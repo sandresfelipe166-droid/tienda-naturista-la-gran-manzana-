@@ -1,0 +1,160 @@
+from sqlalchemy.orm import Session
+from app.models.models import Producto, Seccion, Laboratorio, Lote
+from app.models.schemas import ProductoCreate, ProductoUpdate
+from typing import List, Optional, Dict, Any
+from sqlalchemy import or_
+from datetime import datetime, timedelta
+
+def _build_productos_query(
+    db: Session,
+    nombre: Optional[str] = None,
+    id_seccion: Optional[int] = None,
+    id_laboratorio: Optional[int] = None,
+    estado: Optional[str] = None,
+):
+    query = db.query(Producto)
+    if nombre:
+        query = query.filter(Producto.nombre_producto.ilike(f"%{nombre}%"))
+    if id_seccion:
+        query = query.filter(Producto.id_seccion == id_seccion)
+    if id_laboratorio:
+        query = query.filter(Producto.id_laboratorio == id_laboratorio)
+    if estado:
+        query = query.filter(Producto.estado == estado)
+    return query
+
+
+def count_productos(
+    db: Session,
+    nombre: Optional[str] = None,
+    id_seccion: Optional[int] = None,
+    id_laboratorio: Optional[int] = None,
+    estado: Optional[str] = None,
+) -> int:
+    return _build_productos_query(db, nombre, id_seccion, id_laboratorio, estado).count()
+
+
+def get_productos(
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
+    nombre: Optional[str] = None,
+    id_seccion: Optional[int] = None,
+    id_laboratorio: Optional[int] = None,
+    estado: Optional[str] = None
+) -> List[Producto]:
+    """Obtener lista de productos con filtros opcionales"""
+    query = _build_productos_query(db, nombre, id_seccion, id_laboratorio, estado)
+    return query.offset(skip).limit(limit).all()
+
+def get_producto_by_id(db: Session, id_producto: int) -> Optional[Producto]:
+    """Obtener un producto por ID"""
+    return db.query(Producto).filter(Producto.id_producto == id_producto).first()
+
+def create_producto(db: Session, producto_data: ProductoCreate) -> Producto:
+    """Crear un nuevo producto"""
+    seccion = db.query(Seccion).filter(Seccion.id_seccion == producto_data.id_seccion).first()
+    if not seccion:
+        raise ValueError("La sección especificada no existe")
+
+    laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == producto_data.id_laboratorio).first()
+    if not laboratorio:
+        raise ValueError("El laboratorio especificado no existe")
+
+    db_producto = Producto(**producto_data.model_dump())
+    db.add(db_producto)
+    db.commit()
+    db.refresh(db_producto)
+    return db_producto
+
+def update_producto(db: Session, id_producto: int, producto_data: ProductoUpdate) -> Optional[Producto]:
+    """Actualizar un producto existente"""
+    producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
+    if not producto:
+        return None
+
+    if producto_data.id_seccion is not None:
+        seccion = db.query(Seccion).filter(Seccion.id_seccion == producto_data.id_seccion).first()
+        if not seccion:
+            raise ValueError("La sección especificada no existe")
+
+    if producto_data.id_laboratorio is not None:
+        laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == producto_data.id_laboratorio).first()
+        if not laboratorio:
+            raise ValueError("El laboratorio especificado no existe")
+
+    update_data = producto_data.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(producto, field, value)
+
+    db.commit()
+    db.refresh(producto)
+    return producto
+
+def delete_producto(db: Session, id_producto: int, logical: bool = True) -> bool:
+    """Eliminar un producto (lógico o físico)"""
+    producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
+    if not producto:
+        return False
+
+    if logical:
+        producto.estado = "Inactivo"
+        db.commit()
+    else:
+        db.delete(producto)
+        db.commit()
+
+    return True
+
+def search_productos(
+    db: Session,
+    query: str,
+    skip: int = 0,
+    limit: int = 50
+) -> List[Producto]:
+    """Buscar productos por nombre, principio activo o descripción"""
+    search_filter = f"%{query}%"
+    return (
+        db.query(Producto)
+        .filter(
+            or_(
+                Producto.nombre_producto.ilike(search_filter),
+                Producto.principio_activo.ilike(search_filter),
+                Producto.descripcion.ilike(search_filter)
+            ),
+            Producto.estado == "Activo"
+        )
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+
+def get_productos_bajo_stock(db: Session) -> List[Producto]:
+    """Obtener productos con stock actual menor o igual al mínimo, activos"""
+    return (
+        db.query(Producto)
+        .filter(
+            Producto.estado == "Activo",
+            Producto.stock_actual <= Producto.stock_minimo,
+        )
+        .all()
+    )
+
+
+def get_productos_por_vencer(db: Session, dias: int = 30) -> List[Producto]:
+    """Obtener productos que tienen lotes que vencen en los próximos 'dias' días"""
+    fecha_limite = datetime.utcnow() + timedelta(days=dias)
+    # Join con Lote para identificar productos con lotes próximos a vencer
+    return (
+        db.query(Producto)
+        .join(Lote, Lote.id_producto == Producto.id_producto)
+        .filter(
+            Producto.estado == "Activo",
+            Lote.estado == "Activo",
+            Lote.cantidad_disponible > 0,
+            Lote.fecha_vencimiento <= fecha_limite,
+        )
+        .distinct()
+        .all()
+    )

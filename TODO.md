@@ -1,0 +1,7 @@
+- [x] Add database fixtures to create/drop tables and seed data (seccion, laboratorio) in tests/test_productos_auth.py
+- [x] Override the get_db dependency to use a test session
+- [x] Modify test_create_producto_as_admin_success to use fixture data instead of manual seeding
+- [x] Ensure test database is properly initialized and cleaned up
+- [x] Run tests to verify 422 error is fixed
+- [x] Fix test setup in tests/test_api.py to use consistent database and fixtures
+- [x] Run all tests to ensure everything works together

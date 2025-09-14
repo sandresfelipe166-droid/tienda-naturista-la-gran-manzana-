@@ -1,0 +1,1129 @@
+2025-09-06 17:06:00,810 | INFO     | __main__ | _initialize:387 | Base de datos inicializada correctamente
+2025-09-06 17:06:02,211 | INFO     | __mp_main__ | _initialize:387 | Base de datos inicializada correctamente
+2025-09-06 17:06:02,325 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:02,423 | INFO     | main | _initialize:387 | Base de datos inicializada correctamente
+2025-09-06 17:06:02,423 | INFO     | main | _initialize:387 | Base de datos inicializada correctamente
+2025-09-06 17:06:02,435 | INFO     | main | lifespan:817 | ============================================================
+2025-09-06 17:06:02,435 | INFO     | main | lifespan:817 | ============================================================
+2025-09-06 17:06:02,437 | INFO     | main | lifespan:818 | 🚀 Iniciando Sistema de Inventario Naturista Premium
+2025-09-06 17:06:02,437 | INFO     | main | lifespan:818 | 🚀 Iniciando Sistema de Inventario Naturista Premium
+2025-09-06 17:06:02,438 | INFO     | main | lifespan:819 | 📌 Versión: 7.0.0
+2025-09-06 17:06:02,438 | INFO     | main | lifespan:819 | 📌 Versión: 7.0.0
+2025-09-06 17:06:02,439 | INFO     | main | lifespan:820 | 🌍 Entorno: development
+2025-09-06 17:06:02,439 | INFO     | main | lifespan:820 | 🌍 Entorno: development
+2025-09-06 17:06:02,440 | INFO     | main | lifespan:821 | ============================================================
+2025-09-06 17:06:02,440 | INFO     | main | lifespan:821 | ============================================================
+2025-09-06 17:06:02,685 | INFO     | watchfiles.main | _log_changes:308 | 6 changes detected
+2025-09-06 17:06:02,775 | INFO     | main | lifespan:828 | ✅ Base de datos conectada: inventario
+2025-09-06 17:06:02,775 | INFO     | main | lifespan:828 | ✅ Base de datos conectada: inventario
+2025-09-06 17:06:02,777 | INFO     | main | lifespan:829 | 📊 Tamaño BD: 8.72 MB
+2025-09-06 17:06:02,777 | INFO     | main | lifespan:829 | 📊 Tamaño BD: 8.72 MB
+2025-09-06 17:06:02,777 | INFO     | main | lifespan:830 | 🔌 Conexiones activas: 1
+2025-09-06 17:06:02,777 | INFO     | main | lifespan:830 | 🔌 Conexiones activas: 1
+2025-09-06 17:06:03,040 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:03,393 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:03,749 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:04,105 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:04,474 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:04,830 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:05,237 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:05,650 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:06,066 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:06,431 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:06,837 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:07,249 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:07,665 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:08,027 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:08,435 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:08,848 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:09,263 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:09,665 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:10,084 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:10,487 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:10,852 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:11,262 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:11,666 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:12,081 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:12,438 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:12,847 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:13,251 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:13,656 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:14,074 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:14,491 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:14,894 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:15,297 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:15,661 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:16,066 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:16,470 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:16,876 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:17,294 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:17,697 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:18,103 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:18,510 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:18,913 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:19,318 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:19,723 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:20,142 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:20,544 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:20,948 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:21,352 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:21,756 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:22,110 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:22,518 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:22,934 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:23,337 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:23,744 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:24,149 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:24,554 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:24,970 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:25,373 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:25,777 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:26,181 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:26,586 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:26,942 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:27,351 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:27,757 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:28,161 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:28,564 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:28,969 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:29,373 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:29,777 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:30,181 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:30,584 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:30,989 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:31,392 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:31,797 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:32,199 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:32,607 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:33,021 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:33,389 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:33,800 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:34,217 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:34,619 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:35,025 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:35,442 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:35,846 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:36,249 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:36,624 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:37,029 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:37,433 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:37,851 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:38,256 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:38,661 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:39,065 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:39,467 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:39,872 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:40,276 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:40,681 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:41,086 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:41,501 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:41,904 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:42,308 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:42,675 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:43,080 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:43,496 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:43,903 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:44,319 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:44,723 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:45,126 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:45,530 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:45,887 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:46,297 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:46,714 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:47,132 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:47,489 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:47,896 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:48,303 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:48,707 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:49,113 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:49,517 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:49,934 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:50,338 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:50,741 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:51,159 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:51,524 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:53,148 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:53,511 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:53,865 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:54,268 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:54,674 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:55,078 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:56,210 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:56,568 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:56,931 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:57,334 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:57,738 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:58,146 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:58,511 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:58,923 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:59,332 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:06:59,740 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:00,104 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:00,515 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:00,923 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:01,588 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:01,956 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:02,378 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:02,794 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:03,199 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:03,602 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:04,009 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:04,416 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:04,825 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:05,237 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:05,600 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:06,008 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:06,416 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:06,830 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:07,242 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:07,657 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:08,073 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:08,490 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:08,848 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:09,264 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:09,677 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:10,083 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:10,492 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:10,852 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:11,269 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:11,682 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:12,047 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:12,456 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:12,864 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:13,274 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:13,685 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:14,092 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:14,499 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:14,860 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:15,271 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:15,677 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:16,082 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:16,495 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:16,904 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:17,321 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:17,734 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:18,099 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:18,516 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:18,922 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:19,287 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:19,703 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:19,924 | ERROR    | main | execute_query:474 | Error en query (intento 1/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:19,924 | ERROR    | main | execute_query:474 | Error en query (intento 1/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:20,068 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:20,436 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:20,467 | WARNING  | main | execute_query:471 | Transacción abortada, haciendo rollback. Intento 2/3
+2025-09-06 17:07:20,467 | WARNING  | main | execute_query:471 | Transacción abortada, haciendo rollback. Intento 2/3
+2025-09-06 17:07:20,801 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:21,169 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:21,475 | ERROR    | main | execute_query:474 | Error en query (intento 3/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:21,475 | ERROR    | main | execute_query:474 | Error en query (intento 3/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:21,481 | ERROR    | main | listar:596 | Error en listar productos: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:21,481 | ERROR    | main | listar:596 | Error en listar productos: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:21,484 | ERROR    | main | listar_productos:1055 | Error en listar productos: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:21,484 | ERROR    | main | listar_productos:1055 | Error en listar productos: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: SELECT COUNT(*) FROM (
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE WHEN p.stock_actual <= p.stock_minimo THEN true ELSE false END as alerta_stock,
+                    CASE WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN true ELSE false END as stock_excedido,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer,
+                    CASE 
+                        WHEN p.stock_actual = 0 THEN 'Sin Stock'
+                        WHEN p.stock_actual <= p.stock_minimo THEN 'Bajo'
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_actual > p.stock_maximo THEN 'Excedido'
+                        ELSE 'Normal'
+                    END as nivel_alerta
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE 1=1
+             AND p.estado = $1) as subquery]
+[parameters: ('Activo',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:21,494 | ERROR    | main | get_session:401 | Error inesperado: 
+2025-09-06 17:07:21,494 | ERROR    | main | get_session:401 | Error inesperado: 
+2025-09-06 17:07:21,579 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:21,944 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:22,305 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:22,670 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:23,030 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:23,385 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:23,748 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:24,111 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:24,567 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:24,971 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:25,387 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:25,797 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:26,212 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:26,568 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:26,973 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:27,380 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:27,792 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:28,205 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:28,568 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:28,976 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:29,386 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:29,800 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:30,161 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:30,575 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:30,982 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:31,349 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:31,768 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:32,173 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:32,630 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:32,986 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:33,395 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:33,808 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:34,221 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:34,629 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:35,031 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:35,388 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:35,847 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:36,211 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:36,616 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:37,029 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:37,433 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:37,799 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:38,205 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:38,618 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:38,852 | ERROR    | main | execute_query:474 | Error en query (intento 1/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:38,852 | ERROR    | main | execute_query:474 | Error en query (intento 1/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:38,979 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:39,343 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:39,384 | WARNING  | main | execute_query:471 | Transacción abortada, haciendo rollback. Intento 2/3
+2025-09-06 17:07:39,384 | WARNING  | main | execute_query:471 | Transacción abortada, haciendo rollback. Intento 2/3
+2025-09-06 17:07:39,697 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:40,063 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:40,400 | ERROR    | main | execute_query:474 | Error en query (intento 3/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:40,400 | ERROR    | main | execute_query:474 | Error en query (intento 3/3): (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:40,404 | ERROR    | main | obtener_por_id:655 | Error obteniendo producto 2: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:40,404 | ERROR    | main | obtener_por_id:655 | Error obteniendo producto 2: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:40,404 | ERROR    | main | obtener_producto:1082 | Error obteniendo producto: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:40,404 | ERROR    | main | obtener_producto:1082 | Error obteniendo producto: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedFunctionError'>: function date_part(unknown, integer) does not exist
+HINT:  No function matches the given name and argument types. You might need to add explicit type casts.
+[SQL: 
+                SELECT 
+                    p.*,
+                    l.nombre_laboratorio,
+                    s.nombre_seccion,
+                    CASE 
+                        WHEN p.stock_maximo IS NOT NULL AND p.stock_maximo > 0 
+                        THEN ROUND((p.stock_actual::numeric / p.stock_maximo::numeric * 100), 2)
+                        ELSE NULL 
+                    END as porcentaje_stock,
+                    CASE 
+                        WHEN p.fecha_vencimiento IS NOT NULL 
+                        THEN DATE_PART('day', p.fecha_vencimiento - CURRENT_DATE)::integer
+                        ELSE NULL 
+                    END as dias_para_vencer
+                FROM producto p
+                LEFT JOIN laboratorio l ON p.id_laboratorio = l.id_laboratorio
+                LEFT JOIN seccion s ON p.id_seccion = s.id_seccion
+                WHERE p.id_producto = $1
+            ]
+[parameters: (2,)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-09-06 17:07:40,414 | ERROR    | main | get_session:401 | Error inesperado: 
+2025-09-06 17:07:40,414 | ERROR    | main | get_session:401 | Error inesperado: 
+2025-09-06 17:07:40,473 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:40,827 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:41,196 | INFO     | watchfiles.main | _log_changes:308 | 2 changes detected
+2025-09-06 17:07:41,558 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:41,919 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:42,324 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:42,689 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:43,108 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:43,514 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:43,920 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:44,285 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:44,695 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:45,110 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:45,477 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:45,946 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:46,363 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:46,779 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:47,145 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:47,562 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:47,973 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:48,337 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:48,743 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:49,157 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:49,561 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:49,928 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:50,344 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:50,756 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:51,119 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:51,521 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:51,930 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:52,345 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:52,757 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:53,197 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:53,560 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:53,970 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:54,385 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:54,747 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:55,206 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:57,898 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:58,405 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:58,761 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:59,170 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:59,581 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:07:59,993 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:00,403 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:00,814 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:01,221 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:01,585 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:01,993 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:02,407 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:02,767 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:03,181 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:03,593 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:03,956 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:04,371 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:04,788 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:05,201 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:05,554 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:05,963 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:06,424 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:06,779 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:07,195 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:07,619 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:08,023 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:08,384 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:08,840 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:09,250 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:09,654 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:10,067 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:10,470 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:10,881 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:11,286 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:11,698 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:12,104 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:12,468 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:12,885 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:13,295 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:13,703 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:14,071 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:14,485 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:14,897 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:15,263 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:15,675 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:16,086 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:16,497 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:16,903 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:17,315 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:17,733 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:18,137 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:18,548 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:18,952 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:19,316 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:19,733 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:20,141 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:20,501 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:20,909 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:21,323 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:21,736 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:22,150 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:22,566 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:22,977 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:23,394 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:23,802 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:24,215 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:24,580 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:24,991 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:25,402 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:25,810 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:26,217 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:26,620 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:26,990 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:27,400 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:27,811 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:28,219 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:28,582 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:28,992 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:29,397 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:29,813 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:30,219 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:30,583 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:30,998 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:31,407 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:31,821 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:32,227 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:32,588 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:33,002 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:33,416 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:33,827 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:34,193 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:34,607 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:35,017 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:35,431 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:35,792 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:36,207 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:36,618 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:37,079 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:37,437 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:37,853 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:38,265 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:38,675 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:39,084 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:39,442 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:39,858 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:40,266 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:40,629 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:41,044 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:41,464 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:41,873 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:42,280 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:42,686 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:43,046 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:43,459 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:43,867 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:44,278 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:44,701 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:45,157 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:45,566 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:45,969 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:46,383 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:46,793 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:47,207 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:47,625 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:47,981 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:48,439 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:48,845 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:49,210 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:49,619 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:50,035 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:50,444 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:50,849 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:51,265 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:51,625 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:52,033 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:52,439 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:52,925 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:53,280 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:53,737 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:54,104 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:54,526 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:54,889 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:55,295 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:58,020 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:58,428 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:58,838 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:59,245 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:08:59,661 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:00,067 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:00,480 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:00,934 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:01,344 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:01,704 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:02,110 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:02,513 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:02,931 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:03,336 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:03,742 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:04,110 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:04,517 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:04,920 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:05,337 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:05,698 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:06,106 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:06,513 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:06,874 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:07,285 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:07,691 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:08,199 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:08,615 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:09,019 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:09,434 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:09,800 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:10,215 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:10,619 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:11,023 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:11,434 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:11,852 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:12,219 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:12,637 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:13,049 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:13,462 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:13,827 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:14,244 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:14,658 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:15,072 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:15,484 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:15,895 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:16,248 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:16,658 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:17,065 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:17,482 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:17,846 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:18,261 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:18,674 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:19,038 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:19,445 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:19,857 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:20,266 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:20,633 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:21,050 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:21,468 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:21,873 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:22,230 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:22,638 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:23,053 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:23,468 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:23,878 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:24,244 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:24,658 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:25,068 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:25,474 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:25,891 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:26,297 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:26,705 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:27,161 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:27,571 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:27,974 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:28,386 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:28,750 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:29,212 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:29,616 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:30,027 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:30,433 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:30,786 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:31,199 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:31,656 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:32,021 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:32,437 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:32,942 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:33,346 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:33,762 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:34,169 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:34,586 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:34,993 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:35,397 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:35,762 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:36,223 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:36,588 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:37,003 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:37,409 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:37,814 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:38,222 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:38,633 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:39,038 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:39,443 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:39,860 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:40,226 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:40,642 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:41,061 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:41,423 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:41,838 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:42,251 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:42,712 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:43,182 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:43,588 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:43,944 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:44,404 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:44,764 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:45,176 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:45,630 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:46,045 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:46,457 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:46,826 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:47,231 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:47,640 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:48,006 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:48,419 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:48,832 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:49,190 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:49,596 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:50,002 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:50,466 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:50,971 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:51,375 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:51,791 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:52,209 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:52,613 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:53,020 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:53,385 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:53,796 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:54,206 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:54,612 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:55,026 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:55,439 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:58,030 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:58,542 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:58,901 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:59,317 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:09:59,732 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:00,150 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:00,558 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:00,918 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:01,329 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:01,736 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:02,150 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:02,566 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:02,971 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:03,376 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:03,787 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:04,197 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:04,665 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:05,021 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:05,479 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:05,885 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:06,298 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:06,661 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:07,074 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:07,486 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:07,900 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:08,311 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:08,724 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:09,087 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:09,498 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:09,911 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:10,322 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:10,688 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:11,101 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:11,516 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:11,928 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:12,436 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:12,995 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:13,399 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:13,758 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:14,174 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:14,586 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:14,950 | INFO     | watchfiles.main | _log_changes:308 | 1 change detected
+2025-09-06 17:10:15,125 | INFO     | main | lifespan:838 | 🛑 Cerrando aplicación...
+2025-09-06 17:10:15,125 | INFO     | main | lifespan:838 | 🛑 Cerrando aplicación...
+2025-09-06 17:10:15,244 | INFO     | main | close:444 | Conexiones de BD cerradas
+2025-09-06 17:10:15,244 | INFO     | main | close:444 | Conexiones de BD cerradas
+2025-09-06 17:10:15,247 | INFO     | main | lifespan:840 | 👋 Aplicación cerrada correctamente
+2025-09-06 17:10:15,247 | INFO     | main | lifespan:840 | 👋 Aplicación cerrada correctamente
+{"timestamp": "2025-09-13T20:07:15.745129", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 4, "ip_address": "127.0.0.1", "details": {"username": "felipe"}}
+{"timestamp": "2025-09-13T20:29:58.970543", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_71ac6019", "email": "newuser_71ac6019@example.com"}}
+{"timestamp": "2025-09-13T20:30:21.263453", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_bb45f3db", "email": "newuser_bb45f3db@example.com"}}
+{"timestamp": "2025-09-13T20:32:34.418428", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_a730b89f", "email": "newuser_a730b89f@example.com"}}
+{"timestamp": "2025-09-13T20:32:47.926331", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_b54833cf", "email": "newuser_b54833cf@example.com"}}
+{"timestamp": "2025-09-13T20:33:40.922100", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_4a256bba", "email": "newuser_4a256bba@example.com"}}
+{"timestamp": "2025-09-13T20:33:50.658265", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_b7e88fa4", "email": "newuser_b7e88fa4@example.com"}}
+{"timestamp": "2025-09-13T20:34:49.114002", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_66a6a1d8", "email": "newuser_66a6a1d8@example.com"}}
+{"timestamp": "2025-09-13T20:39:34.203676", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_e548dc99", "email": "newuser_e548dc99@example.com"}}
+{"timestamp": "2025-09-13T20:42:35.376307", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_9399a475", "email": "newuser_9399a475@example.com"}}
+{"timestamp": "2025-09-13T20:43:05.175551", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_55fefd3a", "email": "newuser_55fefd3a@example.com"}}
+{"timestamp": "2025-09-13T20:45:47.208048", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_713fd1af", "email": "newuser_713fd1af@example.com"}}
+{"timestamp": "2025-09-13T20:51:08.506341", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_c4e6b1f2", "email": "newuser_c4e6b1f2@example.com"}}
+{"timestamp": "2025-09-13T20:53:35.834356", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_35badbb3", "email": "newuser_35badbb3@example.com"}}
+{"timestamp": "2025-09-13T20:53:35.853241", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T20:57:54.787057", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_fcbbd616", "email": "newuser_fcbbd616@example.com"}}
+{"timestamp": "2025-09-13T20:57:54.822593", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:00:00.343874", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_08a5527a", "email": "newuser_08a5527a@example.com"}}
+{"timestamp": "2025-09-13T21:00:00.374377", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:02:32.601681", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 5, "ip_address": "testclient", "details": {"username": "newuser_7f86959e", "email": "newuser_7f86959e@example.com"}}
+{"timestamp": "2025-09-13T21:02:32.620692", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:03:30.474588", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 6, "ip_address": "testclient", "details": {"username": "newuser_d8e25acf", "email": "newuser_d8e25acf@example.com"}}
+{"timestamp": "2025-09-13T21:03:30.490102", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:04:32.607468", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 7, "ip_address": "testclient", "details": {"username": "newuser_3c88fc30", "email": "newuser_3c88fc30@example.com"}}
+{"timestamp": "2025-09-13T21:04:32.622207", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:06:26.595948", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 8, "ip_address": "testclient", "details": {"username": "newuser_cbb394bb", "email": "newuser_cbb394bb@example.com"}}
+{"timestamp": "2025-09-13T21:06:26.619530", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:10:32.137300", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 9, "ip_address": "testclient", "details": {"username": "newuser_1ce580e2", "email": "newuser_1ce580e2@example.com"}}
+{"timestamp": "2025-09-13T21:10:32.156346", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:12:43.518636", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 10, "ip_address": "testclient", "details": {"username": "newuser_49835b2c", "email": "newuser_49835b2c@example.com"}}
+{"timestamp": "2025-09-13T21:12:43.536263", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:14:49.282515", "level": "INFO", "logger": "inventario", "message": "Audit event: user_registered", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "user_registered", "user_id": 11, "ip_address": "testclient", "details": {"username": "newuser_faab9eff", "email": "newuser_faab9eff@example.com"}}
+{"timestamp": "2025-09-13T21:14:49.298221", "level": "INFO", "logger": "inventario", "message": "Audit event: login", "module": "audit_logging", "function": "log_audit_event", "line": 21, "event_type": "audit_event", "event": "login", "user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}
+{"timestamp": "2025-09-13T21:18:59.427388", "level": "ERROR", "logger": "inventario", "message": "Error updating product 1: La sección especificada no existe", "module": "producto_service", "function": "actualizar", "line": 81}
+{"timestamp": "2025-09-13T21:20:06.804394", "level": "ERROR", "logger": "inventario", "message": "Error updating product 1: (sqlite3.IntegrityError) datatype mismatch\n[SQL: UPDATE producto SET id_producto=?, id_seccion=?, id_laboratorio=?, nombre_producto=?, principio_activo=?, concentracion=?, forma_farmaceutica=?, codigo_barras=?, requiere_receta=?, precio_compra=?, stock_actual=?, stock_minimo=?, descripcion=?, estado=? WHERE producto.id_producto = ?]\n[parameters: (None, None, None, 'Producto Actualizado', None, None, None, None, None, None, 150, None, None, None, 1)]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)", "module": "producto_service", "function": "actualizar", "line": 83}
+{"timestamp": "2025-09-13T21:20:31.864461", "level": "ERROR", "logger": "inventario", "message": "Error updating product 1: (sqlite3.IntegrityError) datatype mismatch\n[SQL: UPDATE producto SET id_producto=?, id_seccion=?, id_laboratorio=?, nombre_producto=?, principio_activo=?, concentracion=?, forma_farmaceutica=?, codigo_barras=?, requiere_receta=?, precio_compra=?, stock_actual=?, stock_minimo=?, descripcion=?, estado=? WHERE producto.id_producto = ?]\n[parameters: (None, None, None, 'Producto Actualizado', None, None, None, None, None, None, 150, None, None, None, 1)]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)", "module": "producto_service", "function": "actualizar", "line": 83}
+{"timestamp": "2025-09-13T21:21:38.344731", "level": "ERROR", "logger": "inventario", "message": "Error updating product 1: (sqlite3.IntegrityError) datatype mismatch\n[SQL: UPDATE producto SET id_producto=?, id_seccion=?, id_laboratorio=?, nombre_producto=?, principio_activo=?, concentracion=?, forma_farmaceutica=?, codigo_barras=?, requiere_receta=?, precio_compra=?, stock_actual=?, stock_minimo=?, descripcion=?, estado=? WHERE producto.id_producto = ?]\n[parameters: (None, None, None, 'Producto Actualizado', None, None, None, None, None, None, 150, None, None, None, 1)]\n(Background on this error at: https://sqlalche.me/e/20/gkpj)", "module": "producto_service", "function": "actualizar", "line": 84}
+{"timestamp": "2025-09-13T22:11:07.775927", "level": "ERROR", "logger": "inventario", "message": "Error inesperado en InputValidationMiddleware: 'Logger' object has no attribute 'log_error'", "module": "input_validation", "function": "dispatch", "line": 182, "exception": "Traceback (most recent call last):\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 151, in call_next\n    message = await recv_stream.receive()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\anyio\\streams\\memory.py\", line 126, in receive\n    raise EndOfStream from None\nanyio.EndOfStream\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\app\\core\\input_validation.py\", line 174, in dispatch\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 159, in call_next\n    raise app_exc\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 182, in __call__\n    with recv_stream, send_stream, collapse_excgroups():\n  File \"C:\\Program Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\contextlib.py\", line 158, in __exit__\n    self.gen.throw(typ, value, traceback)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\_utils.py\", line 85, in collapse_excgroups\n    raise exc\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 184, in __call__\n    response = await self.dispatch_func(request, call_next)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\app\\core\\rate_limiter.py\", line 164, in dispatch\n    logger.log_error(e, {\n    ^^^^^^^^^^^^^^^^\nAttributeError: 'Logger' object has no attribute 'log_error'"}
+{"timestamp": "2025-09-13T22:13:05.419384", "level": "ERROR", "logger": "inventario", "message": "Error: 'Logger' object has no attribute 'logger'", "module": "logging_config", "function": "log_error", "line": 148, "event_type": "error", "error_type": "AttributeError", "context": {"middleware": "RateLimitMiddleware", "client_id": "testclient:-2319015133043981516", "path": "/api/v1/auth/login"}, "exception": "Traceback (most recent call last):\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 151, in call_next\n    message = await recv_stream.receive()\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\anyio\\streams\\memory.py\", line 126, in receive\n    raise EndOfStream from None\nanyio.EndOfStream\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\app\\core\\rate_limiter.py\", line 144, in dispatch\n    response = await call_next(request)\n               ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 159, in call_next\n    raise app_exc\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\base.py\", line 144, in coro\n    await self.app(scope, receive_or_disconnect, send_no_error)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\trustedhost.py\", line 51, in __call__\n    await self.app(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\cors.py\", line 85, in __call__\n    await self.app(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\middleware\\exceptions.py\", line 63, in __call__\n    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\routing.py\", line 716, in __call__\n    await self.middleware_stack(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\routing.py\", line 736, in app\n    await route.handle(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\routing.py\", line 290, in handle\n    await self.app(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\routing.py\", line 78, in app\n    await wrap_app_handling_exceptions(app, request)(scope, receive, send)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 53, in wrapped_app\n    raise exc\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\_exception_handler.py\", line 42, in wrapped_app\n    await app(scope, receive, sender)\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\starlette\\routing.py\", line 75, in app\n    response = await f(request)\n               ^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\fastapi\\routing.py\", line 302, in app\n    raw_response = await run_endpoint_function(\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\venv\\Lib\\site-packages\\fastapi\\routing.py\", line 213, in run_endpoint_function\n    return await dependant.call(**values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\app\\routers\\auth.py\", line 102, in login_for_access_token\n    audit_logger.log_audit_event(\n  File \"C:\\Users\\cleiv\\Desktop\\inventario-backend\\app\\core\\audit_logging.py\", line 21, in log_audit_event\n    logger.logger.info(f\"Audit event: {event}\", extra={\"extra_data\": extra_data})\n    ^^^^^^^^^^^^^\nAttributeError: 'Logger' object has no attribute 'logger'"}
+{"timestamp": "2025-09-13T22:14:47.424909", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_654dfc42", "email": "newuser_654dfc42@example.com"}}}
+{"timestamp": "2025-09-13T22:14:47.475226", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:16:19.647354", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_46867645", "email": "newuser_46867645@example.com"}}}
+{"timestamp": "2025-09-13T22:16:19.660713", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:18:13.186000", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 15, "ip_address": "testclient", "details": {"username": "newuser_a4c97f42", "email": "newuser_a4c97f42@example.com"}}}
+{"timestamp": "2025-09-13T22:18:13.203057", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:18:27.950808", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 16, "ip_address": "testclient", "details": {"username": "newuser_0ad29cac", "email": "newuser_0ad29cac@example.com"}}}
+{"timestamp": "2025-09-13T22:18:27.981951", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:19:22.955698", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 17, "ip_address": "testclient", "details": {"username": "newuser_85362ff8", "email": "newuser_85362ff8@example.com"}}}
+{"timestamp": "2025-09-13T22:19:23.072299", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:19:35.668362", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 18, "ip_address": "testclient", "details": {"username": "newuser_4a150ac4", "email": "newuser_4a150ac4@example.com"}}}
+{"timestamp": "2025-09-13T22:19:35.683377", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:23:07.932486", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_df49957b", "email": "newuser_df49957b@example.com"}}}
+{"timestamp": "2025-09-13T22:23:08.115793", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:23:21.442360", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_233750ee", "email": "newuser_233750ee@example.com"}}}
+{"timestamp": "2025-09-13T22:23:21.464227", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:23:50.428768", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_c9870861", "email": "newuser_c9870861@example.com"}}}
+{"timestamp": "2025-09-13T22:23:50.505950", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:24:38.339587", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_d6d46f9b", "email": "newuser_d6d46f9b@example.com"}}}
+{"timestamp": "2025-09-13T22:24:38.368594", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:28:29.150869", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_02af4a23", "email": "newuser_02af4a23@example.com"}}}
+{"timestamp": "2025-09-13T22:28:29.170863", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:30:43.644500", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_c16e8318", "email": "newuser_c16e8318@example.com"}}}
+{"timestamp": "2025-09-13T22:30:43.665877", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:30:59.646791", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_0bdd41a8", "email": "newuser_0bdd41a8@example.com"}}}
+{"timestamp": "2025-09-13T22:30:59.674087", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-13T22:36:41.497077", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_fdb59fff", "email": "newuser_fdb59fff@example.com"}}}
+{"timestamp": "2025-09-13T22:36:41.510496", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:28:16.011435", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_442f3211", "email": "newuser_442f3211@example.com"}}}
+{"timestamp": "2025-09-14T14:28:16.046754", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:44:09.191090", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_f50769e9", "email": "newuser_f50769e9@example.com"}}}
+{"timestamp": "2025-09-14T14:44:09.235248", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:45:50.741357", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_988608ad", "email": "newuser_988608ad@example.com"}}}
+{"timestamp": "2025-09-14T14:45:50.764269", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:46:09.081301", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_c9bc345d", "email": "newuser_c9bc345d@example.com"}}}
+{"timestamp": "2025-09-14T14:46:09.110263", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:47:53.395682", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_f7f99fdf", "email": "newuser_f7f99fdf@example.com"}}}
+{"timestamp": "2025-09-14T14:47:53.418450", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:48:23.373381", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_dc9ac661", "email": "newuser_dc9ac661@example.com"}}}
+{"timestamp": "2025-09-14T14:48:23.400094", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
+{"timestamp": "2025-09-14T14:53:27.296317", "level": "INFO", "logger": "inventario", "message": "Business event: user_registered", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "user_registered", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "newuser_b6c94790", "email": "newuser_b6c94790@example.com"}}}
+{"timestamp": "2025-09-14T14:53:27.326815", "level": "INFO", "logger": "inventario", "message": "Business event: login", "module": "logging_config", "function": "log_business_event", "line": 128, "event_type": "business_event", "event": "login", "details": {"user_id": 1, "ip_address": "testclient", "details": {"username": "testuser"}}}
