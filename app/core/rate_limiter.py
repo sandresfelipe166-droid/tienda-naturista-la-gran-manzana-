@@ -1,14 +1,15 @@
 """
-Sistema de rate limiting para el API
+Sistema de rate limiting avanzado para el API
 """
 import time
-from typing import Dict, Optional
+import asyncio
+from typing import Dict, Optional, Tuple
 from fastapi import Request, HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
-import asyncio
 from collections import defaultdict, deque
 from datetime import datetime, timedelta
+import hashlib
 
 from app.core.config import settings
 from app.core.exceptions import RateLimitException
@@ -66,19 +67,24 @@ class InMemoryRateLimiter:
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
-    """Middleware de rate limiting"""
-    
+    """Middleware de rate limiting avanzado"""
+
     def __init__(self, app, limiter: InMemoryRateLimiter = None):
         super().__init__(app)
         self.limiter = limiter or InMemoryRateLimiter()
         self.default_limit = settings.rate_limit_requests
         self.default_window = settings.rate_limit_window
-        
-        # Configuración específica por endpoint
-        self.endpoint_limits = {
-            "/api/v1/auth/login": {"limit": 5, "window": 300},  # 5 intentos por 5 minutos
-            "/api/v1/auth/register": {"limit": 3, "window": 3600},  # 3 registros por hora
-            "/api/v1/productos": {"limit": 200, "window": 60},  # 200 solicitudes por minuto
+
+        # Configuración específica por endpoint desde settings
+        self.endpoint_limits = settings.endpoint_rate_limits
+
+        # Configuración adicional por método HTTP
+        self.method_limits = {
+            "GET": {"limit": 200, "window": 60},    # Más permisivo para lectura
+            "POST": {"limit": 50, "window": 60},    # Moderado para creación
+            "PUT": {"limit": 30, "window": 60},     # Moderado para actualización
+            "DELETE": {"limit": 10, "window": 60},  # Restrictivo para eliminación
+            "PATCH": {"limit": 20, "window": 60},   # Moderado para parches
         }
     
     def get_client_identifier(self, request: Request) -> str:

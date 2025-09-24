@@ -106,7 +106,7 @@ class InventarioLogger:
             **kwargs
         }
         self.logger.info(f"{method} {path}", extra={"extra_data": extra_data})
-    
+
     def log_database_operation(self, operation: str, table: str, record_id: int = None, **kwargs):
         """Log de operaciones de base de datos"""
         extra_data = {
@@ -117,7 +117,7 @@ class InventarioLogger:
             **kwargs
         }
         self.logger.info(f"DB {operation} on {table}", extra={"extra_data": extra_data})
-    
+
     def log_business_event(self, event: str, details: Dict[str, Any] = None):
         """Log de eventos de negocio"""
         extra_data = {
@@ -126,7 +126,7 @@ class InventarioLogger:
             "details": details or {}
         }
         self.logger.info(f"Business event: {event}", extra={"extra_data": extra_data})
-    
+
     def log_security_event(self, event: str, user_id: int = None, ip_address: str = None, **kwargs):
         """Log de eventos de seguridad"""
         extra_data = {
@@ -137,7 +137,7 @@ class InventarioLogger:
             **kwargs
         }
         self.logger.warning(f"Security event: {event}", extra={"extra_data": extra_data})
-    
+
     def log_error(self, error: Exception, context: Dict[str, Any] = None):
         """Log de errores con contexto"""
         extra_data = {
@@ -146,6 +146,15 @@ class InventarioLogger:
             "context": context or {}
         }
         self.logger.error(f"Error: {str(error)}", extra={"extra_data": extra_data}, exc_info=True)
+
+    # Métodos de compatibilidad para el script de prueba
+    def log_info(self, message: str, extra_data: Dict[str, Any] = None):
+        """Log de información (compatibilidad)"""
+        self.logger.info(message, extra={"extra_data": extra_data or {}})
+
+    def log_warning(self, message: str, extra_data: Dict[str, Any] = None):
+        """Log de advertencia (compatibilidad)"""
+        self.logger.warning(message, extra={"extra_data": extra_data or {}})
 
 
 # Instancia global del logger

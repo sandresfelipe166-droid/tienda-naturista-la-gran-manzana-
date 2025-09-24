@@ -4,6 +4,11 @@ from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime
 from app.utils import calcular_dias_para_vencer
 from app.core.logging_config import get_logger
+from app.crud.producto import (
+    get_productos, count_productos, search_productos,
+    get_productos_bajo_stock, get_productos_por_vencer,
+    get_producto_by_id, create_producto, update_producto, delete_producto
+)
 
 logger = get_logger()
 
@@ -106,58 +111,45 @@ class ProductoService:
 
     @staticmethod
     def get_productos(db: Session, skip: int = 0, limit: int = 100, nombre: Optional[str] = None, id_seccion: Optional[int] = None, id_laboratorio: Optional[int] = None, estado: Optional[str] = "Activo") -> List[Producto]:
-        query = db.query(Producto)
-        if nombre:
-            query = query.filter(Producto.nombre_producto.ilike(f"%{nombre}%"))
-        if id_seccion:
-            query = query.filter(Producto.id_seccion == id_seccion)
-        if id_laboratorio:
-            query = query.filter(Producto.id_laboratorio == id_laboratorio)
-        if estado:
-            query = query.filter(Producto.estado == estado)
-        return query.offset(skip).limit(limit).all()
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return get_productos(db, skip, limit, nombre, id_seccion, id_laboratorio, estado)
 
     @staticmethod
     def count_productos(db: Session, nombre: Optional[str] = None, id_seccion: Optional[int] = None, id_laboratorio: Optional[int] = None, estado: Optional[str] = "Activo") -> int:
-        query = db.query(Producto)
-        if nombre:
-            query = query.filter(Producto.nombre_producto.ilike(f"%{nombre}%"))
-        if id_seccion:
-            query = query.filter(Producto.id_seccion == id_seccion)
-        if id_laboratorio:
-            query = query.filter(Producto.id_laboratorio == id_laboratorio)
-        if estado:
-            query = query.filter(Producto.estado == estado)
-        return query.count()
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return count_productos(db, nombre, id_seccion, id_laboratorio, estado)
 
     @staticmethod
     def search_productos(db: Session, q: str, skip: int = 0, limit: int = 50) -> List[Producto]:
-        query = db.query(Producto).filter(Producto.nombre_producto.ilike(f"%{q}%"))
-        return query.offset(skip).limit(limit).all()
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return search_productos(db, q, skip, limit)
 
     @staticmethod
     def get_productos_bajo_stock(db: Session) -> List[Producto]:
-        return db.query(Producto).filter(Producto.stock_actual <= Producto.stock_minimo).all()
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return get_productos_bajo_stock(db)
 
     @staticmethod
     def get_productos_por_vencer(db: Session, dias: int) -> List[Producto]:
-        # Assuming fecha_vencimiento exists
-        from datetime import datetime, timedelta
-        fecha_limite = datetime.now() + timedelta(days=dias)
-        return db.query(Producto).filter(Producto.fecha_vencimiento <= fecha_limite).all()
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return get_productos_por_vencer(db, dias)
 
     @staticmethod
     def get_producto_by_id(db: Session, producto_id: int) -> Optional[Producto]:
-        return ProductoService.obtener_por_id(db, producto_id)
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return get_producto_by_id(db, producto_id)
 
     @staticmethod
     def create_producto(db: Session, producto) -> Producto:
-        return ProductoService.crear(db, producto.model_dump())
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return create_producto(db, producto)
 
     @staticmethod
     def update_producto(db: Session, producto_id: int, producto_update) -> Producto:
-        return ProductoService.actualizar(db, producto_id, producto_update.model_dump())
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return update_producto(db, producto_id, producto_update)
 
     @staticmethod
     def delete_producto(db: Session, producto_id: int, modo: str = "logico") -> bool:
-        return ProductoService.eliminar(db, producto_id, modo)
+        """Delegar a CRUD - método mantenido por compatibilidad"""
+        return delete_producto(db, producto_id, modo == "logico")

@@ -4,7 +4,7 @@ import os
 # Set TESTING environment variable for proper config
 os.environ["TESTING"] = "true"
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from starlette.testclient import TestClient
+from fastapi.testclient import TestClient
 from app.models.database import get_db
 from fastapi import Depends
 from main import app
@@ -109,9 +109,12 @@ app.dependency_overrides[get_current_active_user] = override_get_current_active_
 app.dependency_overrides[require_product_read] = override_require_product_read
 app.dependency_overrides[require_product_write] = override_require_product_write
 
-client = TestClient(app)
+# Move TestClient inside a fixture to avoid import issues
+@pytest.fixture(scope="module")
+def client():
+    return TestClient(app)
 
-def test_create_and_get_seccion():
+def test_create_and_get_seccion(client):
     # Create seccion
     response = client.post("/api/v1/secciones", json={
         "nombre_seccion": "Seccion Test",
@@ -133,7 +136,7 @@ def test_create_and_get_seccion():
     assert data["success"] is True
     assert data["data"]["nombre_seccion"] == "Seccion Test"
 
-def test_create_laboratorio_invalid_email():
+def test_create_laboratorio_invalid_email(client):
     # Test creating laboratorio with invalid email
     response = client.post("/api/v1/laboratorios", json={
         "nombre_laboratorio": "Laboratorio Test",
@@ -145,7 +148,7 @@ def test_create_laboratorio_invalid_email():
     })
     assert response.status_code == 422  # Validation error
 
-def test_update_seccion():
+def test_update_seccion(client):
     # First create a seccion
     response = client.post("/api/v1/secciones", json={
         "nombre_seccion": "Seccion Update Test",
@@ -169,7 +172,7 @@ def test_update_seccion():
     assert data["success"] is True
     assert data["message"] == "Sección actualizada exitosamente"
 
-def test_create_laboratorio_success():
+def test_create_laboratorio_success(client):
     response = client.post("/api/v1/laboratorios", json={
         "nombre_laboratorio": "Laboratorio Success Test",
         "pais_origen": "Colombia",
@@ -183,7 +186,7 @@ def test_create_laboratorio_success():
     assert data["success"] is True
     assert "id_laboratorio" in data["data"]
 
-def test_create_seccion_duplicate_name():
+def test_create_seccion_duplicate_name(client):
     # Create first seccion
     response = client.post("/api/v1/secciones", json={
         "nombre_seccion": "Seccion Duplicate",
@@ -200,7 +203,7 @@ def test_create_seccion_duplicate_name():
     })
     assert response.status_code == 500  # Unique constraint error handled as 500
 
-def test_delete_producto():
+def test_delete_producto(client):
     # First get an existing producto
     response = client.get("/api/v1/productos")
     if response.status_code == 200 and response.json()["data"]:

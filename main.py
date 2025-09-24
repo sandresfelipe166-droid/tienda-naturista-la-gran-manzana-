@@ -12,6 +12,7 @@ from app.core.roles import DEFAULT_ROLES
 from app.core.config import settings
 from app.core.rate_limiter import RateLimitMiddleware
 from app.core.input_validation import InputValidationMiddleware
+from app.core.security_middleware import SecurityHeadersMiddleware, CSRFMiddleware, APIKeyMiddleware, SecurityEventLogger
 from app.core.exception_handlers import (
     inventario_exception_handler,
     validation_exception_handler,
@@ -22,6 +23,7 @@ from app.core.exception_handlers import (
 from app.core.exceptions import InventarioException
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from app.routers.health import router as health_router
 
 # Configure logging
 logging.basicConfig(
@@ -55,13 +57,15 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Add CORS middleware
+# Add CORS middleware with advanced configuration
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_credentials=settings.cors_allow_credentials,
+    allow_methods=settings.cors_allow_methods,
+    allow_headers=settings.cors_allow_headers,
+    expose_headers=settings.cors_expose_headers,
+    max_age=settings.cors_max_age,
 )
 
 # Add trusted host middleware
@@ -70,15 +74,17 @@ app.add_middleware(
     allowed_hosts=settings.trusted_hosts
 )
 
+# Add security middleware
+app.add_middleware(SecurityHeadersMiddleware)
+app.add_middleware(CSRFMiddleware)
+app.add_middleware(APIKeyMiddleware)
+app.add_middleware(SecurityEventLogger)
+
 # Add rate limiting middleware
-app.add_middleware(
-    RateLimitMiddleware
-)
+app.add_middleware(RateLimitMiddleware)
 
 # Add input validation middleware
-app.add_middleware(
-    InputValidationMiddleware
-)
+app.add_middleware(InputValidationMiddleware)
 
 # Add exception handlers
 app.add_exception_handler(InventarioException, inventario_exception_handler)
@@ -88,18 +94,9 @@ app.add_exception_handler(IntegrityError, database_exception_handler)
 app.add_exception_handler(SQLAlchemyError, database_exception_handler)
 app.add_exception_handler(Exception, general_exception_handler)
 
-# Versioned API only
+# Include routers
 app.include_router(api_router)
-
-# Basic security headers middleware
-@app.middleware("http")
-async def add_security_headers(request, call_next):
-    response = await call_next(request)
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["Referrer-Policy"] = "no-referrer"
-    response.headers["X-XSS-Protection"] = "1; mode=block"
-    return response
+app.include_router(health_router, prefix="/api/v1", tags=["health"])
 
 # Startup: initialize DB schema and seed default roles
 
@@ -124,15 +121,22 @@ async def root():
     return {
         "message": "Bienvenido a la API de Inventario Backend",
         "version": "1.0.0",
+        "environment": settings.environment,
         "docs": "/docs",
-        "health": "/api/v1/health"
+        "health": "/api/v1/health",
+        "health_detailed": "/api/v1/health/detailed",
+        "metrics": "/api/v1/health/metrics"
     }
 
 if __name__ == "__main__":
+    # Configurar logging de uvicorn
+    log_level = "debug" if settings.debug else "info"
+
     uvicorn.run(
         "main:app",
         host=settings.host,
         port=settings.port,
         reload=settings.debug,
-        log_level="info"
+        log_level=log_level,
+        access_log=True
     )
