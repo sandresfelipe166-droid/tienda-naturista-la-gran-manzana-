@@ -1,0 +1,58 @@
+"""
+Router de Dashboard de métricas
+"""
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from typing import Dict, Any
+
+from app.models.database import get_db
+from app.core.auth_middleware import get_current_active_user
+from app.crud.producto_advanced import (
+    get_productos_stats,
+    get_productos_por_laboratorio_stats,
+    get_productos_por_seccion_stats,
+)
+from app.core.cache import cache_manager
+from app.models.models import Usuario
+
+router = APIRouter(prefix="/dashboard", tags=["dashboard"])
+
+
+@router.get("/metrics", response_model=dict)
+def get_metrics(
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_active_user),
+) -> Dict[str, Any]:
+    """
+    Retorna métricas consolidadas del inventario:
+    - Estadísticas generales de productos
+    - Estadísticas por laboratorio
+    - Estadísticas por sección
+    Cacheado por 60s.
+    """
+    cache_key = "dashboard:metrics:v1"
+    cached = cache_manager.get(cache_key)
+    if cached:
+        return {
+            "success": True,
+            "message": "Métricas obtenidas exitosamente (cache)",
+            "data": cached,
+        }
+
+    stats = get_productos_stats(db)
+    por_laboratorio = get_productos_por_laboratorio_stats(db)
+    por_seccion = get_productos_por_seccion_stats(db)
+
+    data = {
+        "generales": stats,
+        "por_laboratorio": por_laboratorio,
+        "por_seccion": por_seccion,
+    }
+
+    cache_manager.set(cache_key, data, ttl=60)
+
+    return {
+        "success": True,
+        "message": "Métricas obtenidas exitosamente",
+        "data": data,
+    }
