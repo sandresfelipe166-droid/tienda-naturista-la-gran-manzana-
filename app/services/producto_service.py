@@ -1,13 +1,12 @@
 from sqlalchemy.orm import Session
 from app.models.models import Producto, Seccion, Laboratorio
 from typing import List, Optional, Dict, Any, Tuple
-from datetime import datetime
-from app.utils import calcular_dias_para_vencer
 from app.core.logging_config import get_logger
 from app.crud.producto import (
     get_productos, count_productos, search_productos,
     get_productos_bajo_stock, get_productos_por_vencer,
-    get_producto_by_id, create_producto, update_producto, delete_producto
+    get_producto_by_id, create_producto, update_producto, delete_producto,
+    get_total_productos_activos, get_valor_total_stock, count_productos_bajo_stock
 )
 
 logger = get_logger()
@@ -20,18 +19,11 @@ class ProductoService:
             query = query.filter(getattr(Producto, attr) == value)
         total = query.count()
         productos = query.offset((page - 1) * size).limit(size).all()
-
-        # Calculate dias_para_vencer for each producto
-        for producto in productos:
-            producto.dias_para_vencer = calcular_dias_para_vencer(getattr(producto, "fecha_vencimiento", None))
-
         return productos, total
 
     @staticmethod
     def obtener_por_id(db: Session, id_producto: int) -> Optional[Producto]:
         producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
-        if producto:
-            producto.dias_para_vencer = calcular_dias_para_vencer(getattr(producto, "fecha_vencimiento", None))
         return producto
 
     @staticmethod
@@ -55,7 +47,7 @@ class ProductoService:
             db.refresh(nuevo_producto)
             return nuevo_producto
         except Exception as e:
-            logger.error(f"Error creating product: {e}", extra={"data": data})
+            logger.error("Error creating product: %s", e, extra={"data": data})
             db.rollback()
             raise
 
@@ -86,7 +78,7 @@ class ProductoService:
             # Return the updated product
             return db.query(Producto).filter(Producto.id_producto == id_producto).first()
         except Exception as e:
-            logger.error(f"Error updating product {id_producto}: {e}", extra={"updates": updates})
+            logger.error("Error updating product %s: %s", id_producto, e, extra={"updates": updates})
             db.rollback()
             raise
 
@@ -105,7 +97,7 @@ class ProductoService:
             db.commit()
             return True
         except Exception as e:
-            logger.error(f"Error deleting product {id_producto}: {e}", extra={"modo": modo})
+            logger.error("Error deleting product %s: %s", id_producto, e, extra={"modo": modo})
             db.rollback()
             raise
 
@@ -128,6 +120,21 @@ class ProductoService:
     def get_productos_bajo_stock(db: Session) -> List[Producto]:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return get_productos_bajo_stock(db)
+
+    @staticmethod
+    def get_total_productos_activos(db: Session) -> int:
+        """Contar productos activos"""
+        return get_total_productos_activos(db)
+
+    @staticmethod
+    def get_valor_total_stock(db: Session) -> float:
+        """Calcular el valor total del stock"""
+        return get_valor_total_stock(db)
+
+    @staticmethod
+    def count_productos_bajo_stock(db: Session) -> int:
+        """Contar productos con stock bajo"""
+        return count_productos_bajo_stock(db)
 
     @staticmethod
     def get_productos_por_vencer(db: Session, dias: int) -> List[Producto]:
@@ -153,3 +160,8 @@ class ProductoService:
     def delete_producto(db: Session, producto_id: int, modo: str = "logico") -> bool:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return delete_producto(db, producto_id, modo == "logico")
+
+    @staticmethod
+    def buscar_productos(db: Session, q: str, skip: int = 0, limit: int = 50) -> List[Producto]:
+        """Buscar productos por query string"""
+        return search_productos(db, q, skip, limit)

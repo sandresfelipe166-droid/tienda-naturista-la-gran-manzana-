@@ -36,14 +36,16 @@ def count_productos(
 
 def get_productos(
     db: Session,
-    skip: int = 0,
-    limit: int = 100,
-    nombre: Optional[str] = None,
-    id_seccion: Optional[int] = None,
-    id_laboratorio: Optional[int] = None,
-    estado: Optional[str] = None
+    params: Dict[str, Any]
 ) -> List[Producto]:
     """Obtener lista de productos con filtros opcionales"""
+    skip = params.get('skip', 0)
+    limit = params.get('limit', 100)
+    nombre = params.get('nombre')
+    id_seccion = params.get('id_seccion')
+    id_laboratorio = params.get('id_laboratorio')
+    estado = params.get('estado')
+    
     query = _build_productos_query(db, nombre, id_seccion, id_laboratorio, estado)
     return query.offset(skip).limit(limit).all()
 
@@ -140,6 +142,24 @@ def get_productos_bajo_stock(db: Session) -> List[Producto]:
         )
         .all()
     )
+
+def get_total_productos_activos(db: Session) -> int:
+    """Contar productos activos"""
+    return db.query(Producto).filter(Producto.estado == "Activo").count()
+
+from sqlalchemy import func
+
+def get_valor_total_stock(db: Session) -> float:
+    """Calcular el valor total del stock (stock_actual * precio_compra) para productos activos"""
+    total_valor = db.query(func.sum(Producto.stock_actual * Producto.precio_compra)).filter(Producto.estado == "Activo").scalar()
+    return total_valor or 0.0
+
+def count_productos_bajo_stock(db: Session) -> int:
+    """Contar productos con stock bajo"""
+    return db.query(Producto).filter(
+        Producto.estado == "Activo",
+        Producto.stock_actual <= Producto.stock_minimo
+    ).count()
 
 
 def get_productos_por_vencer(db: Session, dias: int = 30) -> List[Producto]:
