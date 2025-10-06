@@ -4,6 +4,7 @@ from sqlalchemy.orm import declarative_base
 from typing import Generator
 import os
 from app.core.config import settings
+from sqlalchemy.pool import QueuePool
 
 # Normalize async driver to sync driver always; tests further normalize plain postgresql to psycopg2
 database_url = settings.database_url
@@ -17,8 +18,15 @@ if os.getenv("TESTING") == "true":
 
 engine = create_engine(
     database_url,
+    echo=getattr(settings, "debug", False),
+    poolclass=QueuePool,
+    pool_size=settings.db_pool_size,
+    max_overflow=settings.db_max_overflow,
+    pool_timeout=settings.db_pool_timeout,
+    pool_recycle=settings.db_pool_recycle,
     pool_pre_ping=True,
-    echo=getattr(settings, "debug", False)
+    connect_args=settings.db_connect_args,
+    future=True
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

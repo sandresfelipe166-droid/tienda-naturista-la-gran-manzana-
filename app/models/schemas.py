@@ -55,6 +55,36 @@ class PaginatedResponse(BaseModel, Generic[T]):
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
 
+# Generic simple message response
+class MessageResponse(BaseModel):
+    success: bool
+    message: str
+
+# Inventory summary responses
+class InventorySummary(BaseModel):
+    total_productos: int
+    valor_total_stock: float
+    productos_bajo_stock: int
+
+class InventorySummaryResponse(BaseModel):
+    success: bool
+    message: str
+    data: InventorySummary
+
+# Alertas specific responses
+class AlertaResponse(BaseModel):
+    success: bool
+    message: str
+    data: AlertaBase
+
+class AlertaId(BaseModel):
+    id_alerta: int
+
+class AlertaCreateResponse(BaseModel):
+    success: bool
+    message: str
+    data: AlertaId
+
 
 # ==========================
 # Secciones
@@ -77,6 +107,19 @@ class SeccionPaginatedResponse(BaseModel):
     data: List[SeccionBase]
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
+
+class SeccionResponse(BaseModel):
+    success: bool
+    message: str
+    data: SeccionBase
+
+class SeccionId(BaseModel):
+    id_seccion: int
+
+class SeccionCreateResponse(BaseModel):
+    success: bool
+    message: str
+    data: SeccionId
 
 
 class AlertaPaginatedResponse(BaseModel):
@@ -131,6 +174,20 @@ class ProductoPaginatedResponse(BaseModel):
     data: List[ProductoBase]
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
+
+class ProductoResponse(BaseModel):
+    success: bool
+    message: str
+    data: ProductoBase
+
+class ProductoId(BaseModel):
+    id_producto: int
+
+class ProductoCreateResponse(BaseModel):
+    success: bool
+    message: str
+    data: ProductoId
+
 
 
 class ProductoCreate(ProductoBase):
@@ -189,6 +246,19 @@ class LaboratorioPaginatedResponse(BaseModel):
     data: List[LaboratorioBase]
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
+
+class LaboratorioResponse(BaseModel):
+    success: bool
+    message: str
+    data: LaboratorioBase
+
+class LaboratorioId(BaseModel):
+    id_laboratorio: int
+
+class LaboratorioCreateResponse(BaseModel):
+    success: bool
+    message: str
+    data: LaboratorioId
 
 
 # ==========================
