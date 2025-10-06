@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from app.api.v1.router import api_router
+from app.core.request_id_middleware import RequestIdMiddleware
 import logging
 import uvicorn
 import os
@@ -13,6 +14,7 @@ from app.core.config import settings
 from app.core.rate_limiter import RateLimitMiddleware
 from app.core.input_validation import InputValidationMiddleware
 from app.core.security_middleware import SecurityHeadersMiddleware, CSRFMiddleware, APIKeyMiddleware, SecurityEventLogger
+from app.core.metrics import MetricsMiddleware, get_prometheus_metrics
 from app.core.exception_handlers import (
     inventario_exception_handler,
     validation_exception_handler,
@@ -24,6 +26,7 @@ from app.core.exceptions import InventarioException
 from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from app.routers.health import router as health_router
+from app.core.scheduler import scheduler_manager
 
 # Configure logging
 logging.basicConfig(
@@ -35,17 +38,31 @@ logger = logging.getLogger(__name__)
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        # Avoid creating schema during tests; rely on migrations or test setup
-        if os.getenv("TESTING") != "true":
+        # Create schema only if explicitly enabled and not during tests (prefer Alembic)
+        if settings.create_schema_on_startup and os.getenv("TESTING") != "true":
             Base.metadata.create_all(bind=engine)
         db = SessionLocal()
         try:
             _seed_default_roles(db)
         finally:
             db.close()
+        # Start scheduler if enabled
+        try:
+            if settings.scheduler_enabled:
+                scheduler_manager.start()
+                interval = getattr(settings, "scheduler_interval_hours", 24)
+                scheduler_manager.add_or_update_stock_bajo_job(interval)
+        except Exception as e:
+            logger.error(f"Scheduler start error: {e}")
     except Exception as e:
         logger.error(f"DB init error: {e}")
     yield
+    # Shutdown scheduler on application shutdown
+    try:
+        if settings.scheduler_enabled:
+            scheduler_manager.shutdown()
+    except Exception as e:
+        logger.error(f"Scheduler shutdown error: {e}")
 
 # Create FastAPI app
 app = FastAPI(
@@ -56,6 +73,9 @@ app = FastAPI(
     redoc_url="/redoc",
     lifespan=lifespan
 )
+
+# Add request ID middleware (early so downstream can use request.state.request_id)
+app.add_middleware(RequestIdMiddleware)
 
 # Add CORS middleware with advanced configuration
 app.add_middleware(
@@ -86,6 +106,10 @@ app.add_middleware(RateLimitMiddleware)
 # Add input validation middleware
 app.add_middleware(InputValidationMiddleware)
 
+# Add metrics middleware (optional)
+if settings.metrics_enabled:
+    app.add_middleware(MetricsMiddleware)
+
 # Add exception handlers
 app.add_exception_handler(InventarioException, inventario_exception_handler)
 app.add_exception_handler(RequestValidationError, validation_exception_handler)
@@ -97,6 +121,12 @@ app.add_exception_handler(Exception, general_exception_handler)
 # Include routers
 app.include_router(api_router)
 app.include_router(health_router, prefix="/api/v1", tags=["health"])
+
+# Expose Prometheus metrics endpoint if enabled
+if settings.prometheus_enabled:
+    async def prometheus_endpoint_async():
+        return get_prometheus_metrics()
+    app.add_api_route("/metrics", prometheus_endpoint_async, include_in_schema=False, methods=["GET"])
 
 # Startup: initialize DB schema and seed default roles
 

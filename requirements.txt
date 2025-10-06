@@ -14,3 +14,5 @@ redis==5.0.1
 pytest==7.4.3
 pytest-asyncio==0.21.1
 httpx==0.25.2
+APScheduler==3.10.4
+prometheus-client==0.20.0
