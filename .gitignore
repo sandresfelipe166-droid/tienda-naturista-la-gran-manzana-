@@ -205,3 +205,20 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Entorno y caches
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Bases de datos de prueba y logs
+test.db
+*.sqlite
+logs/
+*.log
+
+# Producción / secretos
+.env
+redis-windows.zip
