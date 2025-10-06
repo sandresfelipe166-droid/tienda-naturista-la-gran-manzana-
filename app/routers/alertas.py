@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body
+from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body, Response
 from sqlalchemy.orm import Session
 from app.services import AlertaService
 from app.utils import crear_respuesta
 from typing import Optional
 from app.models.schemas import (
     AlertaPaginatedResponse, AlertaCreate, AlertaUpdate,
-    AlertaBase
+    AlertaBase, MessageResponse, AlertaResponse, AlertaCreateResponse
 )
 from app.models.database import get_db
 from app.core.auth_middleware import require_product_read, require_product_write
@@ -59,7 +59,7 @@ async def listar_alertas(
         logger.error(f"Error en endpoint listar_alertas: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/{id_alerta}")
+@router.get("/{id_alerta}", response_model=AlertaResponse)
 async def obtener_alerta(
     id_alerta: int = Path(..., gt=0),
     db: Session = Depends(get_db),
@@ -74,7 +74,7 @@ async def obtener_alerta(
         data=alerta_data
     )
 
-@router.post("")
+@router.post("", response_model=AlertaCreateResponse)
 async def crear_alerta(
     alerta: AlertaCreate,
     db: Session = Depends(get_db),
@@ -83,14 +83,17 @@ async def crear_alerta(
     try:
         alerta_data = alerta.model_dump()
         nuevo_id = AlertaService.crear(db, alerta_data)
-        return crear_respuesta(
+        resp = crear_respuesta(
             message="Alerta creada exitosamente",
             data={"id_alerta": nuevo_id}
         )
+        # Optional Location header (no contract change)
+        resp.headers["Location"] = f"/api/v1/alertas/{nuevo_id}"
+        return resp
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.put("/{id_alerta}")
+@router.put("/{id_alerta}", response_model=MessageResponse)
 async def actualizar_alerta(
     id_alerta: int = Path(..., gt=0),
     alerta: AlertaUpdate = Body(...),
@@ -105,7 +108,7 @@ async def actualizar_alerta(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{id_alerta}")
+@router.delete("/{id_alerta}", response_model=MessageResponse)
 async def eliminar_alerta(
     id_alerta: int = Path(..., gt=0),
     modo: str = Query("logico", pattern="^(logico|fisico)$"),

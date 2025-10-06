@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body
+from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body, Response
 from sqlalchemy.orm import Session
 from app.services import LaboratorioService
 from app.utils import crear_respuesta
 from typing import Optional
 from app.models.schemas import (
     LaboratorioPaginatedResponse, LaboratorioCreate, LaboratorioUpdate,
-    LaboratorioBase
+    LaboratorioBase, LaboratorioResponse, LaboratorioCreateResponse, MessageResponse
 )
 from app.models.database import get_db
 from app.core.auth_middleware import require_product_read, require_product_write
@@ -53,7 +53,7 @@ async def listar_laboratorios(
         logger.error(f"Error en endpoint listar_laboratorios: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/{id_laboratorio}")
+@router.get("/{id_laboratorio}", response_model=LaboratorioResponse)
 async def obtener_laboratorio(
     id_laboratorio: int = Path(..., gt=0),
     db: Session = Depends(get_db),
@@ -68,20 +68,23 @@ async def obtener_laboratorio(
         data=laboratorio_data
     )
 
-@router.post("")
+@router.post("", response_model=LaboratorioCreateResponse)
 async def crear_laboratorio(
     laboratorio: LaboratorioCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
+    response: Response = None,
 ):
     laboratorio_data = laboratorio.model_dump()
     nuevo_id = LaboratorioService.crear(db, laboratorio_data)
+    if response is not None:
+        response.headers["Location"] = f"/api/v1/laboratorios/{nuevo_id}"
     return crear_respuesta(
         message="Laboratorio creado exitosamente",
         data={"id_laboratorio": nuevo_id}
     )
 
-@router.put("/{id_laboratorio}")
+@router.put("/{id_laboratorio}", response_model=MessageResponse)
 async def actualizar_laboratorio(
     id_laboratorio: int = Path(..., gt=0),
     laboratorio: LaboratorioUpdate = Body(...),
@@ -96,7 +99,7 @@ async def actualizar_laboratorio(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{id_laboratorio}")
+@router.delete("/{id_laboratorio}", response_model=MessageResponse)
 async def eliminar_laboratorio(
     id_laboratorio: int = Path(..., gt=0),
     modo: str = Query("logico", pattern="^(logico|fisico)$"),

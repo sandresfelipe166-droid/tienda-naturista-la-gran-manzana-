@@ -9,6 +9,7 @@ import time
 from app.core.config import settings
 from app.core.database import db_manager
 from app.core.logging_config import inventario_logger
+from app.core.metrics import metrics_manager
 
 router = APIRouter()
 logger = inventario_logger
@@ -56,12 +57,14 @@ async def detailed_health_check() -> Dict[str, Any]:
     # Redis health check
     if settings.redis_health_check_enabled:
         try:
+            # Asegurar tipos correctos para Pylance/redis-py
+            redis_host = settings.redis_host or "localhost"
             redis_client = redis.Redis(
-                host=settings.redis_host,
-                port=settings.redis_port,
-                db=settings.redis_db,
+                host=redis_host,
+                port=int(settings.redis_port),
+                db=int(settings.redis_db),
                 password=settings.redis_password,
-                socket_timeout=settings.redis_health_timeout
+                socket_timeout=float(settings.redis_health_timeout)
             )
             redis_client.ping()
             health_info["checks"]["redis"] = {
@@ -117,20 +120,61 @@ async def database_health_check() -> Dict[str, Any]:
 @router.get("/health/metrics", summary="Application Metrics")
 async def application_metrics() -> Dict[str, Any]:
     """
-    Métricas básicas de la aplicación
+    Métricas básicas de la aplicación (reales). Si psutil no está disponible, los datos
+    de memoria serán None. Para conexiones activas se usa el pool info del db_manager.
     """
+    # Summary base desde el metrics manager
+    summary = metrics_manager.summary()
+    uptime_seconds = summary.get("uptime_seconds")
+    rates = summary.get("rates", {})
+    latency = summary.get("latency", {})
+
+    # Intentar obtener uso de memoria con psutil (opcional)
+    mem_info: Dict[str, Any] = {"available": False, "rss": None, "vms": None, "percent": None}
+    try:
+        import psutil  # type: ignore
+        p = psutil.Process()
+        with p.oneshot():
+            mem = p.memory_info()
+            mem_info = {
+                "available": True,
+                "rss": getattr(mem, "rss", None),
+                "vms": getattr(mem, "vms", None),
+                "percent": psutil.virtual_memory().percent if hasattr(psutil, "virtual_memory") else None,
+            }
+    except Exception:
+        # Mantener mem_info con available=False
+        pass
+
+    # Información de conexiones del pool
+    active_connections = None
+    try:
+        db_info = db_manager.get_connection_info()
+        # Exponer directamente estructura del pool
+        active_connections = {
+            "pool_size": db_info.get("pool_size"),
+            "checked_in": db_info.get("checked_in"),
+            "checked_out": db_info.get("checked_out"),
+            "overflow": db_info.get("overflow"),
+        }
+    except Exception:
+        active_connections = None
+
     return {
         "timestamp": time.time(),
-        "uptime": "calculated_uptime",  # Implementar cálculo real
-        "memory_usage": "memory_info",   # Implementar con psutil
-        "active_connections": "connection_count",  # Implementar conteo
-        "request_rate": "requests_per_second",     # Implementar métricas
-        "error_rate": "errors_per_second",         # Implementar métricas
+        "uptime_seconds": uptime_seconds,
+        "memory_usage": mem_info,
+        "active_connections": active_connections,
+        "requests_total": summary.get("requests_total"),
+        "errors_total": summary.get("errors_total"),
+        "status_counts": summary.get("status_counts"),
+        "request_rate": rates.get("requests_per_second"),
+        "error_rate": rates.get("errors_per_second"),
         "response_times": {
-            "average": "avg_response_time",
-            "median": "median_response_time",
-            "95th_percentile": "p95_response_time"
-        }
+            "average_seconds": latency.get("average_seconds"),
+            "p95_bucket_seconds": latency.get("p95_bucket_seconds"),
+            "observations": latency.get("observation_count"),
+        },
     }
 
 @router.get("/health/config", summary="Configuration Info")

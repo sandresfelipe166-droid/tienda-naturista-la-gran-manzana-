@@ -1,7 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from app.routers import auth, secciones, alertas, laboratorios, productos, inventory
 from app.routers.users import router as users_router
-from app.models.database import get_db
+from app.routers.productos_advanced import router as productos_advanced_router
+from app.routers.reportes import router as reportes_router
+from app.routers.dashboard import router as dashboard_router
+from app.routers.notificaciones import router as notificaciones_router
+from app.routers.scheduler import router as scheduler_router
 
 # Main API router for version 1
 api_router = APIRouter(prefix="/api/v1")
@@ -15,21 +19,12 @@ api_router.include_router(inventory.router)
 api_router.include_router(productos.router, prefix="/productos")
 api_router.include_router(auth.router, prefix="/auth")
 api_router.include_router(users_router)
-
-# Health check endpoint
-@api_router.get("/health")
-async def health_check():
-    return {"status": "healthy", "version": "1.0.0"}
-
-# DB health check (simple SELECT 1)
-@api_router.get("/db-health")
-async def db_health(db=Depends(get_db)):
-    try:
-        from sqlalchemy import text
-        db.execute(text("SELECT 1"))
-        return {"database": "ok"}
-    except Exception as e:
-        return {"database": "error", "detail": str(e)}
+# Advanced and Phase 2 routers
+api_router.include_router(productos_advanced_router)
+api_router.include_router(reportes_router)
+api_router.include_router(dashboard_router)
+api_router.include_router(notificaciones_router)
+api_router.include_router(scheduler_router)
 
 # API info endpoint
 @api_router.get("/")
@@ -44,6 +39,11 @@ async def api_info():
             "alertas": "/api/v1/alertas",
             "laboratorios": "/api/v1/laboratorios",
             "productos": "/api/v1/productos",
-            "inventory": "/api/v1/inventory"
+            "productos_advanced": "/api/v1/productos",
+            "inventory": "/api/v1/inventory",
+            "reportes": "/api/v1/reportes",
+            "dashboard": "/api/v1/dashboard",
+            "notificaciones": "/api/v1/notificaciones",
+            "scheduler": "/api/v1/scheduler"
         }
     }

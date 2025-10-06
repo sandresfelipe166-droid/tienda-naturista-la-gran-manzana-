@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
+
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.models.database import get_db
@@ -6,7 +7,9 @@ from app.models.schemas import (
     ProductoBase,
     ProductoCreate,
     ProductoUpdate,
-    ProductoPaginatedResponse
+    ProductoPaginatedResponse,
+    ProductoResponse,
+    MessageResponse,
 )
 from app.crud.producto import (
     get_productos,
@@ -21,6 +24,12 @@ from app.crud.producto import (
 from app.core.auth_middleware import require_product_read, require_product_write
 
 router = APIRouter(tags=["Productos"])
+
+def get_pagination_params(
+    limit: int = Query(50, ge=1, le=1000),
+    skip: int = Query(0, ge=0)
+):
+    return {"limit": limit, "skip": skip}
 
 # Search route must come BEFORE the {producto_id} route
 @router.get("/search", response_model=dict)
@@ -97,12 +106,14 @@ async def listar_productos(
     try:
         productos = get_productos(
             db=db,
-            skip=skip,
-            limit=limit,
-            nombre=nombre,
-            id_seccion=id_seccion,
-            id_laboratorio=id_laboratorio,
-            estado=estado
+            params={
+                "skip": skip,
+                "limit": limit,
+                "nombre": nombre,
+                "id_seccion": id_seccion,
+                "id_laboratorio": id_laboratorio,
+                "estado": estado
+            }
         )
 
         # Calcular total con COUNT() sobre los mismos filtros
@@ -160,7 +171,7 @@ async def listar_productos(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al obtener productos: {str(e)}")
 
-@router.get("/{producto_id}", response_model=dict)
+@router.get("/{producto_id}", response_model=ProductoResponse)
 async def obtener_producto(
     producto_id: int,
     db: Session = Depends(get_db),
@@ -203,12 +214,15 @@ async def obtener_producto(
 @router.post("", response_model=dict)
 async def crear_producto(
     producto: ProductoCreate,
+    response: Response,
     db: Session = Depends(get_db),
     _: dict = Depends(require_product_write())
 ):
     """Crear un nuevo producto"""
     try:
         nuevo_producto = create_producto(db, producto)
+        # Set Location header to created resource
+        response.headers["Location"] = f"/api/v1/productos/{nuevo_producto.id_producto}"
         # Convertir el objeto SQLAlchemy a diccionario
         producto_dict = {
             "id_producto": nuevo_producto.id_producto,
@@ -236,7 +250,7 @@ async def crear_producto(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al crear producto: {str(e)}")
 
-@router.put("/{producto_id}", response_model=dict)
+@router.put("/{producto_id}", response_model=ProductoResponse)
 async def actualizar_producto(
     producto_id: int,
     producto_update: ProductoUpdate,
@@ -279,7 +293,7 @@ async def actualizar_producto(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al actualizar producto: {str(e)}")
 
-@router.delete("/{producto_id}", response_model=dict)
+@router.delete("/{producto_id}", response_model=MessageResponse)
 async def eliminar_producto(
     producto_id: int,
     modo: str = Query("logico", pattern="^(logico|fisico)$"),

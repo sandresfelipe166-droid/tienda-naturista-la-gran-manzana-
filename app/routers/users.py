@@ -1,5 +1,5 @@
 # app/routers/users.py
-from fastapi import APIRouter, Depends, HTTPException, status, Request
+from fastapi import APIRouter, Depends, HTTPException, status, Request, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from app.models.database import get_db
@@ -11,10 +11,15 @@ from app.models.models import Usuario
 
 router = APIRouter(tags=["Users"])
 
+def get_pagination_params(
+    limit: int = Query(50, ge=1, le=1000),
+    skip: int = Query(0, ge=0)
+):
+    return {"limit": limit, "skip": skip}
+
 @router.get("/users", response_model=List[UserResponse])
 async def list_users(
-    skip: int = 0,
-    limit: int = 100,
+    pagination: dict = Depends(get_pagination_params),
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user)
 ):
@@ -22,6 +27,8 @@ async def list_users(
     Listar usuarios (solo administradores)
     """
     # TODO: Agregar verificación de permisos de admin
+    limit = pagination.get("limit", 50)
+    skip = pagination.get("skip", 0)
     users = get_users(db, skip=skip, limit=limit)
     return [UserResponse.model_validate(user) for user in users]
 

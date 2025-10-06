@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body
+from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body, Response
 from sqlalchemy.orm import Session
 from app.services import SeccionService
 from app.utils import crear_respuesta
 from typing import Optional
 from app.models.schemas import (
     SeccionPaginatedResponse, SeccionCreate, SeccionUpdate,
-    SeccionBase
+    SeccionBase, SeccionResponse, SeccionCreateResponse, MessageResponse
 )
 from app.models.database import get_db
 from app.core.auth_middleware import require_product_read, require_product_write
@@ -53,7 +53,7 @@ async def listar_secciones(
         logger.error(f"Error en endpoint listar_secciones: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@router.get("/{id_seccion}")
+@router.get("/{id_seccion}", response_model=SeccionResponse)
 async def obtener_seccion(
     id_seccion: int = Path(..., gt=0),
     db: Session = Depends(get_db),
@@ -68,15 +68,18 @@ async def obtener_seccion(
         data=seccion_data
     )
 
-@router.post("")
+@router.post("", response_model=SeccionCreateResponse)
 async def crear_seccion(
     seccion: SeccionCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
+    response: Response = None,
 ):
     try:
         seccion_data = seccion.model_dump()
         nuevo_id = SeccionService.crear(db, seccion_data)
+        if response is not None:
+            response.headers["Location"] = f"/api/v1/secciones/{nuevo_id}"
         return crear_respuesta(
             message="Sección creada exitosamente",
             data={"id_seccion": nuevo_id}
@@ -84,7 +87,7 @@ async def crear_seccion(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.put("/{id_seccion}")
+@router.put("/{id_seccion}", response_model=MessageResponse)
 async def actualizar_seccion(
     id_seccion: int = Path(..., gt=0),
     seccion: SeccionUpdate = Body(...),
@@ -99,7 +102,7 @@ async def actualizar_seccion(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{id_seccion}")
+@router.delete("/{id_seccion}", response_model=MessageResponse)
 async def eliminar_seccion(
     id_seccion: int = Path(..., gt=0),
     modo: str = Query("logico", pattern="^(logico|fisico)$"),
