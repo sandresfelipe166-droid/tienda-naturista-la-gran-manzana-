@@ -28,11 +28,7 @@ class Settings(BaseSettings):
     db_max_overflow: int = int(os.getenv("DB_MAX_OVERFLOW", "30"))
     db_pool_timeout: int = int(os.getenv("DB_POOL_TIMEOUT", "30"))
     db_pool_recycle: int = int(os.getenv("DB_POOL_RECYCLE", "3600"))
-    db_connect_args: Dict[str, Any] = {
-        "connect_timeout": int(os.getenv("DB_CONNECT_TIMEOUT", "10")),
-        "application_name": os.getenv("DB_APP_NAME", "InventarioBackend"),
-        "options": os.getenv("DB_PG_OPTIONS", "-c statement_timeout=30s"),
-    }
+    db_connect_args: Dict[str, Any] = {}
 
     # Schema creation on startup (for development only; prefer Alembic migrations)
     create_schema_on_startup: bool = os.getenv("CREATE_SCHEMA_ON_STARTUP", "false").lower() == "true"
@@ -190,6 +186,16 @@ class Settings(BaseSettings):
             # Add testserver to trusted hosts for testing
             if "testserver" not in self.trusted_hosts:
                 self.trusted_hosts.append("testserver")
+
+        # Set connect_args based on database type
+        if self.database_url.startswith("sqlite"):
+            self.db_connect_args = {"check_same_thread": False}
+        else:
+            self.db_connect_args = {
+                "connect_timeout": int(os.getenv("DB_CONNECT_TIMEOUT", "10")),
+                "application_name": os.getenv("DB_APP_NAME", "InventarioBackend"),
+                "options": os.getenv("DB_PG_OPTIONS", "-c statement_timeout=30s"),
+            }
 
         # Parse env-driven overrides for lists (comma-separated)
         cors_env = os.getenv("CORS_ORIGINS")
