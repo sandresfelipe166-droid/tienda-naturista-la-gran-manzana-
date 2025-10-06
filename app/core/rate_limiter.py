@@ -101,14 +101,25 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         
         return f"{client_ip}:{hash(user_agent)}"
     
-    def get_rate_limit_config(self, path: str) -> Dict[str, int]:
-        """Obtener configuración de rate limit para un path"""
-        # Buscar configuración específica
-        for endpoint, config in self.endpoint_limits.items():
+    def get_rate_limit_config(self, path: str, method: str = "GET") -> Dict[str, int]:
+        """Obtener configuración de rate limit para un path y método"""
+        # Buscar configuración específica por endpoint
+        for endpoint, method_configs in self.endpoint_limits.items():
             if path.startswith(endpoint):
-                return config
-        
-        # Usar configuración por defecto
+                if method in method_configs:
+                    return method_configs[method]
+                else:
+                    # Fallback a configuración por método HTTP si existe
+                    if method in self.method_limits:
+                        return self.method_limits[method]
+                    # Si el método no está configurado, usar por defecto global
+                    return {"limit": self.default_limit, "window": self.default_window}
+
+        # Fallback a configuración por método HTTP si no hay match de endpoint
+        if method in self.method_limits:
+            return self.method_limits[method]
+
+        # Usar configuración por defecto global
         return {"limit": self.default_limit, "window": self.default_window}
     
     async def dispatch(self, request: Request, call_next) -> Response:
@@ -118,7 +129,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         client_id = self.get_client_identifier(request)
         
         # Obtener configuración de rate limit
-        config = self.get_rate_limit_config(request.url.path)
+        config = self.get_rate_limit_config(request.url.path, request.method)
         limit = config["limit"]
         window = config["window"]
         

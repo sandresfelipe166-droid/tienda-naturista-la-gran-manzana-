@@ -5,7 +5,12 @@ from passlib.context import CryptContext
 from app.core.config import settings
 
 # Configuración de encriptación
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Evitamos dependencias de bcrypt (incompatibilidad entre passlib 1.7.4 y bcrypt 5.x)
+# usando pbkdf2_sha256, que no requiere módulos externos y es seguro.
+pwd_context = CryptContext(
+    schemes=["pbkdf2_sha256"],
+    deprecated="auto"
+)
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verificar contraseña"""

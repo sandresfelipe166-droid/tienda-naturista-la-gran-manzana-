@@ -7,7 +7,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
 import secrets
 import time
-from typing import Dict, Any
+from typing import Dict, Any, Literal, cast
+import string
 from app.core.config import settings
 from app.core.logging_config import inventario_logger
 from app.core.exceptions import SecurityException
@@ -24,19 +25,26 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next) -> Response:
         response = await call_next(request)
 
-        # Agregar headers de seguridad
+        # Agregar headers de seguridad (sin sobrescribir si ya existen)
         for header_name, header_value in self.security_headers.items():
-            response.headers[header_name] = header_value
+            if header_name not in response.headers:
+                response.headers[header_name] = header_value
 
-        # Headers adicionales específicos
-        response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
-        response.headers["X-XSS-Protection"] = "1; mode=block"
-        response.headers["Referrer-Policy"] = "no-referrer-when-downgrade"
-        response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
+        # Compatibilidad: asegurar headers comunes si no están presentes desde settings
+        defaults = {
+            "X-Content-Type-Options": "nosniff",
+            "X-Frame-Options": "DENY",
+            "X-XSS-Protection": "1; mode=block",
+            "Referrer-Policy": "no-referrer-when-downgrade",
+            "Permissions-Policy": "geolocation=(), microphone=(), camera=()",
+        }
+        for k, v in defaults.items():
+            if k not in response.headers:
+                response.headers[k] = v
 
         # Headers de información
-        response.headers["X-Powered-By"] = "Inventario-Backend"
+        if getattr(settings, "send_x_powered_by", True):
+            response.headers["X-Powered-By"] = getattr(settings, "powered_by_header", "Inventario-Backend")
         response.headers["X-Environment"] = settings.environment
 
         return response
@@ -66,7 +74,8 @@ class CSRFMiddleware(BaseHTTPMiddleware):
                     logger.log_security_event(
                         "csrf_token_invalid",
                         ip_address=request.client.host if request.client else "unknown",
-                        path=request.url.path
+                        path=request.url.path,
+                        request_id=getattr(request.state, 'request_id', None)
                     )
                     return JSONResponse(
                         status_code=403,
@@ -78,12 +87,16 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         # Agregar token CSRF a responses si es necesario
         if request.method == "GET" and not request.url.path.startswith("/api/"):
             new_token = self._generate_csrf_token()
+            # Normalizar samesite a valores admitidos por Starlette ('lax'|'strict'|'none')
+            samesite_raw = str(getattr(settings, "session_cookie_samesite", "lax")).lower()
+            if samesite_raw not in ("lax", "strict", "none"):
+                samesite_raw = "lax"
             response.set_cookie(
                 "csrf_token",
                 new_token,
                 httponly=False,
-                secure=settings.session_cookie_secure,
-                samesite=settings.session_cookie_samesite
+                secure=bool(getattr(settings, "session_cookie_secure", True)),
+                samesite=cast(Literal["lax", "strict", "none"], samesite_raw),
             )
 
         return response
@@ -93,9 +106,12 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         return secrets.token_urlsafe(32)
 
     def _validate_csrf_token(self, token: str) -> bool:
-        """Validar token CSRF (simplificado)"""
+        """Validar token CSRF (simplificado) compatible con token_urlsafe"""
         # En producción, implementar validación real con timestamp y firma
-        return len(token) >= 32 and token.isalnum()
+        if not token or len(token) < 32:
+            return False
+        allowed = set(string.ascii_letters + string.digits + "-_")
+        return all(c in allowed for c in token)
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
     """Middleware para validación de API Key"""
@@ -111,7 +127,8 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                 logger.log_security_event(
                     "api_key_invalid",
                     ip_address=request.client.host if request.client else "unknown",
-                    path=request.url.path
+                    path=request.url.path,
+                    request_id=getattr(request.state, 'request_id', None)
                 )
                 return JSONResponse(
                     status_code=401,
@@ -130,12 +147,17 @@ class SecurityEventLogger(BaseHTTPMiddleware):
         start_time = time.time()
 
         # Log de solicitud
+        # Tipado seguro para Pylance: user_id como int y request_id como str
+        _user_id_val = getattr(request.state, "user_id", None)
+        user_id_int = _user_id_val if isinstance(_user_id_val, int) else 0
+        request_id_str = str(getattr(request.state, "request_id", "")) if getattr(request.state, "request_id", None) else ""
         logger.log_request(
             method=request.method,
             path=request.url.path,
-            user_id=getattr(request.state, 'user_id', None),
+            user_id=user_id_int,
             ip_address=request.client.host if request.client else "unknown",
-            user_agent=request.headers.get("User-Agent", "")
+            user_agent=request.headers.get("User-Agent", ""),
+            request_id=request_id_str,
         )
 
         response = await call_next(request)
@@ -152,12 +174,11 @@ class SecurityEventLogger(BaseHTTPMiddleware):
                     "path": request.url.path,
                     "status_code": response.status_code,
                     "duration": duration,
-                    "ip_address": request.client.host if request.client else "unknown"
+                    "ip_address": request.client.host if request.client else "unknown",
+                    "request_id": request_id_str,
                 }
             )
 
         return response
 
-class SecurityException(Exception):
-    """Excepción personalizada para errores de seguridad"""
-    pass
+

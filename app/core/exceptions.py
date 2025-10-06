@@ -155,3 +155,11 @@ class RateLimitException(InventarioException):
             status_code=429,
             details={"limit": limit, "window": window}
         )
+
+
+class SecurityException(Exception):
+    """Excepción para errores de seguridad (CSRF, API Key, autorización)."""
+    def __init__(self, message: str = "Security error", status_code: int = 403):
+        super().__init__(message)
+        self.message = message
+        self.status_code = status_code

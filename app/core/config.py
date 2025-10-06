@@ -2,262 +2,250 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional, List, Dict, Any
 import os
 
+
 class Settings(BaseSettings):
-    # Environment
-    environment: str = "development"
-    debug: bool = True
+    # Base configuration
+    environment: str = os.getenv("ENVIRONMENT", "development")
+    debug: bool = os.getenv("DEBUG", "true").lower() == "true"
+
+    # Server
+    host: str = os.getenv("HOST", "127.0.0.1")
+    port: int = int(os.getenv("PORT", "8000"))
 
     # Database
-    database_url: str = "postgresql+psycopg2://admin:admin123@localhost:5432/inventario"
-    db_host: Optional[str] = None
-    db_port: int = 5432
-    db_name: str = "inventario"
-    db_user: str = "admin"
-    db_password: str = "admin123"
+    database_url: str = os.getenv(
+        "DATABASE_URL",
+        "postgresql+psycopg2://admin:admin123@localhost:5432/inventario",
+    )
+    db_host: Optional[str] = os.getenv("DB_HOST")
+    db_port: int = int(os.getenv("DB_PORT", "5432"))
+    db_name: str = os.getenv("DB_NAME", "inventario")
+    db_user: str = os.getenv("DB_USER", "admin")
+    db_password: str = os.getenv("DB_PASSWORD", "admin123")
 
     # Database - Advanced Pool Configuration
-    db_pool_size: int = 20
-    db_max_overflow: int = 30
-    db_pool_timeout: int = 30
-    db_pool_recycle: int = 3600
+    db_pool_size: int = int(os.getenv("DB_POOL_SIZE", "20"))
+    db_max_overflow: int = int(os.getenv("DB_MAX_OVERFLOW", "30"))
+    db_pool_timeout: int = int(os.getenv("DB_POOL_TIMEOUT", "30"))
+    db_pool_recycle: int = int(os.getenv("DB_POOL_RECYCLE", "3600"))
     db_connect_args: Dict[str, Any] = {
-        "connect_timeout": 10,
-        "application_name": "InventarioBackend",
-        "options": "-c statement_timeout=30s"
+        "connect_timeout": int(os.getenv("DB_CONNECT_TIMEOUT", "10")),
+        "application_name": os.getenv("DB_APP_NAME", "InventarioBackend"),
+        "options": os.getenv("DB_PG_OPTIONS", "-c statement_timeout=30s"),
     }
 
+    # Schema creation on startup (for development only; prefer Alembic migrations)
+    create_schema_on_startup: bool = os.getenv("CREATE_SCHEMA_ON_STARTUP", "false").lower() == "true"
+
     # Security - JWT
-    secret_key: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production-123456789")
-    algorithm: str = "HS256"
-    access_token_expire_minutes: int = 30
-    refresh_token_expire_days: int = 7
+    secret_key: str = os.getenv(
+        "SECRET_KEY", "dev-secret-key-change-in-production-123456789"
+    )
+    algorithm: str = os.getenv("JWT_ALG", "HS256")
+    access_token_expire_minutes: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
+    refresh_token_expire_days: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
 
     # Security - Password Policy
-    min_password_length: int = 8
-    require_special_chars: bool = True
-    require_uppercase: bool = True
-    require_numbers: bool = True
+    min_password_length: int = int(os.getenv("MIN_PASSWORD_LENGTH", "8"))
+    require_special_chars: bool = os.getenv("REQUIRE_SPECIAL_CHARS", "true").lower() == "true"
+    require_uppercase: bool = os.getenv("REQUIRE_UPPERCASE", "true").lower() == "true"
+    require_numbers: bool = os.getenv("REQUIRE_NUMBERS", "true").lower() == "true"
 
     # Security - Session
-    session_cookie_secure: bool = True
-    session_cookie_httponly: bool = True
-    session_cookie_samesite: str = "strict"
+    session_cookie_secure: bool = os.getenv("SESSION_COOKIE_SECURE", "true").lower() == "true"
+    session_cookie_httponly: bool = os.getenv("SESSION_COOKIE_HTTPONLY", "true").lower() == "true"
+    session_cookie_samesite: str = os.getenv("SESSION_COOKIE_SAMESITE", "strict")
 
     # Security - CSRF
     csrf_secret: str = os.getenv("CSRF_SECRET", "csrf-secret-key-change-in-production")
-    csrf_token_expire_minutes: int = 60
+    csrf_token_expire_minutes: int = int(os.getenv("CSRF_TOKEN_EXPIRE_MINUTES", "60"))
 
     # Security - API Key
-    api_key_enabled: bool = False
+    api_key_enabled: bool = os.getenv("API_KEY_ENABLED", "false").lower() == "true"
     api_key_secret: str = os.getenv("API_KEY_SECRET", "api-key-secret")
 
     # Security - Headers
+    send_x_powered_by: bool = os.getenv("SEND_X_POWERED_BY", "false").lower() == "true"
+    powered_by_header: str = os.getenv("POWERED_BY_HEADER", "Inventario-Backend")
     security_headers: Dict[str, str] = {
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY",
         "X-XSS-Protection": "1; mode=block",
         "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
         "Referrer-Policy": "no-referrer-when-downgrade",
-        "Permissions-Policy": "geolocation=(), microphone=(), camera=()"
+        "Permissions-Policy": "geolocation=(), microphone=(), camera=()",
     }
 
-    # Server
-    port: int = 8000
-    host: str = "127.0.0.1"
+    # Content Security Policy (optional)
+    csp_enabled: bool = os.getenv("CSP_ENABLED", "false").lower() == "true"
+    csp_default: str = os.getenv(
+        "CSP_DEFAULT",
+        "default-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+    )
+
+    # CORS
+    cors_allow_credentials: bool = True
+    cors_allow_methods: List[str] = ["*"]
+    cors_allow_headers: List[str] = [
+        "Authorization",
+        "Content-Type",
+        "X-Requested-With",
+        "X-API-Key",
+        "X-CSRF-Token",
+        "X-Request-Id",
+    ]
+    cors_expose_headers: List[str] = [
+        "X-RateLimit-Limit",
+        "X-RateLimit-Remaining",
+        "X-RateLimit-Window",
+        "X-RateLimit-Reset",
+        "X-Request-Id",
+    ]
+    cors_max_age: int = 600
 
     # CORS & Hosts - Environment Specific
     cors_origins_development: List[str] = [
         "http://localhost:3000",
         "http://localhost:8000",
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
     ]
-
     cors_origins_production: List[str] = [
         "https://yourdomain.com",
         "https://www.yourdomain.com",
-        "https://api.yourdomain.com"
+        "https://api.yourdomain.com",
     ]
+    trusted_hosts: List[str] = ["localhost", "127.0.0.1"]
 
-    trusted_hosts: List[str] = ["localhost", "127.0.0.1", "testserver"]
+    # Rate limiting
+    rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
+    rate_limit_window: int = int(os.getenv("RATE_LIMIT_WINDOW", "60"))
+    endpoint_rate_limits: Dict[str, Dict[str, int]] = {}
+    # Optional Redis backend for rate limiting
+    rate_limit_use_redis: bool = os.getenv("RATE_LIMIT_USE_REDIS", "false").lower() == "true"
+    rate_limit_redis_prefix: str = os.getenv("RATE_LIMIT_REDIS_PREFIX", "ratelimit")
 
-    # CORS Advanced Configuration
-    cors_allow_credentials: bool = True
-    cors_allow_methods: List[str] = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    cors_allow_headers: List[str] = ["*"]
-    cors_expose_headers: List[str] = ["X-RateLimit-Limit", "X-RateLimit-Remaining"]
-    cors_max_age: int = 86400  # 24 horas
-
-    # Rate Limiting - Advanced
-    rate_limit_requests: int = 100
-    rate_limit_window: int = 60
-
-    # Rate Limiting - Per Endpoint
-    endpoint_rate_limits: Dict[str, Dict[str, Dict[str, int]]] = {
-        "/api/v1/auth/login": {
-            "GET": {"limit": 10, "window": 300},
-            "POST": {"limit": 5, "window": 300}
-        },
-        "/api/v1/productos": {
-            "GET": {"limit": 200, "window": 60},
-            "POST": {"limit": 50, "window": 60},
-            "PUT": {"limit": 30, "window": 60},
-            "DELETE": {"limit": 10, "window": 60}
-        },
-        "/api/v1/users": {
-            "GET": {"limit": 100, "window": 60},
-            "POST": {"limit": 20, "window": 60},
-            "PUT": {"limit": 20, "window": 60},
-            "DELETE": {"limit": 5, "window": 60}
-        }
-    }
-
-    # Logging - Advanced
-    log_level: str = "INFO"
-    log_file: str = "logs/app.log"
-    log_max_file_size: str = "10MB"
-    log_backup_count: int = 10
-    log_json_format: bool = True
-    log_include_extra: bool = True
-
-    # Logging - External Services
-    sentry_dsn: Optional[str] = None
-    rollbar_token: Optional[str] = None
-
-    # Logging - Module Levels
+    # Logging
+    log_file: str = os.getenv("LOG_FILE", "logs/inventario.log")
+    log_level: str = os.getenv("LOG_LEVEL", "INFO")
+    log_json_format: bool = os.getenv("LOG_JSON_FORMAT", "true").lower() == "true"
+    log_max_file_size: int = int(os.getenv("LOG_MAX_FILE_SIZE", str(10 * 1024 * 1024)))
+    log_backup_count: int = int(os.getenv("LOG_BACKUP_COUNT", "5"))
     log_levels: Dict[str, str] = {
-        "app.core.security": "WARNING",
         "app.core.database": "INFO",
-        "uvicorn": "WARNING"
+        "sqlalchemy.engine": "WARNING",
+        "sqlalchemy.pool": "WARNING",
+        "uvicorn": "WARNING",
     }
 
-    # Cache - Redis
-    redis_host: str = "localhost"
-    redis_port: int = 6379
-    redis_db: int = 0
-    redis_password: Optional[str] = None
-    redis_socket_timeout: int = 5
-    redis_socket_connect_timeout: int = 5
-    redis_retry_on_timeout: bool = True
-    redis_health_check_interval: int = 30
+    # Redis and caching
+    redis_host: Optional[str] = os.getenv("REDIS_HOST")
+    redis_port: int = int(os.getenv("REDIS_PORT", "6379"))
+    redis_db: int = int(os.getenv("REDIS_DB", "0"))
+    redis_password: Optional[str] = os.getenv("REDIS_PASSWORD")
+    redis_socket_timeout: float = float(os.getenv("REDIS_SOCKET_TIMEOUT", "1.0"))
+    # Health check socket timeout for Redis (used in /health/detailed)
+    redis_health_timeout: float = float(os.getenv("REDIS_HEALTH_TIMEOUT", "1.0"))
 
-    # Cache - TTL Settings
-    cache_ttl_short: int = 300      # 5 minutos
-    cache_ttl_medium: int = 1800    # 30 minutos
-    cache_ttl_long: int = 7200      # 2 horas
-    cache_ttl_products: int = 600   # 10 minutos
-    cache_ttl_users: int = 900      # 15 minutos
+    # SMTP / Email
+    smtp_host: Optional[str] = os.getenv("SMTP_HOST")
+    smtp_port: int = int(os.getenv("SMTP_PORT", "587"))
+    smtp_user: Optional[str] = os.getenv("SMTP_USER")
+    smtp_password: Optional[str] = os.getenv("SMTP_PASSWORD")
+    smtp_use_tls: bool = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
+    alert_emails: List[str] = []
 
-    # Health Checks
-    health_check_enabled: bool = True
-    health_check_path: str = "/health"
-    health_check_timeout: int = 30
+    # Scheduler
+    scheduler_enabled: bool = os.getenv("SCHEDULER_ENABLED", "false").lower() == "true"
+    scheduler_interval_hours: int = int(os.getenv("SCHEDULER_INTERVAL_HOURS", "24"))
+    scheduler_timezone: str = os.getenv("SCHEDULER_TIMEZONE", "UTC")
 
-    # Database Health
-    db_health_check_enabled: bool = True
-    db_health_query_timeout: int = 5
-
-    # Redis Health
-    redis_health_check_enabled: bool = True
-    redis_health_timeout: int = 3
-
-    # External Services Health
+    # Health/Monitoring toggles
+    health_check_enabled: bool = os.getenv("HEALTH_CHECK_ENABLED", "true").lower() == "true"
+    db_health_check_enabled: bool = os.getenv("DB_HEALTH_CHECK_ENABLED", "true").lower() == "true"
+    redis_health_check_enabled: bool = os.getenv("REDIS_HEALTH_CHECK_ENABLED", "false").lower() == "true"
+    prometheus_enabled: bool = os.getenv("PROMETHEUS_ENABLED", "false").lower() == "true"
+    metrics_enabled: bool = os.getenv("METRICS_ENABLED", "false").lower() == "true"
+    backup_enabled: bool = os.getenv("BACKUP_ENABLED", "false").lower() == "true"
+    ssl_enabled: bool = os.getenv("SSL_ENABLED", "false").lower() == "true"
+    # External services health checks configuration placeholder
     external_services_health: List[Dict[str, Any]] = []
 
-    # Backup Configuration
-    backup_enabled: bool = True
-    backup_path: str = "./backups"
-    backup_frequency_hours: int = 24
-    backup_retention_days: int = 7
-
-    # Cloud Backup
-    cloud_backup_enabled: bool = False
-    aws_s3_bucket: Optional[str] = None
-    aws_access_key_id: Optional[str] = None
-    aws_secret_access_key: Optional[str] = None
-
-    # Monitoring
-    prometheus_enabled: bool = True
-    prometheus_port: int = 9090
-    metrics_enabled: bool = True
-    metrics_collection_interval: int = 60
-
-    # Alert Configuration
-    alerts_enabled: bool = True
-    alert_thresholds: Dict[str, Any] = {
-        "error_rate": 0.05,      # 5% error rate
-        "response_time": 2.0,    # 2 segundos
-        "db_connection_errors": 5,
-        "memory_usage": 80       # 80% memory
-    }
-
-    # Deployment
-    docker_enabled: bool = False
-    docker_registry: Optional[str] = None
-    docker_image_tag: str = "latest"
-
-    # SSL/TLS
-    ssl_enabled: bool = False
-    ssl_cert_path: Optional[str] = None
-    ssl_key_path: Optional[str] = None
-
-    # Pydantic v2 settings config
+    # Pydantic settings model config
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        # Environment-specific configurations
-        if self.environment == "production":
-            self.debug = False
-            self.log_level = "WARNING"
-            self.cors_allow_credentials = True
-            self.ssl_enabled = True
-        elif self.environment == "testing":
-            self.debug = True
-            self.log_level = "DEBUG"
-            self.trusted_hosts.append("testserver")
-
+    def model_post_init(self, __context: Any) -> None:
         # Normalize to sync driver always (avoid async/sync conflicts in runtime)
         if self.database_url.startswith("postgresql+asyncpg://"):
-            self.database_url = self.database_url.replace("postgresql+asyncpg://", "postgresql+psycopg2://", 1)
+            self.database_url = self.database_url.replace(
+                "postgresql+asyncpg://", "postgresql+psycopg2://", 1
+            )
+
         # For tests, also convert plain postgresql to psycopg2
         if os.getenv("TESTING") == "true":
             if self.database_url.startswith("postgresql://"):
-                self.database_url = self.database_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+                self.database_url = self.database_url.replace(
+                    "postgresql://", "postgresql+psycopg2://", 1
+                )
             # Add testserver to trusted hosts for testing
-            self.trusted_hosts.append("testserver")
+            if "testserver" not in self.trusted_hosts:
+                self.trusted_hosts.append("testserver")
 
         # Parse env-driven overrides for lists (comma-separated)
         cors_env = os.getenv("CORS_ORIGINS")
         hosts_env = os.getenv("TRUSTED_HOSTS")
         if cors_env:
-            self.cors_origins = [o.strip() for o in cors_env.split(",") if o.strip()]
+            parsed = [o.strip() for o in cors_env.split(",") if o.strip()]
+            if parsed:
+                self.cors_origins = parsed
         if hosts_env:
-            self.trusted_hosts = [h.strip() for h in hosts_env.split(",") if h.strip()]
+            parsed = [h.strip() for h in hosts_env.split(",") if h.strip()]
+            if parsed:
+                self.trusted_hosts = parsed
+
+        # Parse alert emails for notifications (comma-separated)
+        emails_env = os.getenv("ALERT_EMAILS")
+        if emails_env:
+            parsed_emails = [e.strip() for e in emails_env.split(",") if e.strip()]
+            if parsed_emails:
+                self.alert_emails = parsed_emails
 
         # Dynamic CORS origins based on environment
-        if self.environment == "production":
-            self.cors_origins = self.cors_origins_production
+        if self.environment.lower() == "production":
+            self._cors_origins = self.cors_origins_production
         else:
-            self.cors_origins = self.cors_origins_development
+            self._cors_origins = self.cors_origins_development
 
         # Validate critical security settings
-        if self.environment == "production" and len(self.secret_key) < 32:
+        if self.environment.lower() == "production" and len(self.secret_key) < 32:
             raise ValueError("SECRET_KEY must be at least 32 characters long in production")
 
-        if self.environment == "production" and not self.ssl_enabled:
+        if self.environment.lower() == "production" and not self.ssl_enabled:
+            # Only a warning in production if SSL disabled
             print("WARNING: SSL is not enabled in production environment")
+
+        # Conditionally apply HSTS only when SSL is enabled
+        if not self.ssl_enabled and "Strict-Transport-Security" in self.security_headers:
+            self.security_headers.pop("Strict-Transport-Security", None)
+        elif self.ssl_enabled:
+            self.security_headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+        # Apply Content-Security-Policy header if enabled
+        if getattr(self, "csp_enabled", False):
+            self.security_headers["Content-Security-Policy"] = getattr(
+                self, "csp_default", "default-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+            )
+        else:
+            self.security_headers.pop("Content-Security-Policy", None)
 
     @property
     def cors_origins(self) -> List[str]:
         """Get CORS origins based on environment"""
-        if self.environment == "production":
-            return self.cors_origins_production
-        return self.cors_origins_development
+        return getattr(self, "_cors_origins", self.cors_origins_development)
 
     @cors_origins.setter
     def cors_origins(self, value: List[str]):
-        """Set CORS origins"""
+        """Set CORS origins (explicit override)"""
         self._cors_origins = value
 
     def get_redis_url(self) -> str:
@@ -270,5 +258,6 @@ class Settings(BaseSettings):
     def get_log_level(self, module_name: str) -> str:
         """Get log level for specific module"""
         return self.log_levels.get(module_name, self.log_level)
+
 
 settings = Settings()

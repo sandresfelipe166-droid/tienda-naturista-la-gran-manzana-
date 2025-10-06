@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from typing import Generator
 from app.core.config import settings
 from app.core.logging_config import inventario_logger
+from app.models.database import engine as shared_engine, SessionLocal as SharedSessionLocal
 
 logger = inventario_logger
 
@@ -16,18 +17,7 @@ logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 logging.getLogger('sqlalchemy.pool').setLevel(logging.INFO)
 
 # Motor de base de datos con configuración avanzada
-engine = create_engine(
-    settings.database_url,
-    echo=settings.debug,
-    poolclass=QueuePool,
-    pool_size=settings.db_pool_size,
-    max_overflow=settings.db_max_overflow,
-    pool_timeout=settings.db_pool_timeout,
-    pool_recycle=settings.db_pool_recycle,
-    pool_pre_ping=True,
-    connect_args=settings.db_connect_args,
-    future=True  # Habilitar SQLAlchemy 2.0 features
-)
+engine = shared_engine
 
 # Configurar eventos de SQLAlchemy para logging
 @event.listens_for(engine, "before_cursor_execute")
@@ -58,15 +48,9 @@ def receive_checkin(dbapi_connection, connection_record):
     logger.log_database_operation("checkin", "pool")
 
 # Sesión de base de datos
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine,
-    expire_on_commit=False
-)
+SessionLocal = SharedSessionLocal
 
-# Base para modelos
-Base = declarative_base()
+# Base imported from app.models.database
 
 class DatabaseManager:
     """Gestor avanzado de base de datos con retry y health checks"""
@@ -120,8 +104,7 @@ class DatabaseManager:
             "pool_size": pool.size(),
             "checked_in": pool.checkedin(),
             "checked_out": pool.checkedout(),
-            "overflow": pool.overflow(),
-            "checked_out": pool.checkedout()
+            "overflow": pool.overflow()
         }
 
 # Instancia global del gestor de base de datos
