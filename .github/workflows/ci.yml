@@ -43,7 +43,15 @@ jobs:
           isort --check-only .
           black --check .
 
-      - name: Run type checks (pyright)
+      - name: Set up Node cache (for pyright)
+        uses: actions/cache@v4
+        with:
+          path: ~/.nodeenv
+          key: ${{ runner.os }}-nodeenv-${{ hashFiles('.nodeenv') }}
+          restore-keys: |
+            ${{ runner.os }}-nodeenv-
+
+      - name: Run type checks (pyright --strict)
         run: |
           pyright --strict
 
