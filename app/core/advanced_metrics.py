@@ -7,12 +7,12 @@ Provides comprehensive monitoring capabilities including:
 - Prometheus integration
 """
 
-from typing import Dict, Optional
+from typing import Dict, Optional, Any, List, Callable
 from datetime import datetime
 import time
 
 from prometheus_client import Counter, Histogram, Gauge, CollectorRegistry
-from fastapi import Request
+from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.logging_config import inventario_logger as logger
@@ -236,7 +236,7 @@ class AdvancedMetricsMiddleware(BaseHTTPMiddleware):
         super().__init__(app)
         self.exclude_paths = exclude_paths or ["/docs", "/redoc", "/openapi.json", "/metrics"]
 
-    async def dispatch(self, request: Request, call_next) -> object:
+    async def dispatch(self, request: Request, call_next: Callable) -> Response:
         """Process request and collect metrics."""
 
         # Skip metrics collection for excluded paths
@@ -317,7 +317,7 @@ class HealthCheckCollector:
     """Collector for health check metrics."""
 
     @staticmethod
-    def get_system_health() -> Dict[str, any]:
+    def get_system_health() -> Dict[str, Any]:
         """Get overall system health status."""
         from app.models.database import engine
         from sqlalchemy import text
@@ -340,7 +340,7 @@ class HealthCheckCollector:
         return health
 
     @staticmethod
-    def get_inventory_metrics() -> Dict[str, any]:
+    def get_inventory_metrics() -> Dict[str, Any]:
         """Get current inventory metrics."""
         from app.models.database import SessionLocal
         from app.models.models import Producto
@@ -363,7 +363,7 @@ class HealthCheckCollector:
             db.close()
 
     @staticmethod
-    def get_performance_metrics() -> Dict[str, any]:
+    def get_performance_metrics() -> Dict[str, Any]:
         """Get performance metrics."""
         from prometheus_client import REGISTRY
 

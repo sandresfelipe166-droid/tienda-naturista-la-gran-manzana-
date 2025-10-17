@@ -27,12 +27,12 @@ class TestAuditLogger:
             request_id="req-123",
         )
 
-        assert audit.action == "CREATE"
-        assert audit.resource_type == "Producto"
-        assert audit.resource_id == 123
-        assert audit.username == "admin"
-        assert audit.status == "SUCCESS"
-        assert audit.changes["created"]["name"] == "Paracetamol"
+        assert audit.action == "CREATE"  # type: ignore
+        assert audit.resource_type == "Producto"  # type: ignore
+        assert audit.resource_id == 123  # type: ignore
+        assert audit.username == "admin"  # type: ignore
+        assert audit.status == "SUCCESS"  # type: ignore
+        assert audit.changes["created"]["name"] == "Paracetamol"  # type: ignore
 
     def test_log_update_operation(self, db_session):
         """Test logging an UPDATE operation."""
@@ -51,9 +51,9 @@ class TestAuditLogger:
             ip_address="192.168.1.1",
         )
 
-        assert audit.action == "UPDATE"
-        assert audit.changes["before"]["price"] == 10.5
-        assert audit.changes["after"]["price"] == 12.0
+        assert audit.action == "UPDATE"  # type: ignore
+        assert audit.changes["before"]["price"] == 10.5  # type: ignore
+        assert audit.changes["after"]["price"] == 12.0  # type: ignore
 
     def test_log_delete_operation(self, db_session):
         """Test logging a DELETE operation."""
@@ -67,9 +67,9 @@ class TestAuditLogger:
             ip_address="192.168.1.1",
         )
 
-        assert audit.action == "DELETE"
-        assert audit.resource_id == 123
-        assert audit.changes["deleted"]["name"] == "Paracetamol"
+        assert audit.action == "DELETE"  # type: ignore
+        assert audit.resource_id == 123  # type: ignore
+        assert audit.changes["deleted"]["name"] == "Paracetamol"  # type: ignore
 
     def test_log_login_success(self, db_session):
         """Test logging successful login."""
@@ -80,9 +80,9 @@ class TestAuditLogger:
             success=True,
         )
 
-        assert audit.action == "LOGIN"
-        assert audit.status == "SUCCESS"
-        assert audit.username == "admin"
+        assert audit.action == "LOGIN"  # type: ignore
+        assert audit.status == "SUCCESS"  # type: ignore
+        assert audit.username == "admin"  # type: ignore
 
     def test_log_login_failure(self, db_session):
         """Test logging failed login."""
@@ -93,8 +93,8 @@ class TestAuditLogger:
             success=False,
         )
 
-        assert audit.action == "AUTH_FAILURE"
-        assert audit.status == "FAILURE"
+        assert audit.action == "AUTH_FAILURE"  # type: ignore
+        assert audit.status == "FAILURE"  # type: ignore
 
     def test_log_permission_denied(self, db_session):
         """Test logging permission denied."""
@@ -107,8 +107,8 @@ class TestAuditLogger:
             ip_address="192.168.1.2",
         )
 
-        assert audit.action == "PERMISSION_DENIED"
-        assert audit.status == "FAILURE"
+        assert audit.action == "PERMISSION_DENIED"  # type: ignore
+        assert audit.status == "FAILURE"  # type: ignore
         assert "DELETE" in audit.message
 
 
@@ -170,7 +170,7 @@ class TestAuditQueryBuilder:
         builder = AuditQueryBuilder(db_session)
         result = builder.by_resource_id(100).first()
         assert result is not None
-        assert result.resource_id == 100
+        assert result.resource_id == 100  # type: ignore
 
     def test_query_order_by_recent(self, db_session):
         """Test order by most recent."""
@@ -178,7 +178,7 @@ class TestAuditQueryBuilder:
         results = builder.order_by_recent().limit(2).all()
         assert len(results) >= 1
         if len(results) > 1:
-            assert results[0].timestamp >= results[1].timestamp
+            assert results[0].timestamp >= results[1].timestamp  # type: ignore
 
     def test_query_limit_and_offset(self, db_session):
         """Test limit and offset."""
