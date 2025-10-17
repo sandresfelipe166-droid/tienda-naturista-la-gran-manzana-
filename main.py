@@ -11,6 +11,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.api.v1.router import api_router
 from app.core.config import settings
+from app.core.error_responses import register_error_handlers
 from app.core.exception_handlers import (
     database_exception_handler,
     general_exception_handler,
@@ -122,6 +123,9 @@ app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(IntegrityError, database_exception_handler)
 app.add_exception_handler(SQLAlchemyError, database_exception_handler)
 app.add_exception_handler(Exception, general_exception_handler)
+
+# Register new standardized error handlers (these override above if needed)
+register_error_handlers(app)
 
 # Include routers
 app.include_router(api_router)
