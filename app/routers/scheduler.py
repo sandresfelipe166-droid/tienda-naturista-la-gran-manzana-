@@ -9,15 +9,17 @@ Endpoints (solo admin):
 - POST   /api/v1/scheduler/start                -> Arranca el scheduler (si estuviera detenido)
 - POST   /api/v1/scheduler/stop                 -> Detiene el scheduler
 """
+
+from typing import Any, Dict, List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query
-from typing import Dict, Any, List, Optional
 
 from app.core.auth_middleware import require_admin
-from app.models.models import Usuario
 from app.core.config import settings
 
 # Importar manager del scheduler
 from app.core.scheduler import scheduler_manager
+from app.models.models import Usuario
 
 router = APIRouter(prefix="/scheduler", tags=["scheduler"])
 

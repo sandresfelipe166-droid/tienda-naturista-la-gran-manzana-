@@ -1,39 +1,46 @@
+import contextlib
+import logging
+import os
+
+import uvicorn
 from fastapi import FastAPI, HTTPException
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+
 from app.api.v1.router import api_router
-from app.core.request_id_middleware import RequestIdMiddleware
-import logging
-import uvicorn
-import os
-import contextlib
-from app.models.database import Base, engine, SessionLocal
-from app.models.models import Rol
-from app.core.roles import DEFAULT_ROLES
 from app.core.config import settings
-from app.core.rate_limiter import RateLimitMiddleware
-from app.core.input_validation import InputValidationMiddleware
-from app.core.security_middleware import SecurityHeadersMiddleware, CSRFMiddleware, APIKeyMiddleware, SecurityEventLogger
-from app.core.metrics import MetricsMiddleware, get_prometheus_metrics
 from app.core.exception_handlers import (
+    database_exception_handler,
+    general_exception_handler,
+    http_exception_handler,
     inventario_exception_handler,
     validation_exception_handler,
-    http_exception_handler,
-    database_exception_handler,
-    general_exception_handler
 )
 from app.core.exceptions import InventarioException
-from fastapi.exceptions import RequestValidationError
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
-from app.routers.health import router as health_router
+from app.core.input_validation import InputValidationMiddleware
+from app.core.metrics import MetricsMiddleware, get_prometheus_metrics
+from app.core.rate_limiter import RateLimitMiddleware
+from app.core.request_id_middleware import RequestIdMiddleware
+from app.core.roles import DEFAULT_ROLES
 from app.core.scheduler import scheduler_manager
+from app.core.security_middleware import (
+    APIKeyMiddleware,
+    CSRFMiddleware,
+    SecurityEventLogger,
+    SecurityHeadersMiddleware,
+)
+from app.models.database import Base, SessionLocal, engine
+from app.models.models import Rol
+from app.routers.health import router as health_router
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
 
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -64,6 +71,7 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.error(f"Scheduler shutdown error: {e}")
 
+
 # Create FastAPI app
 app = FastAPI(
     title="Inventario Backend API",
@@ -71,7 +79,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # Add request ID middleware (early so downstream can use request.state.request_id)
@@ -89,10 +97,7 @@ app.add_middleware(
 )
 
 # Add trusted host middleware
-app.add_middleware(
-    TrustedHostMiddleware,
-    allowed_hosts=settings.trusted_hosts
-)
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.trusted_hosts)
 
 # Add security middleware
 app.add_middleware(SecurityHeadersMiddleware)
@@ -124,11 +129,16 @@ app.include_router(health_router, prefix="/api/v1", tags=["health"])
 
 # Expose Prometheus metrics endpoint if enabled
 if settings.prometheus_enabled:
+
     async def prometheus_endpoint_async():
         return get_prometheus_metrics()
-    app.add_api_route("/metrics", prometheus_endpoint_async, include_in_schema=False, methods=["GET"])
+
+    app.add_api_route(
+        "/metrics", prometheus_endpoint_async, include_in_schema=False, methods=["GET"]
+    )
 
 # Startup: initialize DB schema and seed default roles
+
 
 def _seed_default_roles(db):
     existing = {r.nombre_rol for r in db.query(Rol).all()}
@@ -136,14 +146,17 @@ def _seed_default_roles(db):
     for role in DEFAULT_ROLES:
         name = str(role.get("nombre_rol"))
         if name not in existing:
-            to_insert.append(Rol(
-                nombre_rol=name,
-                descripcion=role.get("descripcion", ""),
-                permisos=role.get("permisos", ""),
-            ))
+            to_insert.append(
+                Rol(
+                    nombre_rol=name,
+                    descripcion=role.get("descripcion", ""),
+                    permisos=role.get("permisos", ""),
+                )
+            )
     if to_insert:
         db.add_all(to_insert)
         db.commit()
+
 
 # Root endpoint
 @app.get("/")
@@ -155,8 +168,9 @@ async def root():
         "docs": "/docs",
         "health": "/api/v1/health",
         "health_detailed": "/api/v1/health/detailed",
-        "metrics": "/api/v1/health/metrics"
+        "metrics": "/api/v1/health/metrics",
     }
+
 
 if __name__ == "__main__":
     # Configurar logging de uvicorn
@@ -168,5 +182,5 @@ if __name__ == "__main__":
         port=settings.port,
         reload=settings.debug,
         log_level=log_level,
-        access_log=True
+        access_log=True,
     )

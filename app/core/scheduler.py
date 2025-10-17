@@ -4,10 +4,12 @@ Scheduler de tareas en segundo plano (APScheduler - AsyncIOScheduler)
 - Programa y administra tareas periódicas como el envío de alertas de stock bajo.
 - Integración con FastAPI mediante inicialización en lifespan (main.py).
 """
+
 from __future__ import annotations
 
-from typing import List, Dict, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
@@ -32,7 +34,10 @@ def _stock_bajo_job() -> None:
         result = send_stock_bajo_email(db)
         logger.log_info(
             "Scheduled job executed: stock_bajo_email",
-            {"email_result": result.get("email_result", {}), "total_items": result.get("summary", {}).get("total", 0)},
+            {
+                "email_result": result.get("email_result", {}),
+                "total_items": result.get("summary", {}).get("total", 0),
+            },
         )
     except Exception as e:
         logger.log_error(e, {"context": "scheduler_stock_bajo_job"})
@@ -57,8 +62,8 @@ class SchedulerManager:
         self.scheduler = AsyncIOScheduler(
             timezone=tz,
             job_defaults={
-                "coalesce": True,       # agrupar ejecuciones si hubo retraso
-                "max_instances": 1,     # evitar concurrencia múltiple del mismo job
+                "coalesce": True,  # agrupar ejecuciones si hubo retraso
+                "max_instances": 1,  # evitar concurrencia múltiple del mismo job
                 "misfire_grace_time": 30,
             },
         )
@@ -97,8 +102,12 @@ class SchedulerManager:
         except Exception:
             pass
 
-        trigger = IntervalTrigger(hours=int(interval_hours), timezone=getattr(settings, "scheduler_timezone", "UTC"))
-        job = self.scheduler.add_job(_stock_bajo_job, trigger, id=STOCK_BAJO_JOB_ID, replace_existing=True)
+        trigger = IntervalTrigger(
+            hours=int(interval_hours), timezone=getattr(settings, "scheduler_timezone", "UTC")
+        )
+        job = self.scheduler.add_job(
+            _stock_bajo_job, trigger, id=STOCK_BAJO_JOB_ID, replace_existing=True
+        )
 
         logger.log_info("Scheduled/Updated stock_bajo job", {"interval_hours": interval_hours})
         return {

@@ -1,17 +1,22 @@
-from sqlalchemy.orm import Session
-from app.models.models import Usuario, Rol
-from app.models.schemas import UserCreate
-from app.core.security import get_password_hash, verify_password
-from typing import Optional
 from datetime import datetime
+from typing import Optional
+
+from sqlalchemy.orm import Session
+
+from app.core.security import get_password_hash, verify_password
+from app.models.models import Rol, Usuario
+from app.models.schemas import UserCreate
+
 
 def get_user_by_username(db: Session, username: str) -> Optional[Usuario]:
     """Obtener usuario por username"""
     return db.query(Usuario).filter(Usuario.nombre_usuario == username).first()
 
+
 def get_user_by_email(db: Session, email: str) -> Optional[Usuario]:
     """Obtener usuario por email"""
     return db.query(Usuario).filter(Usuario.email == email).first()
+
 
 def create_user(db: Session, user: UserCreate) -> Usuario:
     """Crear nuevo usuario"""
@@ -31,9 +36,11 @@ def create_user(db: Session, user: UserCreate) -> Usuario:
     db.refresh(db_user)
     return db_user
 
+
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     """Obtener lista de usuarios"""
     return db.query(Usuario).offset(skip).limit(limit).all()
+
 
 def authenticate_user(db: Session, username: str, password: str):
     """Autenticar usuario"""
@@ -43,6 +50,7 @@ def authenticate_user(db: Session, username: str, password: str):
     if not verify_password(password, user.password_hash):
         return False
     return user
+
 
 def update_user(db: Session, user_id: int, user_data: dict) -> Optional[Usuario]:
     """Actualizar usuario"""
@@ -71,6 +79,7 @@ def update_user(db: Session, user_id: int, user_data: dict) -> Optional[Usuario]
     db.commit()
     db.refresh(user)
     return user
+
 
 def delete_user(db: Session, user_id: int, logical: bool = True) -> bool:
     """Eliminar usuario (lógico o físico)"""

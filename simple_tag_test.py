@@ -4,7 +4,9 @@ Simple test to verify tag functionality without dealing with middleware issues.
 """
 
 import os
-from app.routers import auth, secciones, alertas, laboratorios, productos, inventory, users
+
+from app.routers import alertas, auth, inventory, laboratorios, productos, secciones, users
+
 
 def test_router_tags():
     """Test that routers have correct tags configured."""
@@ -18,7 +20,7 @@ def test_router_tags():
         (laboratorios.router, ["Laboratorios"]),
         (productos.router, ["Productos"]),
         (inventory.router, ["Inventory"]),
-        (users.router, ["Users"])
+        (users.router, ["Users"]),
     ]
 
     all_correct = True
@@ -39,6 +41,7 @@ def test_router_tags():
     else:
         print("⚠️  Some router tags are incorrect.")
         return False
+
 
 def test_tag_functionality():
     """Test basic tag functionality by checking router attributes."""
@@ -64,6 +67,7 @@ def test_tag_functionality():
         print("⚠️  Some routers are missing tags.")
         return False
 
+
 def main():
     """Run all simple tag tests."""
     print("🔍 Simple Tag Functionality Test")
@@ -83,6 +87,7 @@ def main():
     else:
         print("\n⚠️  Some tag functionality tests failed.")
         return False
+
 
 if __name__ == "__main__":
     success = main()

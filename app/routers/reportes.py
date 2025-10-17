@@ -1,19 +1,21 @@
 """
 Router de exportación de reportes (CSV)
 """
-from fastapi import APIRouter, Depends, Response, Query, HTTPException
-from sqlalchemy.orm import Session
+
 from typing import Optional
 
-from app.models.database import get_db
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from sqlalchemy.orm import Session
+
 from app.core.auth_middleware import get_current_active_user, require_admin
+from app.models.database import get_db
 from app.models.filters import ProductoFilters
+from app.models.models import Usuario
 from app.services.report_service import (
-    generate_productos_csv,
     generate_laboratorios_csv,
+    generate_productos_csv,
     generate_secciones_csv,
 )
-from app.models.models import Usuario
 
 router = APIRouter(prefix="/reportes", tags=["reportes"])
 

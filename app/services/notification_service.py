@@ -1,11 +1,12 @@
-from typing import Dict, Any, List, Optional
 from datetime import datetime
-from sqlalchemy.orm import Session
-from sqlalchemy import and_
+from typing import Any, Dict, List, Optional
 
-from app.models.models import Producto
+from sqlalchemy import and_
+from sqlalchemy.orm import Session
+
 from app.core.email import email_client
 from app.core.logging_config import inventario_logger
+from app.models.models import Producto
 
 logger = inventario_logger
 
@@ -72,7 +73,9 @@ def format_stock_bajo_email(summary: Dict[str, Any]) -> str:
     else:
         lines.append("Listado (máximo 20 ítems):")
         lines.append("")
-        lines.append(f"{'ID':<6} {'Nombre':<35} {'Stock':>7} {'Mín':>5}  {'Sección':<15} {'Laboratorio':<20}")
+        lines.append(
+            f"{'ID':<6} {'Nombre':<35} {'Stock':>7} {'Mín':>5}  {'Sección':<15} {'Laboratorio':<20}"
+        )
         lines.append("-" * 100)
         for it in items:
             lines.append(
@@ -99,5 +102,7 @@ def send_stock_bajo_email(db: Session, recipients: Optional[List[str]] = None) -
     result = email_client.send_email(subject=subject, body=body, recipients=recipients)
     # Log de envío
     status = "sent" if result.get("success") else "skipped"
-    logger.log_info("Stock bajo email processed", {"status": status, "meta": {"total": summary.get("total", 0)}})
+    logger.log_info(
+        "Stock bajo email processed", {"status": status, "meta": {"total": summary.get("total", 0)}}
+    )
     return {"summary": summary, "email_result": result}

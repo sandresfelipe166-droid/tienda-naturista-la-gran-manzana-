@@ -1,15 +1,17 @@
 """
 Router de notificaciones (email) para alertas del sistema
 """
-from fastapi import APIRouter, Depends, BackgroundTasks
-from sqlalchemy.orm import Session
-from typing import Optional, List, Dict, Any
 
-from app.models.database import get_db, SessionLocal
+from typing import Any, Dict, List, Optional
+
+from fastapi import APIRouter, BackgroundTasks, Depends
+from sqlalchemy.orm import Session
+
 from app.core.auth_middleware import require_admin
-from app.services.notification_service import send_stock_bajo_email
-from app.models.models import Usuario
 from app.core.logging_config import inventario_logger as logger
+from app.models.database import SessionLocal, get_db
+from app.models.models import Usuario
+from app.services.notification_service import send_stock_bajo_email
 
 router = APIRouter(prefix="/notificaciones", tags=["notificaciones"])
 
@@ -24,13 +26,17 @@ def enviar_alerta_stock_bajo_test(
     Envía un correo con el resumen de productos con stock bajo (ejecución en background).
     Requiere rol admin. Si SMTP no está configurado, se retorna estado 'skipped' (no-op).
     """
+
     # Importante: abrir una nueva sesión dentro de la tarea en background,
     # ya que la sesión inyectada por dependencia puede cerrarse al finalizar la respuesta.
     def task():
         db_local = SessionLocal()
         try:
             res = send_stock_bajo_email(db_local)
-            logger.log_info("Background stock-bajo email task executed", {"email_result": res.get("email_result")})
+            logger.log_info(
+                "Background stock-bajo email task executed",
+                {"email_result": res.get("email_result")},
+            )
         except Exception as e:
             logger.log_error(e, {"context": "bg_stock_bajo_email"})
         finally:

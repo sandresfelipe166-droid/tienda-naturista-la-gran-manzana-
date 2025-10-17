@@ -1,11 +1,12 @@
 from fastapi import APIRouter
-from app.routers import auth, secciones, alertas, laboratorios, productos, inventory
-from app.routers.users import router as users_router
-from app.routers.productos_advanced import router as productos_advanced_router
-from app.routers.reportes import router as reportes_router
+
+from app.routers import alertas, auth, inventory, laboratorios, productos, secciones
 from app.routers.dashboard import router as dashboard_router
 from app.routers.notificaciones import router as notificaciones_router
+from app.routers.productos_advanced import router as productos_advanced_router
+from app.routers.reportes import router as reportes_router
 from app.routers.scheduler import router as scheduler_router
+from app.routers.users import router as users_router
 
 # Main API router for version 1
 api_router = APIRouter(prefix="/api/v1")
@@ -26,6 +27,7 @@ api_router.include_router(dashboard_router)
 api_router.include_router(notificaciones_router)
 api_router.include_router(scheduler_router)
 
+
 # API info endpoint
 @api_router.get("/")
 async def api_info():
@@ -44,6 +46,6 @@ async def api_info():
             "reportes": "/api/v1/reportes",
             "dashboard": "/api/v1/dashboard",
             "notificaciones": "/api/v1/notificaciones",
-            "scheduler": "/api/v1/scheduler"
-        }
+            "scheduler": "/api/v1/scheduler",
+        },
     }

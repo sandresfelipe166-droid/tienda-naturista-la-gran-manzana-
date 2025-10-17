@@ -1,18 +1,26 @@
-from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body, Response
+import logging
+from typing import Optional
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Response
 from sqlalchemy.orm import Session
+
+from app.core.auth_middleware import require_product_read, require_product_write
+from app.models.database import get_db
+from app.models.schemas import (
+    MessageResponse,
+    SeccionBase,
+    SeccionCreate,
+    SeccionCreateResponse,
+    SeccionPaginatedResponse,
+    SeccionResponse,
+    SeccionUpdate,
+)
 from app.services import SeccionService
 from app.utils import crear_respuesta
-from typing import Optional
-from app.models.schemas import (
-    SeccionPaginatedResponse, SeccionCreate, SeccionUpdate,
-    SeccionBase, SeccionResponse, SeccionCreateResponse, MessageResponse
-)
-from app.models.database import get_db
-from app.core.auth_middleware import require_product_read, require_product_write
-import logging
 
 router = APIRouter(prefix="/secciones", tags=["Secciones"])
 logger = logging.getLogger(__name__)
+
 
 @router.get("", response_model=SeccionPaginatedResponse)
 async def listar_secciones(
@@ -21,14 +29,13 @@ async def listar_secciones(
     size: int = Query(10, ge=1, le=100),
     nombre_seccion: Optional[str] = Query(None),
     estado: Optional[str] = Query("Activo"),
-    _: dict = Depends(require_product_read())
+    _: dict = Depends(require_product_read()),
 ):
     try:
         filtros = {
-            k: v for k, v in {
-                "nombre_seccion": nombre_seccion,
-                "estado": estado
-            }.items() if v is not None
+            k: v
+            for k, v in {"nombre_seccion": nombre_seccion, "estado": estado}.items()
+            if v is not None
         }
 
         secciones, total = SeccionService.listar(db, page, size, filtros)
@@ -45,28 +52,27 @@ async def listar_secciones(
                 "total": total,
                 "pages": total_pages,
                 "has_next": page < total_pages,
-                "has_prev": page > 1
+                "has_prev": page > 1,
             },
-            filters_applied=filtros
+            filters_applied=filtros,
         )
     except Exception as e:
         logger.error(f"Error en endpoint listar_secciones: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{id_seccion}", response_model=SeccionResponse)
 async def obtener_seccion(
     id_seccion: int = Path(..., gt=0),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_read())
+    _: dict = Depends(require_product_read()),
 ):
     seccion = SeccionService.obtener_por_id(db, id_seccion)
     if not seccion:
         raise HTTPException(status_code=404, detail="Sección no encontrada")
     seccion_data = SeccionBase.model_validate(seccion)
-    return crear_respuesta(
-        message="Sección encontrada",
-        data=seccion_data
-    )
+    return crear_respuesta(message="Sección encontrada", data=seccion_data)
+
 
 @router.post("", response_model=SeccionCreateResponse)
 async def crear_seccion(
@@ -80,19 +86,17 @@ async def crear_seccion(
         nuevo_id = SeccionService.crear(db, seccion_data)
         if response is not None:
             response.headers["Location"] = f"/api/v1/secciones/{nuevo_id}"
-        return crear_respuesta(
-            message="Sección creada exitosamente",
-            data={"id_seccion": nuevo_id}
-        )
+        return crear_respuesta(message="Sección creada exitosamente", data={"id_seccion": nuevo_id})
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.put("/{id_seccion}", response_model=MessageResponse)
 async def actualizar_seccion(
     id_seccion: int = Path(..., gt=0),
     seccion: SeccionUpdate = Body(...),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
 ):
     try:
         updates = seccion.model_dump(exclude_unset=True)
@@ -102,12 +106,13 @@ async def actualizar_seccion(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.delete("/{id_seccion}", response_model=MessageResponse)
 async def eliminar_seccion(
     id_seccion: int = Path(..., gt=0),
     modo: str = Query("logico", pattern="^(logico|fisico)$"),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
 ):
     try:
         if not SeccionService.eliminar(db, id_seccion, modo):

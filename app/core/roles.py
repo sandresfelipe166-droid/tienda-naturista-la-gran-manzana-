@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import List, Dict, Set
+from typing import Dict, List, Set
+
 
 class Permission(str, Enum):
     # Product permissions
@@ -41,42 +42,65 @@ class Permission(str, Enum):
     ADMIN_ACCESS = "admin:access"
     SYSTEM_CONFIG = "system:config"
 
+
 class Role(str, Enum):
     ADMIN = "admin"
     MANAGER = "manager"
     USER = "user"
     VIEWER = "viewer"
 
+
 # Role-based permissions mapping
 ROLE_PERMISSIONS: Dict[str, List[str]] = {
     # Use string keys (e.g., "admin", "manager") for compatibility with stored role names
     Role.ADMIN.value: [
         # All permissions for admin
-        Permission.PRODUCT_READ, Permission.PRODUCT_WRITE, Permission.PRODUCT_DELETE,
-        Permission.SECTION_READ, Permission.SECTION_WRITE, Permission.SECTION_DELETE,
-        Permission.LABORATORY_READ, Permission.LABORATORY_WRITE, Permission.LABORATORY_DELETE,
-        Permission.ALERT_READ, Permission.ALERT_WRITE, Permission.ALERT_DELETE,
-        Permission.USER_READ, Permission.USER_WRITE, Permission.USER_DELETE,
-        Permission.ROLE_READ, Permission.ROLE_WRITE, Permission.ROLE_DELETE,
-        Permission.INVENTORY_READ, Permission.INVENTORY_WRITE, Permission.INVENTORY_DELETE,
-        Permission.ADMIN_ACCESS, Permission.SYSTEM_CONFIG
+        Permission.PRODUCT_READ,
+        Permission.PRODUCT_WRITE,
+        Permission.PRODUCT_DELETE,
+        Permission.SECTION_READ,
+        Permission.SECTION_WRITE,
+        Permission.SECTION_DELETE,
+        Permission.LABORATORY_READ,
+        Permission.LABORATORY_WRITE,
+        Permission.LABORATORY_DELETE,
+        Permission.ALERT_READ,
+        Permission.ALERT_WRITE,
+        Permission.ALERT_DELETE,
+        Permission.USER_READ,
+        Permission.USER_WRITE,
+        Permission.USER_DELETE,
+        Permission.ROLE_READ,
+        Permission.ROLE_WRITE,
+        Permission.ROLE_DELETE,
+        Permission.INVENTORY_READ,
+        Permission.INVENTORY_WRITE,
+        Permission.INVENTORY_DELETE,
+        Permission.ADMIN_ACCESS,
+        Permission.SYSTEM_CONFIG,
     ],
     Role.MANAGER.value: [
         # Manager permissions
-        Permission.PRODUCT_READ, Permission.PRODUCT_WRITE,
-        Permission.SECTION_READ, Permission.SECTION_WRITE,
-        Permission.LABORATORY_READ, Permission.LABORATORY_WRITE,
-        Permission.ALERT_READ, Permission.ALERT_WRITE,
+        Permission.PRODUCT_READ,
+        Permission.PRODUCT_WRITE,
+        Permission.SECTION_READ,
+        Permission.SECTION_WRITE,
+        Permission.LABORATORY_READ,
+        Permission.LABORATORY_WRITE,
+        Permission.ALERT_READ,
+        Permission.ALERT_WRITE,
         Permission.USER_READ,
-        Permission.INVENTORY_READ, Permission.INVENTORY_WRITE
+        Permission.INVENTORY_READ,
+        Permission.INVENTORY_WRITE,
     ],
     Role.USER.value: [
         # Basic user permissions
-        Permission.PRODUCT_READ, Permission.PRODUCT_WRITE,
+        Permission.PRODUCT_READ,
+        Permission.PRODUCT_WRITE,
         Permission.SECTION_READ,
         Permission.LABORATORY_READ,
         Permission.ALERT_READ,
-        Permission.INVENTORY_READ
+        Permission.INVENTORY_READ,
     ],
     Role.VIEWER.value: [
         # Read-only permissions
@@ -84,46 +108,51 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
         Permission.SECTION_READ,
         Permission.LABORATORY_READ,
         Permission.ALERT_READ,
-        Permission.INVENTORY_READ
-    ]
+        Permission.INVENTORY_READ,
+    ],
 }
+
 
 def get_role_permissions(role_name: str) -> List[str]:
     """Get permissions for a specific role"""
     return ROLE_PERMISSIONS.get(role_name, [])
 
+
 def has_permission(user_permissions: List[str], required_permission: str) -> bool:
     """Check if user has a specific permission"""
     return required_permission in user_permissions
+
 
 def has_any_permission(user_permissions: List[str], required_permissions: List[str]) -> bool:
     """Check if user has any of the required permissions"""
     return any(perm in user_permissions for perm in required_permissions)
 
+
 def has_all_permissions(user_permissions: List[str], required_permissions: List[str]) -> bool:
     """Check if user has all required permissions"""
     return all(perm in user_permissions for perm in required_permissions)
+
 
 # Default roles data for seeding
 DEFAULT_ROLES = [
     {
         "nombre_rol": Role.ADMIN.value,
         "descripcion": "Administrator with full access",
-        "permisos": ",".join([p.value for p in get_role_permissions(Role.ADMIN.value)])
+        "permisos": ",".join([p.value for p in get_role_permissions(Role.ADMIN.value)]),
     },
     {
         "nombre_rol": Role.MANAGER.value,
         "descripcion": "Manager with read/write access",
-        "permisos": ",".join([p.value for p in get_role_permissions(Role.MANAGER.value)])
+        "permisos": ",".join([p.value for p in get_role_permissions(Role.MANAGER.value)]),
     },
     {
         "nombre_rol": Role.USER.value,
         "descripcion": "User with basic access",
-        "permisos": ",".join([p.value for p in get_role_permissions(Role.USER.value)])
+        "permisos": ",".join([p.value for p in get_role_permissions(Role.USER.value)]),
     },
     {
         "nombre_rol": Role.VIEWER.value,
         "descripcion": "Viewer with read-only access",
-        "permisos": ",".join([p.value for p in get_role_permissions(Role.VIEWER.value)])
-    }
+        "permisos": ",".join([p.value for p in get_role_permissions(Role.VIEWER.value)]),
+    },
 ]

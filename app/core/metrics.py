@@ -5,28 +5,30 @@ Observability and metrics utilities.
 - MetricsMiddleware: measures each request and records metrics
 - Optional Prometheus integration (enabled if prometheus-client is installed and settings.prometheus_enabled = true)
 """
+
 from __future__ import annotations
 
 import time
-from typing import Dict, Any, List, Optional, Tuple, cast
 from threading import Lock
+from typing import Any, Dict, List, Optional, Tuple, cast
 
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.types import ASGIApp
 from fastapi import Request, Response
 from fastapi.responses import Response as FastAPIResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.types import ASGIApp
 
 from app.core.config import settings
 
 # Optional Prometheus integration
 try:
     from prometheus_client import (  # type: ignore
+        CONTENT_TYPE_LATEST,
+        CollectorRegistry as PromRegistry,
         Counter as PromCounter,
         Histogram as PromHistogram,
-        CollectorRegistry as PromRegistry,
         generate_latest,
-        CONTENT_TYPE_LATEST,
     )
+
     PROMETHEUS_AVAILABLE = True
 except Exception:
     # Provide lightweight no-op shims to satisfy type checkers without adding a hard dependency
@@ -124,10 +126,16 @@ class MetricsManager:
 
         # Metrics with minimal label cardinality
         self._prom_requests_total = PromCounter(
-            "app_requests_total", "Total HTTP requests", ["method", "status_code"], registry=self._prom_registry
+            "app_requests_total",
+            "Total HTTP requests",
+            ["method", "status_code"],
+            registry=self._prom_registry,
         )
         self._prom_errors_total = PromCounter(
-            "app_errors_total", "Total HTTP errors (status >= 400)", ["status_code"], registry=self._prom_registry
+            "app_errors_total",
+            "Total HTTP errors (status >= 400)",
+            ["status_code"],
+            registry=self._prom_registry,
         )
         self._prom_latency_hist = PromHistogram(
             "app_request_latency_seconds",
@@ -197,7 +205,9 @@ class MetricsManager:
         """
         with self._lock:
             uptime = self.uptime_seconds()
-            avg_latency = (self.latency_sum / self.latency_count) if self.latency_count > 0 else None
+            avg_latency = (
+                (self.latency_sum / self.latency_count) if self.latency_count > 0 else None
+            )
             p95 = self._approx_p95()
             req_rate = (self.total_requests / uptime) if uptime > 0 else None
             err_rate = (self.total_errors / uptime) if uptime > 0 else None
@@ -255,7 +265,9 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         duration = time.perf_counter() - start
         status_code = response.status_code
         # Record with method and path (path is not used in Prometheus labels to avoid cardinality explosion)
-        metrics_manager.record(duration=duration, status_code=status_code, method=request.method, path=request.url.path)
+        metrics_manager.record(
+            duration=duration, status_code=status_code, method=request.method, path=request.url.path
+        )
         return response
 
 

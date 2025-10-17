@@ -3,11 +3,13 @@ from app.core.exceptions import (
     SecurityException,
 )
 
+
 def test_rate_limit_exception():
     exc = RateLimitException(limit=10, window=60)
     assert exc.status_code == 429
     assert exc.details["limit"] == 10
     assert exc.details["window"] == 60
+
 
 def test_security_exception():
     exc = SecurityException()

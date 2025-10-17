@@ -1,11 +1,14 @@
 """
 Health check endpoints para el API
 """
+
+import time
+from typing import Any, Dict
+
+import redis
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import Dict, Any
-import redis
-import time
+
 from app.core.config import settings
 from app.core.database import db_manager
 from app.core.logging_config import inventario_logger
@@ -13,6 +16,7 @@ from app.core.metrics import metrics_manager
 
 router = APIRouter()
 logger = inventario_logger
+
 
 @router.get("/health", summary="Health Check Básico")
 async def health_check() -> Dict[str, Any]:
@@ -24,8 +28,9 @@ async def health_check() -> Dict[str, Any]:
         "timestamp": time.time(),
         "service": "inventario-backend",
         "version": "1.0.0",
-        "environment": settings.environment
+        "environment": settings.environment,
     }
+
 
 @router.get("/health/detailed", summary="Health Check Detallado")
 async def detailed_health_check() -> Dict[str, Any]:
@@ -38,7 +43,7 @@ async def detailed_health_check() -> Dict[str, Any]:
         "service": "inventario-backend",
         "version": "1.0.0",
         "environment": settings.environment,
-        "checks": {}
+        "checks": {},
     }
 
     # Database health check
@@ -50,7 +55,7 @@ async def detailed_health_check() -> Dict[str, Any]:
     except Exception as e:
         health_info["checks"]["database"] = {
             "status": "unhealthy",
-            "message": f"Database check failed: {str(e)}"
+            "message": f"Database check failed: {str(e)}",
         }
         health_info["status"] = "unhealthy"
 
@@ -64,17 +69,17 @@ async def detailed_health_check() -> Dict[str, Any]:
                 port=int(settings.redis_port),
                 db=int(settings.redis_db),
                 password=settings.redis_password,
-                socket_timeout=float(settings.redis_health_timeout)
+                socket_timeout=float(settings.redis_health_timeout),
             )
             redis_client.ping()
             health_info["checks"]["redis"] = {
                 "status": "healthy",
-                "message": "Redis connection successful"
+                "message": "Redis connection successful",
             }
         except Exception as e:
             health_info["checks"]["redis"] = {
                 "status": "unhealthy",
-                "message": f"Redis check failed: {str(e)}"
+                "message": f"Redis check failed: {str(e)}",
             }
             health_info["status"] = "unhealthy"
 
@@ -84,16 +89,17 @@ async def detailed_health_check() -> Dict[str, Any]:
             # Implementar checks específicos para servicios externos
             health_info["checks"][service["name"]] = {
                 "status": "healthy",
-                "message": f"{service['name']} is operational"
+                "message": f"{service['name']} is operational",
             }
         except Exception as e:
             health_info["checks"][service["name"]] = {
                 "status": "unhealthy",
-                "message": f"{service['name']} check failed: {str(e)}"
+                "message": f"{service['name']} check failed: {str(e)}",
             }
             health_info["status"] = "unhealthy"
 
     return health_info
+
 
 @router.get("/health/database", summary="Database Health Check")
 async def database_health_check() -> Dict[str, Any]:
@@ -108,14 +114,12 @@ async def database_health_check() -> Dict[str, Any]:
             "status": db_health["status"],
             "message": db_health["message"],
             "connection_info": db_info,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
     except Exception as e:
         logger.log_error(e, {"context": "database_health_check"})
-        raise HTTPException(
-            status_code=503,
-            detail=f"Database health check failed: {str(e)}"
-        )
+        raise HTTPException(status_code=503, detail=f"Database health check failed: {str(e)}")
+
 
 @router.get("/health/metrics", summary="Application Metrics")
 async def application_metrics() -> Dict[str, Any]:
@@ -133,6 +137,7 @@ async def application_metrics() -> Dict[str, Any]:
     mem_info: Dict[str, Any] = {"available": False, "rss": None, "vms": None, "percent": None}
     try:
         import psutil  # type: ignore
+
         p = psutil.Process()
         with p.oneshot():
             mem = p.memory_info()
@@ -140,7 +145,9 @@ async def application_metrics() -> Dict[str, Any]:
                 "available": True,
                 "rss": getattr(mem, "rss", None),
                 "vms": getattr(mem, "vms", None),
-                "percent": psutil.virtual_memory().percent if hasattr(psutil, "virtual_memory") else None,
+                "percent": psutil.virtual_memory().percent
+                if hasattr(psutil, "virtual_memory")
+                else None,
             }
     except Exception:
         # Mantener mem_info con available=False
@@ -177,6 +184,7 @@ async def application_metrics() -> Dict[str, Any]:
         },
     }
 
+
 @router.get("/health/config", summary="Configuration Info")
 async def configuration_info() -> Dict[str, Any]:
     """
@@ -192,5 +200,5 @@ async def configuration_info() -> Dict[str, Any]:
         "metrics_enabled": settings.metrics_enabled,
         "backup_enabled": settings.backup_enabled,
         "ssl_enabled": settings.ssl_enabled,
-        "health_checks_enabled": settings.health_check_enabled
+        "health_checks_enabled": settings.health_check_enabled,
     }

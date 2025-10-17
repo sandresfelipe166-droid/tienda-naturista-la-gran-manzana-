@@ -2,12 +2,14 @@
 """
 Script para configurar Redis en Windows automáticamente
 """
+
 import os
+import subprocess
 import sys
 import urllib.request
 import zipfile
-import subprocess
 from pathlib import Path
+
 
 def download_redis():
     """Descargar Redis para Windows"""
@@ -25,6 +27,7 @@ def download_redis():
         print(f"❌ Error descargando Redis: {e}")
         return None
 
+
 def extract_redis(zip_path):
     """Extraer Redis del archivo ZIP"""
     print("📦 Extrayendo Redis...")
@@ -38,6 +41,7 @@ def extract_redis(zip_path):
     except Exception as e:
         print(f"❌ Error extrayendo Redis: {e}")
         return None
+
 
 def create_redis_config(redis_path):
     """Crear archivo de configuración de Redis"""
@@ -110,6 +114,7 @@ aof-rewrite-incremental-fsync yes
         print(f"❌ Error creando configuración: {e}")
         return None
 
+
 def test_redis_connection(redis_path):
     """Probar conexión a Redis"""
     print("🔍 Probando conexión a Redis...")
@@ -126,11 +131,12 @@ def test_redis_connection(redis_path):
             [str(redis_server), str(config_file)],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            creationflags=subprocess.CREATE_NO_WINDOW
+            creationflags=subprocess.CREATE_NO_WINDOW,
         )
 
         # Esperar un momento para que inicie
         import time
+
         time.sleep(2)
 
         # Verificar si el proceso sigue ejecutándose
@@ -149,6 +155,7 @@ def test_redis_connection(redis_path):
     except Exception as e:
         print(f"❌ Error probando Redis: {e}")
         return False
+
 
 def create_startup_script(redis_path):
     """Crear script para iniciar Redis fácilmente"""
@@ -170,6 +177,7 @@ redis-server.exe redis.conf
     except Exception as e:
         print(f"❌ Error creando script: {e}")
         return None
+
 
 def main():
     print("🚀 Configurando Redis para Windows...")
@@ -230,6 +238,7 @@ def main():
     print("   3. O manualmente: redis-server.exe redis.conf")
     print("💡 Para verificar:")
     print("   python scripts/test_fixed_configuration.py")
+
 
 if __name__ == "__main__":
     main()

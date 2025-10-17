@@ -1,13 +1,14 @@
 """
 Manejadores de excepciones centralizados para FastAPI
 """
-from datetime import datetime
+
 import logging
+from datetime import datetime
 from typing import Any, Dict, List, Union
 
-from fastapi import Request, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.core.exceptions import InventarioException
@@ -60,7 +61,9 @@ async def inventario_exception_handler(request: Request, exc: InventarioExceptio
     )
 
 
-async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
     """Manejador para errores de validación de Pydantic/FastAPI."""
     errors: List[Dict[str, Any]] = []
     try:

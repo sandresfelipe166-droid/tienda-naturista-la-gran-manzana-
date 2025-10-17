@@ -1,6 +1,7 @@
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional, List, Dict, Any
 import os
+from typing import Any, Dict, List, Optional
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -31,12 +32,12 @@ class Settings(BaseSettings):
     db_connect_args: Dict[str, Any] = {}
 
     # Schema creation on startup (for development only; prefer Alembic migrations)
-    create_schema_on_startup: bool = os.getenv("CREATE_SCHEMA_ON_STARTUP", "false").lower() == "true"
+    create_schema_on_startup: bool = (
+        os.getenv("CREATE_SCHEMA_ON_STARTUP", "false").lower() == "true"
+    )
 
     # Security - JWT
-    secret_key: str = os.getenv(
-        "SECRET_KEY", "dev-secret-key-change-in-production-123456789"
-    )
+    secret_key: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production-123456789")
     algorithm: str = os.getenv("JWT_ALG", "HS256")
     access_token_expire_minutes: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
     refresh_token_expire_days: int = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
@@ -75,8 +76,7 @@ class Settings(BaseSettings):
     # Content Security Policy (optional)
     csp_enabled: bool = os.getenv("CSP_ENABLED", "false").lower() == "true"
     csp_default: str = os.getenv(
-        "CSP_DEFAULT",
-        "default-src 'self'; frame-ancestors 'none'; base-uri 'self'"
+        "CSP_DEFAULT", "default-src 'self'; frame-ancestors 'none'; base-uri 'self'"
     )
 
     # CORS
@@ -159,7 +159,9 @@ class Settings(BaseSettings):
     # Health/Monitoring toggles
     health_check_enabled: bool = os.getenv("HEALTH_CHECK_ENABLED", "true").lower() == "true"
     db_health_check_enabled: bool = os.getenv("DB_HEALTH_CHECK_ENABLED", "true").lower() == "true"
-    redis_health_check_enabled: bool = os.getenv("REDIS_HEALTH_CHECK_ENABLED", "false").lower() == "true"
+    redis_health_check_enabled: bool = (
+        os.getenv("REDIS_HEALTH_CHECK_ENABLED", "false").lower() == "true"
+    )
     prometheus_enabled: bool = os.getenv("PROMETHEUS_ENABLED", "false").lower() == "true"
     metrics_enabled: bool = os.getenv("METRICS_ENABLED", "false").lower() == "true"
     backup_enabled: bool = os.getenv("BACKUP_ENABLED", "false").lower() == "true"
@@ -234,7 +236,9 @@ class Settings(BaseSettings):
         if not self.ssl_enabled and "Strict-Transport-Security" in self.security_headers:
             self.security_headers.pop("Strict-Transport-Security", None)
         elif self.ssl_enabled:
-            self.security_headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+            self.security_headers["Strict-Transport-Security"] = (
+                "max-age=31536000; includeSubDomains"
+            )
 
         # Apply Content-Security-Policy header if enabled
         if getattr(self, "csp_enabled", False):

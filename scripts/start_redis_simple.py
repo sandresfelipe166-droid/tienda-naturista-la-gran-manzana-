@@ -2,10 +2,12 @@
 """
 Script simplificado para iniciar Redis en Windows
 """
-import subprocess
+
 import os
+import subprocess
 import time
 from pathlib import Path
+
 
 def start_redis_simple():
     """Iniciar Redis de forma simple"""
@@ -15,7 +17,7 @@ def start_redis_simple():
     redis_paths = [
         "redis-windows/redis-server.exe",
         "redis-windows/redis-server",
-        "redis-server.exe"
+        "redis-server.exe",
     ]
 
     redis_server = None
@@ -39,7 +41,7 @@ def start_redis_simple():
             [redis_server],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            creationflags=subprocess.CREATE_NO_WINDOW
+            creationflags=subprocess.CREATE_NO_WINDOW,
         )
 
         # Esperar un momento
@@ -65,6 +67,7 @@ def start_redis_simple():
         print(f"❌ Error iniciando Redis: {e}")
         return False
 
+
 def main():
     print("🔧 Iniciador Simple de Redis para Windows")
     print("=" * 50)
@@ -85,6 +88,7 @@ def main():
         print("   1. Descarga Redis desde GitHub")
         print("   2. Instálalo con Docker: docker run -p 6379:6379 redis")
         print("   3. Usa un servicio en la nube como Redis Labs")
+
 
 if __name__ == "__main__":
     main()

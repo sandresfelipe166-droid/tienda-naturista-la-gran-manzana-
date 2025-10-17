@@ -1,9 +1,12 @@
-from sqlalchemy.orm import Session
-from app.models.models import Producto, Seccion, Laboratorio, Lote
-from app.models.schemas import ProductoCreate, ProductoUpdate
-from typing import List, Optional, Dict, Any
-from sqlalchemy import or_
 from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional
+
+from sqlalchemy import or_
+from sqlalchemy.orm import Session
+
+from app.models.models import Laboratorio, Lote, Producto, Seccion
+from app.models.schemas import ProductoCreate, ProductoUpdate
+
 
 def _build_productos_query(
     db: Session,
@@ -34,10 +37,7 @@ def count_productos(
     return _build_productos_query(db, nombre, id_seccion, id_laboratorio, estado).count()
 
 
-def get_productos(
-    db: Session,
-    params: Dict[str, Any]
-) -> List[Producto]:
+def get_productos(db: Session, params: Dict[str, Any]) -> List[Producto]:
     """Obtener lista de productos con filtros opcionales"""
     skip = params.get('skip', 0)
     limit = params.get('limit', 100)
@@ -45,13 +45,15 @@ def get_productos(
     id_seccion = params.get('id_seccion')
     id_laboratorio = params.get('id_laboratorio')
     estado = params.get('estado')
-    
+
     query = _build_productos_query(db, nombre, id_seccion, id_laboratorio, estado)
     return query.offset(skip).limit(limit).all()
+
 
 def get_producto_by_id(db: Session, id_producto: int) -> Optional[Producto]:
     """Obtener un producto por ID"""
     return db.query(Producto).filter(Producto.id_producto == id_producto).first()
+
 
 def create_producto(db: Session, producto_data: ProductoCreate) -> Producto:
     """Crear un nuevo producto"""
@@ -59,7 +61,11 @@ def create_producto(db: Session, producto_data: ProductoCreate) -> Producto:
     if not seccion:
         raise ValueError("La sección especificada no existe")
 
-    laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == producto_data.id_laboratorio).first()
+    laboratorio = (
+        db.query(Laboratorio)
+        .filter(Laboratorio.id_laboratorio == producto_data.id_laboratorio)
+        .first()
+    )
     if not laboratorio:
         raise ValueError("El laboratorio especificado no existe")
 
@@ -69,7 +75,10 @@ def create_producto(db: Session, producto_data: ProductoCreate) -> Producto:
     db.refresh(db_producto)
     return db_producto
 
-def update_producto(db: Session, id_producto: int, producto_data: ProductoUpdate) -> Optional[Producto]:
+
+def update_producto(
+    db: Session, id_producto: int, producto_data: ProductoUpdate
+) -> Optional[Producto]:
     """Actualizar un producto existente"""
     producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
     if not producto:
@@ -81,7 +90,11 @@ def update_producto(db: Session, id_producto: int, producto_data: ProductoUpdate
             raise ValueError("La sección especificada no existe")
 
     if producto_data.id_laboratorio is not None:
-        laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == producto_data.id_laboratorio).first()
+        laboratorio = (
+            db.query(Laboratorio)
+            .filter(Laboratorio.id_laboratorio == producto_data.id_laboratorio)
+            .first()
+        )
         if not laboratorio:
             raise ValueError("El laboratorio especificado no existe")
 
@@ -92,6 +105,7 @@ def update_producto(db: Session, id_producto: int, producto_data: ProductoUpdate
     db.commit()
     db.refresh(producto)
     return producto
+
 
 def delete_producto(db: Session, id_producto: int, logical: bool = True) -> bool:
     """Eliminar un producto (lógico o físico)"""
@@ -108,12 +122,8 @@ def delete_producto(db: Session, id_producto: int, logical: bool = True) -> bool
 
     return True
 
-def search_productos(
-    db: Session,
-    query: str,
-    skip: int = 0,
-    limit: int = 50
-) -> List[Producto]:
+
+def search_productos(db: Session, query: str, skip: int = 0, limit: int = 50) -> List[Producto]:
     """Buscar productos por nombre, principio activo o descripción"""
     search_filter = f"%{query}%"
     return (
@@ -122,9 +132,9 @@ def search_productos(
             or_(
                 Producto.nombre_producto.ilike(search_filter),
                 Producto.principio_activo.ilike(search_filter),
-                Producto.descripcion.ilike(search_filter)
+                Producto.descripcion.ilike(search_filter),
             ),
-            Producto.estado == "Activo"
+            Producto.estado == "Activo",
         )
         .offset(skip)
         .limit(limit)
@@ -143,23 +153,32 @@ def get_productos_bajo_stock(db: Session) -> List[Producto]:
         .all()
     )
 
+
 def get_total_productos_activos(db: Session) -> int:
     """Contar productos activos"""
     return db.query(Producto).filter(Producto.estado == "Activo").count()
 
+
 from sqlalchemy import func
+
 
 def get_valor_total_stock(db: Session) -> float:
     """Calcular el valor total del stock (stock_actual * precio_compra) para productos activos"""
-    total_valor = db.query(func.sum(Producto.stock_actual * Producto.precio_compra)).filter(Producto.estado == "Activo").scalar()
+    total_valor = (
+        db.query(func.sum(Producto.stock_actual * Producto.precio_compra))
+        .filter(Producto.estado == "Activo")
+        .scalar()
+    )
     return total_valor or 0.0
+
 
 def count_productos_bajo_stock(db: Session) -> int:
     """Contar productos con stock bajo"""
-    return db.query(Producto).filter(
-        Producto.estado == "Activo",
-        Producto.stock_actual <= Producto.stock_minimo
-    ).count()
+    return (
+        db.query(Producto)
+        .filter(Producto.estado == "Activo", Producto.stock_actual <= Producto.stock_minimo)
+        .count()
+    )
 
 
 def get_productos_por_vencer(db: Session, dias: int = 30) -> List[Producto]:

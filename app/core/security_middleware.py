@@ -1,19 +1,24 @@
 """
 Middleware de seguridad avanzada para el API
 """
+
+import secrets
+import string
+import time
+from typing import Any, Dict, Literal, cast
+
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
-import secrets
-import time
-from typing import Dict, Any, Literal, cast
-import string
+
 from app.core.config import settings
-from app.core.logging_config import inventario_logger
+from app.core.csrf import generate_csrf_token, validate_csrf_token
 from app.core.exceptions import SecurityException
+from app.core.logging_config import inventario_logger
 
 logger = inventario_logger
+
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     """Middleware para agregar headers de seguridad"""
@@ -44,10 +49,13 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 
         # Headers de información
         if getattr(settings, "send_x_powered_by", True):
-            response.headers["X-Powered-By"] = getattr(settings, "powered_by_header", "Inventario-Backend")
+            response.headers["X-Powered-By"] = getattr(
+                settings, "powered_by_header", "Inventario-Backend"
+            )
         response.headers["X-Environment"] = settings.environment
 
         return response
+
 
 class CSRFMiddleware(BaseHTTPMiddleware):
     """Middleware para protección CSRF"""
@@ -62,31 +70,30 @@ class CSRFMiddleware(BaseHTTPMiddleware):
         if request.method in ["POST", "PUT", "DELETE", "PATCH"]:
             # Verificar token CSRF para requests que no son API
             if not request.url.path.startswith("/api/"):
-                csrf_token = request.headers.get("X-CSRF-Token")
+                # Prefer header, fallback to cookie
+                csrf_token = request.headers.get("X-CSRF-Token") or request.cookies.get(
+                    "csrf_token"
+                )
                 if not csrf_token:
-                    return JSONResponse(
-                        status_code=403,
-                        content={"detail": "CSRF token missing"}
-                    )
+                    return JSONResponse(status_code=403, content={"detail": "CSRF token missing"})
 
-                # Validar token (simplificado - en producción usar validación real)
-                if not self._validate_csrf_token(csrf_token):
+                valid, ts = validate_csrf_token(csrf_token)
+                if not valid:
                     logger.log_security_event(
                         "csrf_token_invalid",
                         ip_address=request.client.host if request.client else "unknown",
                         path=request.url.path,
-                        request_id=getattr(request.state, 'request_id', None)
+                        request_id=getattr(request.state, "request_id", None),
                     )
                     return JSONResponse(
-                        status_code=403,
-                        content={"detail": "CSRF token invalid"}
+                        status_code=403, content={"detail": "CSRF token invalid or expired"}
                     )
 
         response = await call_next(request)
 
-        # Agregar token CSRF a responses si es necesario
+        # Agregar token CSRF a responses si es necesario (para clientes web)
         if request.method == "GET" and not request.url.path.startswith("/api/"):
-            new_token = self._generate_csrf_token()
+            new_token = generate_csrf_token()
             # Normalizar samesite a valores admitidos por Starlette ('lax'|'strict'|'none')
             samesite_raw = str(getattr(settings, "session_cookie_samesite", "lax")).lower()
             if samesite_raw not in ("lax", "strict", "none"):
@@ -98,6 +105,8 @@ class CSRFMiddleware(BaseHTTPMiddleware):
                 secure=bool(getattr(settings, "session_cookie_secure", True)),
                 samesite=cast(Literal["lax", "strict", "none"], samesite_raw),
             )
+            # También enviar en header para SPAs que lean XHR
+            response.headers["X-CSRF-Token"] = new_token
 
         return response
 
@@ -112,6 +121,7 @@ class CSRFMiddleware(BaseHTTPMiddleware):
             return False
         allowed = set(string.ascii_letters + string.digits + "-_")
         return all(c in allowed for c in token)
+
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
     """Middleware para validación de API Key"""
@@ -128,14 +138,12 @@ class APIKeyMiddleware(BaseHTTPMiddleware):
                     "api_key_invalid",
                     ip_address=request.client.host if request.client else "unknown",
                     path=request.url.path,
-                    request_id=getattr(request.state, 'request_id', None)
+                    request_id=getattr(request.state, 'request_id', None),
                 )
-                return JSONResponse(
-                    status_code=401,
-                    content={"detail": "Invalid API key"}
-                )
+                return JSONResponse(status_code=401, content={"detail": "Invalid API key"})
 
         return await call_next(request)
+
 
 class SecurityEventLogger(BaseHTTPMiddleware):
     """Middleware para logging de eventos de seguridad"""
@@ -150,7 +158,11 @@ class SecurityEventLogger(BaseHTTPMiddleware):
         # Tipado seguro para Pylance: user_id como int y request_id como str
         _user_id_val = getattr(request.state, "user_id", None)
         user_id_int = _user_id_val if isinstance(_user_id_val, int) else 0
-        request_id_str = str(getattr(request.state, "request_id", "")) if getattr(request.state, "request_id", None) else ""
+        request_id_str = (
+            str(getattr(request.state, "request_id", ""))
+            if getattr(request.state, "request_id", None)
+            else ""
+        )
         logger.log_request(
             method=request.method,
             path=request.url.path,
@@ -176,9 +188,7 @@ class SecurityEventLogger(BaseHTTPMiddleware):
                     "duration": duration,
                     "ip_address": request.client.host if request.client else "unknown",
                     "request_id": request_id_str,
-                }
+                },
             )
 
         return response
-
-

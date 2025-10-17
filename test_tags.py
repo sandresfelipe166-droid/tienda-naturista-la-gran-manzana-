@@ -5,11 +5,14 @@ This script tests that all routers have proper tags configured and
 that the OpenAPI documentation correctly groups endpoints by tags.
 """
 
-import requests
 import json
-from typing import Dict, List, Any
-from main import app
+from typing import Any, Dict, List
+
+import requests
 from fastapi.testclient import TestClient
+
+from main import app
+
 
 def test_openapi_tags():
     """Test that OpenAPI schema contains all expected tags."""
@@ -29,7 +32,7 @@ def test_openapi_tags():
         {"name": "Productos", "description": "Product management endpoints"},
         {"name": "Secciones", "description": "Section management endpoints"},
         {"name": "Users", "description": "User management endpoints"},
-        {"name": "Alertas", "description": "Alert management endpoints"}
+        {"name": "Alertas", "description": "Alert management endpoints"},
     ]
 
     # Check if tags are present in OpenAPI schema
@@ -61,6 +64,7 @@ def test_openapi_tags():
 
     return True
 
+
 def test_tag_grouping():
     """Test that endpoints are properly grouped by tags."""
     client = TestClient(app)
@@ -91,10 +95,11 @@ def test_tag_grouping():
 
     return tag_endpoints
 
+
 def test_router_tags():
     """Test that routers have correct tags configured."""
     from app.api.v1.router import api_router
-    from app.routers import auth, secciones, alertas, laboratorios, productos, inventory, users
+    from app.routers import alertas, auth, inventory, laboratorios, productos, secciones, users
 
     routers_to_check = [
         (auth.router, ["Authentication"]),
@@ -103,7 +108,7 @@ def test_router_tags():
         (laboratorios.router, ["Laboratorios"]),
         (productos.router, ["Productos"]),
         (inventory.router, ["Inventory"]),
-        (users.router, ["Users"])
+        (users.router, ["Users"]),
     ]
 
     print("\nChecking router tag configurations:")
@@ -118,6 +123,7 @@ def test_router_tags():
             all_correct = False
 
     return all_correct
+
 
 def main():
     """Run all tag tests."""
@@ -154,6 +160,7 @@ def main():
     except Exception as e:
         print(f"\n❌ Error during testing: {e}")
         return False
+
 
 if __name__ == "__main__":
     success = main()

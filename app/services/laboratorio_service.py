@@ -1,11 +1,16 @@
-from sqlalchemy.orm import Session
-from app.models.models import Laboratorio
-from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+
+from sqlalchemy.orm import Session
+
+from app.models.models import Laboratorio
+
 
 class LaboratorioService:
     @staticmethod
-    def listar(db: Session, page: int, size: int, filtros: Dict[str, Any]) -> Tuple[List[Laboratorio], int]:
+    def listar(
+        db: Session, page: int, size: int, filtros: Dict[str, Any]
+    ) -> Tuple[List[Laboratorio], int]:
         query = db.query(Laboratorio)
         for attr, value in filtros.items():
             query = query.filter(getattr(Laboratorio, attr) == value)
@@ -27,7 +32,9 @@ class LaboratorioService:
 
     @staticmethod
     def actualizar(db: Session, id_laboratorio: int, updates: Dict[str, Any]) -> bool:
-        laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == id_laboratorio).first()
+        laboratorio = (
+            db.query(Laboratorio).filter(Laboratorio.id_laboratorio == id_laboratorio).first()
+        )
         if not laboratorio:
             return False
         for key, value in updates.items():
@@ -37,7 +44,9 @@ class LaboratorioService:
 
     @staticmethod
     def eliminar(db: Session, id_laboratorio: int, modo: str = "logico") -> bool:
-        laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == id_laboratorio).first()
+        laboratorio = (
+            db.query(Laboratorio).filter(Laboratorio.id_laboratorio == id_laboratorio).first()
+        )
         if not laboratorio:
             return False
         if modo == "logico":

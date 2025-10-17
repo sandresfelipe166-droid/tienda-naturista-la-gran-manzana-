@@ -1,10 +1,11 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.orm import declarative_base
-from typing import Generator
 import os
-from app.core.config import settings
+from typing import Generator
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 from sqlalchemy.pool import QueuePool
+
+from app.core.config import settings
 
 # Normalize async driver to sync driver always; tests further normalize plain postgresql to psycopg2
 database_url = settings.database_url
@@ -26,11 +27,12 @@ engine = create_engine(
     pool_recycle=settings.db_pool_recycle,
     pool_pre_ping=True,
     connect_args=settings.db_connect_args,
-    future=True
+    future=True,
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
 
 def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()

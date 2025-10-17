@@ -1,18 +1,26 @@
-from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body, Response
+import logging
+from typing import Optional
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Response
 from sqlalchemy.orm import Session
+
+from app.core.auth_middleware import require_product_read, require_product_write
+from app.models.database import get_db
+from app.models.schemas import (
+    LaboratorioBase,
+    LaboratorioCreate,
+    LaboratorioCreateResponse,
+    LaboratorioPaginatedResponse,
+    LaboratorioResponse,
+    LaboratorioUpdate,
+    MessageResponse,
+)
 from app.services import LaboratorioService
 from app.utils import crear_respuesta
-from typing import Optional
-from app.models.schemas import (
-    LaboratorioPaginatedResponse, LaboratorioCreate, LaboratorioUpdate,
-    LaboratorioBase, LaboratorioResponse, LaboratorioCreateResponse, MessageResponse
-)
-from app.models.database import get_db
-from app.core.auth_middleware import require_product_read, require_product_write
-import logging
 
 router = APIRouter(prefix="/laboratorios", tags=["Laboratorios"])
 logger = logging.getLogger(__name__)
+
 
 @router.get("", response_model=LaboratorioPaginatedResponse)
 async def listar_laboratorios(
@@ -21,14 +29,13 @@ async def listar_laboratorios(
     size: int = Query(10, ge=1, le=100),
     nombre_laboratorio: Optional[str] = Query(None),
     estado: Optional[str] = Query("Activo"),
-    _: dict = Depends(require_product_read())
+    _: dict = Depends(require_product_read()),
 ):
     try:
         filtros = {
-            k: v for k, v in {
-                "nombre_laboratorio": nombre_laboratorio,
-                "estado": estado
-            }.items() if v is not None
+            k: v
+            for k, v in {"nombre_laboratorio": nombre_laboratorio, "estado": estado}.items()
+            if v is not None
         }
 
         laboratorios, total = LaboratorioService.listar(db, page, size, filtros)
@@ -45,28 +52,27 @@ async def listar_laboratorios(
                 "total": total,
                 "pages": total_pages,
                 "has_next": page < total_pages,
-                "has_prev": page > 1
+                "has_prev": page > 1,
             },
-            filters_applied=filtros
+            filters_applied=filtros,
         )
     except Exception as e:
         logger.error(f"Error en endpoint listar_laboratorios: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{id_laboratorio}", response_model=LaboratorioResponse)
 async def obtener_laboratorio(
     id_laboratorio: int = Path(..., gt=0),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_read())
+    _: dict = Depends(require_product_read()),
 ):
     laboratorio = LaboratorioService.obtener_por_id(db, id_laboratorio)
     if not laboratorio:
         raise HTTPException(status_code=404, detail="Laboratorio no encontrado")
     laboratorio_data = LaboratorioBase.model_validate(laboratorio)
-    return crear_respuesta(
-        message="Laboratorio encontrado",
-        data=laboratorio_data
-    )
+    return crear_respuesta(message="Laboratorio encontrado", data=laboratorio_data)
+
 
 @router.post("", response_model=LaboratorioCreateResponse)
 async def crear_laboratorio(
@@ -80,16 +86,16 @@ async def crear_laboratorio(
     if response is not None:
         response.headers["Location"] = f"/api/v1/laboratorios/{nuevo_id}"
     return crear_respuesta(
-        message="Laboratorio creado exitosamente",
-        data={"id_laboratorio": nuevo_id}
+        message="Laboratorio creado exitosamente", data={"id_laboratorio": nuevo_id}
     )
+
 
 @router.put("/{id_laboratorio}", response_model=MessageResponse)
 async def actualizar_laboratorio(
     id_laboratorio: int = Path(..., gt=0),
     laboratorio: LaboratorioUpdate = Body(...),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
 ):
     try:
         updates = laboratorio.model_dump(exclude_unset=True)
@@ -99,12 +105,13 @@ async def actualizar_laboratorio(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.delete("/{id_laboratorio}", response_model=MessageResponse)
 async def eliminar_laboratorio(
     id_laboratorio: int = Path(..., gt=0),
     modo: str = Query("logico", pattern="^(logico|fisico)$"),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
 ):
     if not LaboratorioService.eliminar(db, id_laboratorio, modo):
         raise HTTPException(status_code=404, detail="Laboratorio no encontrado")

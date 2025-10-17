@@ -1,14 +1,15 @@
 """
 Configuración de logging para el sistema de inventario
 """
+
+import json
 import logging
 import logging.handlers
 import os
 from datetime import datetime
-from typing import Dict, Any, Optional
-import json
+from typing import Any, Dict, Optional
 
-from app.core.config import settings
+from app.core.config import settings, settings as _settings
 from app.core.log_context import RequestIdFilter
 
 
@@ -36,7 +37,8 @@ class JSONFormatter(logging.Formatter):
         if extra_data is not None:
             try:
                 if isinstance(extra_data, dict):
-                    log_entry.update(extra_data)
+                    clean = sanitize_for_log(extra_data)
+                    log_entry.update(clean)
                 else:
                     log_entry["extra_data"] = str(extra_data)
             except Exception:
@@ -137,7 +139,11 @@ class InventarioLogger:
 
     # Métodos de logging estructurado
     def log_database_operation(
-        self, operation: str, table: str, duration: Optional[float] = None, query: Optional[str] = None
+        self,
+        operation: str,
+        table: str,
+        duration: Optional[float] = None,
+        query: Optional[str] = None,
     ):
         extra_data: Dict[str, Any] = {
             "event_type": "database_operation",
@@ -148,7 +154,9 @@ class InventarioLogger:
             extra_data["duration"] = duration
         if query is not None:
             extra_data["query"] = query
-        self.logger.info(f"DB {operation} on {table}", extra={"extra_data": extra_data})
+        self.logger.info(
+            f"DB {operation} on {table}", extra={"extra_data": sanitize_for_log(extra_data)}
+        )
 
     def log_business_event(self, event: str, details: Optional[Dict[str, Any]] = None):
         extra_data: Dict[str, Any] = {
@@ -156,10 +164,16 @@ class InventarioLogger:
             "event": event,
             "details": details or {},
         }
-        self.logger.info(f"Business event: {event}", extra={"extra_data": extra_data})
+        self.logger.info(
+            f"Business event: {event}", extra={"extra_data": sanitize_for_log(extra_data)}
+        )
 
     def log_security_event(
-        self, event: str, user_id: Optional[int] = None, ip_address: Optional[str] = None, **kwargs: Any
+        self,
+        event: str,
+        user_id: Optional[int] = None,
+        ip_address: Optional[str] = None,
+        **kwargs: Any,
     ):
         extra_data: Dict[str, Any] = {
             "event_type": "security_event",
@@ -169,7 +183,7 @@ class InventarioLogger:
         }
         extra_data.update(kwargs or {})
         self.logger.warning(
-            f"Security event: {event}", extra={"extra_data": extra_data}
+            f"Security event: {event}", extra={"extra_data": sanitize_for_log(extra_data)}
         )
 
     def log_error(self, error: Exception, context: Optional[Dict[str, Any]] = None):
@@ -180,16 +194,16 @@ class InventarioLogger:
         }
         self.logger.error(
             f"Error: {str(error)}",
-            extra={"extra_data": extra_data},
+            extra={"extra_data": sanitize_for_log(extra_data)},
             exc_info=True,
         )
 
     # Métodos de compatibilidad y conveniencia
     def log_info(self, message: str, extra_data: Optional[Dict[str, Any]] = None):
-        self.logger.info(message, extra={"extra_data": extra_data or {}})
+        self.logger.info(message, extra={"extra_data": sanitize_for_log(extra_data or {})})
 
     def log_warning(self, message: str, extra_data: Optional[Dict[str, Any]] = None):
-        self.logger.warning(message, extra={"extra_data": extra_data or {}})
+        self.logger.warning(message, extra={"extra_data": sanitize_for_log(extra_data or {})})
 
     def log_request(
         self,
@@ -218,7 +232,56 @@ class InventarioLogger:
                         extra_data[k] = v
             except Exception:
                 pass
-        self.logger.info(f"{method} {path}", extra={"extra_data": extra_data})
+        self.logger.info(f"{method} {path}", extra={"extra_data": sanitize_for_log(extra_data)})
+
+
+def sanitize_for_log(obj: Any) -> Any:
+    """Sanitiza objetos para logging JSON: convierte objetos no serializables a str
+    y redacta campos sensibles.
+
+    Rules:
+    - Si es dict, procesar recursivamente.
+    - Si es lista/tuple, procesar elementos.
+    - Redactar keys que contengan palabras sensibles.
+    - Para objetos desconocidos, devolver str(obj).
+    """
+    SENSITIVE_KEYS = {
+        "password",
+        "secret",
+        "token",
+        "authorization",
+        "api_key",
+        "api-key",
+        "secret_key",
+    }
+
+    def _is_sensitive_key(k: str) -> bool:
+        kl = k.lower()
+        return any(s in kl for s in SENSITIVE_KEYS)
+
+    try:
+        if obj is None:
+            return obj
+        if isinstance(obj, dict):
+            out = {}
+            for k, v in obj.items():
+                try:
+                    if isinstance(k, str) and _is_sensitive_key(k):
+                        out[k] = "[REDACTED]"
+                    else:
+                        out[k] = sanitize_for_log(v)
+                except Exception:
+                    out[str(k)] = "[UNSERIALIZABLE_KEY]"
+            return out
+        if isinstance(obj, (list, tuple)):
+            return [sanitize_for_log(v) for v in obj]
+        # JSON serializable primitives
+        if isinstance(obj, (str, int, float, bool)):
+            return obj
+        # Fallback: convertir a str
+        return str(obj)
+    except Exception:
+        return "[UNSERIALIZABLE]"
 
 
 # Instancia global del logger

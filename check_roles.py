@@ -1,8 +1,10 @@
-import sys
 import os
+import sys
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 from app.models.database import SessionLocal
 from app.models.models import Rol
+
 db = SessionLocal()
 roles = db.query(Rol).all()
 for r in roles:

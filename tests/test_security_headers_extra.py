@@ -1,15 +1,15 @@
+import json
 import os
 import sys
-import json
 
 # Ensure TESTING mode for predictable config
 os.environ["TESTING"] = "true"
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi.testclient import TestClient  # noqa: E402
-from main import app  # noqa: E402
-from app.core.config import settings  # noqa: E402
 
+from app.core.config import settings  # noqa: E402
+from main import app  # noqa: E402
 
 client = TestClient(app)
 

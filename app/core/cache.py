@@ -1,13 +1,16 @@
 """
 Sistema de caché con Redis para mejorar performance
 """
-import json
-import redis
-from typing import Optional, Any, Callable, Awaitable, Union, Iterable, List, cast
-from functools import wraps
+
 import hashlib
 import inspect
+import json
 from datetime import timedelta
+from functools import wraps
+from typing import Any, Awaitable, Callable, Iterable, List, Optional, Union, cast
+
+import redis
+
 from app.core.config import settings
 from app.core.logging_config import inventario_logger
 
@@ -52,7 +55,7 @@ class CacheManager:
         """Generar clave de caché única basada en argumentos"""
         # Crear string único con los argumentos
         key_parts = [prefix]
-        
+
         # Agregar args
         for arg in args:
             if hasattr(arg, '__dict__'):
@@ -60,17 +63,17 @@ class CacheManager:
                 key_parts.append(str(arg.__class__.__name__))
             else:
                 key_parts.append(str(arg))
-        
+
         # Agregar kwargs ordenados
         for k, v in sorted(kwargs.items()):
             key_parts.append(f"{k}={v}")
-        
+
         # Crear hash para claves muy largas
         key_string = ":".join(key_parts)
         if len(key_string) > 200:
             key_hash = hashlib.md5(key_string.encode()).hexdigest()
             return f"{prefix}:{key_hash}"
-        
+
         return key_string
 
     def get(self, key: str) -> Optional[Any]:
@@ -210,19 +213,21 @@ class CacheManager:
     def cache_result(self, ttl: int = 300, key_prefix: Optional[str] = None):
         """
         Decorador para cachear resultados de funciones (sincronas o asíncronas)
-        
+
         Args:
             ttl: Tiempo de vida en segundos (default: 5 minutos)
             key_prefix: Prefijo personalizado para la clave de caché
-        
+
         Usage:
             @cache_manager.cache_result(ttl=600, key_prefix="productos")
             def get_productos_list(db, skip, limit):
                 return db.query(Producto).offset(skip).limit(limit).all()
         """
+
         def decorator(func: Callable) -> Callable:
             # Soporte para funciones asíncronas
             if inspect.iscoroutinefunction(func):
+
                 @wraps(func)
                 async def async_wrapper(*args, **kwargs):
                     if not self.enabled:
@@ -239,8 +244,10 @@ class CacheManager:
                     serializable_result = self._serialize_result(result)
                     self.set(cache_key, serializable_result, ttl)
                     return result
+
                 return async_wrapper  # type: ignore[return-value]
             else:
+
                 @wraps(func)
                 def sync_wrapper(*args, **kwargs):
                     if not self.enabled:
@@ -257,20 +264,24 @@ class CacheManager:
                     serializable_result = self._serialize_result(result)
                     self.set(cache_key, serializable_result, ttl)
                     return result
+
                 return sync_wrapper  # type: ignore[return-value]
+
         return decorator
 
     def invalidate_cache(self, patterns: list[str]):
         """
         Decorador para invalidar caché después de operaciones de escritura (sync/async)
-        
+
         Usage:
             @cache_manager.invalidate_cache(["productos:*", "dashboard:*"])
             def create_producto(db, producto_data):
                 ...
         """
+
         def decorator(func: Callable) -> Callable:
             if inspect.iscoroutinefunction(func):
+
                 @wraps(func)
                 async def async_wrapper(*args, **kwargs):
                     result = await func(*args, **kwargs)
@@ -278,8 +289,10 @@ class CacheManager:
                         for pattern in patterns:
                             self.delete_pattern(pattern)
                     return result
+
                 return async_wrapper  # type: ignore[return-value]
             else:
+
                 @wraps(func)
                 def sync_wrapper(*args, **kwargs):
                     result = func(*args, **kwargs)
@@ -287,7 +300,9 @@ class CacheManager:
                         for pattern in patterns:
                             self.delete_pattern(pattern)
                     return result
+
                 return sync_wrapper  # type: ignore[return-value]
+
         return decorator
 
 
@@ -314,6 +329,7 @@ def delete_cache(key: str) -> bool:
 def clear_cache_pattern(pattern: str) -> int:
     """Eliminar claves por patrón"""
     return cache_manager.delete_pattern(pattern)
+
 
 # Exported symbols for static analyzers
 __all__ = [

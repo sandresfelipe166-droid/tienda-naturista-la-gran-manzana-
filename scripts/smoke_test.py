@@ -1,8 +1,10 @@
 import os
 import sys
+
 os.environ["TESTING"] = "true"
 
 from typing import List, Tuple
+
 from starlette.testclient import TestClient
 
 # Ensure project root is on sys.path, then import app
@@ -10,6 +12,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import after setting TESTING to avoid real DB init
 from main import app
+
 
 def run_smoke_tests():
     client = TestClient(app)
@@ -66,6 +69,7 @@ def run_smoke_tests():
             print(f"Error calling {path}: {e}")
 
     print("\n=== Smoke Test End ===")
+
 
 if __name__ == "__main__":
     run_smoke_tests()

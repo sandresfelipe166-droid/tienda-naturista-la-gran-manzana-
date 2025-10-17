@@ -1,14 +1,16 @@
-from fastapi.responses import JSONResponse
-from typing import Any, Dict, Optional
-from pydantic import BaseModel
 from datetime import datetime
+from typing import Any, Dict, Optional
+
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+
 
 def crear_respuesta(
     success: bool = True,
     message: str = "",
     data: Optional[Any] = None,
     status_code: int = 200,
-    extra: Optional[Dict[str, Any]] = None
+    extra: Optional[Dict[str, Any]] = None,
 ) -> JSONResponse:
     # Convert Pydantic models to dictionaries
     if isinstance(data, BaseModel):
@@ -16,14 +18,11 @@ def crear_respuesta(
     elif isinstance(data, list) and data and isinstance(data[0], BaseModel):
         data = [item.model_dump(mode='json') for item in data]
 
-    contenido = {
-        "success": success,
-        "message": message,
-        "data": data
-    }
+    contenido = {"success": success, "message": message, "data": data}
     if extra:
         contenido.update(extra)
     return JSONResponse(content=contenido, status_code=status_code)
+
 
 def calcular_dias_para_vencer(fecha_vencimiento: Optional[datetime]) -> Optional[int]:
     if fecha_vencimiento is None:

@@ -1,10 +1,17 @@
-from typing import Iterator, Optional, List, Any, cast
 import csv
 import io
+from typing import Any, Iterator, List, Optional, cast
+
 from sqlalchemy.orm import Session, joinedload
-from app.models.models import Producto, Laboratorio, Seccion
-from app.models.filters import ProductoFilters, apply_text_filter, apply_exact_filter, apply_range_filter
+
 from app.core import cache as cache_mod
+from app.models.filters import (
+    ProductoFilters,
+    apply_exact_filter,
+    apply_range_filter,
+    apply_text_filter,
+)
+from app.models.models import Laboratorio, Producto, Seccion
 
 
 def _build_productos_query(db: Session, filters: ProductoFilters):
@@ -27,7 +34,9 @@ def _build_productos_query(db: Session, filters: ProductoFilters):
     query = apply_exact_filter(query, Producto.id_seccion, filters.id_seccion)
 
     # Rangos
-    query = apply_range_filter(query, Producto.precio_compra, filters.precio_min, filters.precio_max)
+    query = apply_range_filter(
+        query, Producto.precio_compra, filters.precio_min, filters.precio_max
+    )
     query = apply_range_filter(query, Producto.stock_actual, filters.stock_min, filters.stock_max)
 
     # Booleanos
@@ -97,11 +106,22 @@ def generate_productos_csv(db: Session, filters: ProductoFilters) -> bytes:
     output = io.StringIO(newline="")
     writer = csv.writer(output)
     # Cabeceras
-    writer.writerow([
-        "ID", "Nombre", "Principio Activo", "Forma Farmacéutica", "Código Barras",
-        "Requiere Receta", "Precio Compra", "Stock Actual", "Stock Mínimo",
-        "Estado", "Laboratorio", "Sección"
-    ])
+    writer.writerow(
+        [
+            "ID",
+            "Nombre",
+            "Principio Activo",
+            "Forma Farmacéutica",
+            "Código Barras",
+            "Requiere Receta",
+            "Precio Compra",
+            "Stock Actual",
+            "Stock Mínimo",
+            "Estado",
+            "Laboratorio",
+            "Sección",
+        ]
+    )
 
     for p in productos:
         writer.writerow(_producto_row(p))
@@ -118,19 +138,32 @@ def generate_laboratorios_csv(db: Session) -> bytes:
 
     output = io.StringIO(newline="")
     writer = csv.writer(output)
-    writer.writerow(["ID", "Nombre", "País Origen", "Teléfono", "Email", "Dirección", "Estado", "Total Productos"])
+    writer.writerow(
+        [
+            "ID",
+            "Nombre",
+            "País Origen",
+            "Teléfono",
+            "Email",
+            "Dirección",
+            "Estado",
+            "Total Productos",
+        ]
+    )
 
     for lab in laboratorios:
-        writer.writerow([
-            _safe_str(getattr(lab, "id_laboratorio", "")),
-            _safe_str(getattr(lab, "nombre_laboratorio", "")),
-            _safe_str(getattr(lab, "pais_origen", "")),
-            _safe_str(getattr(lab, "telefono", "")),
-            _safe_str(getattr(lab, "email", "")),
-            _safe_str(getattr(lab, "direccion", "")),
-            _safe_str(getattr(lab, "estado", "")),
-            _safe_str(len(getattr(lab, "productos", []) or [])),
-        ])
+        writer.writerow(
+            [
+                _safe_str(getattr(lab, "id_laboratorio", "")),
+                _safe_str(getattr(lab, "nombre_laboratorio", "")),
+                _safe_str(getattr(lab, "pais_origen", "")),
+                _safe_str(getattr(lab, "telefono", "")),
+                _safe_str(getattr(lab, "email", "")),
+                _safe_str(getattr(lab, "direccion", "")),
+                _safe_str(getattr(lab, "estado", "")),
+                _safe_str(len(getattr(lab, "productos", []) or [])),
+            ]
+        )
 
     return output.getvalue().encode("utf-8")
 
@@ -144,21 +177,31 @@ def generate_secciones_csv(db: Session) -> bytes:
 
     output = io.StringIO(newline="")
     writer = csv.writer(output)
-    writer.writerow([
-        "ID", "Nombre", "Descripción", "Ubicación", "Capacidad Máxima",
-        "Temperatura Recomendada", "Estado", "Total Productos"
-    ])
+    writer.writerow(
+        [
+            "ID",
+            "Nombre",
+            "Descripción",
+            "Ubicación",
+            "Capacidad Máxima",
+            "Temperatura Recomendada",
+            "Estado",
+            "Total Productos",
+        ]
+    )
 
     for sec in secciones:
-        writer.writerow([
-            _safe_str(getattr(sec, "id_seccion", "")),
-            _safe_str(getattr(sec, "nombre_seccion", "")),
-            _safe_str(getattr(sec, "descripcion", "")),
-            _safe_str(getattr(sec, "ubicacion_fisica", "")),
-            _safe_str(getattr(sec, "capacidad_maxima", 0)),
-            _safe_str(getattr(sec, "temperatura_recomendada", "")),
-            _safe_str(getattr(sec, "estado", "")),
-            _safe_str(len(getattr(sec, "productos", []) or [])),
-        ])
+        writer.writerow(
+            [
+                _safe_str(getattr(sec, "id_seccion", "")),
+                _safe_str(getattr(sec, "nombre_seccion", "")),
+                _safe_str(getattr(sec, "descripcion", "")),
+                _safe_str(getattr(sec, "ubicacion_fisica", "")),
+                _safe_str(getattr(sec, "capacidad_maxima", 0)),
+                _safe_str(getattr(sec, "temperatura_recomendada", "")),
+                _safe_str(getattr(sec, "estado", "")),
+                _safe_str(len(getattr(sec, "productos", []) or [])),
+            ]
+        )
 
     return output.getvalue().encode("utf-8")

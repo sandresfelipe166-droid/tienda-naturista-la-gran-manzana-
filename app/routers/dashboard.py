@@ -1,18 +1,20 @@
 """
 Router de Dashboard de métricas
 """
+
+from typing import Any, Dict
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from typing import Dict, Any
 
-from app.models.database import get_db
 from app.core.auth_middleware import get_current_active_user
+from app.core.cache import cache_manager
 from app.crud.producto_advanced import (
-    get_productos_stats,
     get_productos_por_laboratorio_stats,
     get_productos_por_seccion_stats,
+    get_productos_stats,
 )
-from app.core.cache import cache_manager
+from app.models.database import get_db
 from app.models.models import Usuario
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])

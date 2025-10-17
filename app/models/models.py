@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
+
 from app.models.database import Base
 
 
@@ -16,6 +17,7 @@ class Laboratorio(Base):
     estado = Column(String(20), default="Activo")
     productos = relationship("Producto", back_populates="laboratorio")
 
+
 # Modelo para Secciones
 class Seccion(Base):
     __tablename__ = "seccion"
@@ -29,6 +31,7 @@ class Seccion(Base):
     fecha_ultimo_mantenimiento = Column(DateTime)
     estado = Column(String(20), default="Activo")
     productos = relationship("Producto", back_populates="seccion")
+
 
 # Modelo para Productos
 class Producto(Base):
@@ -52,6 +55,7 @@ class Producto(Base):
     laboratorio = relationship("Laboratorio", back_populates="productos")
     lotes = relationship("Lote", back_populates="producto")
 
+
 # Modelo para Clientes
 class Cliente(Base):
     __tablename__ = "cliente"
@@ -65,6 +69,7 @@ class Cliente(Base):
     direccion = Column(String(200))
     estado = Column(String(20), default="Activo")
     ventas = relationship("Venta", back_populates="cliente")
+
 
 # Modelo para Usuario
 class Usuario(Base):
@@ -85,6 +90,7 @@ class Usuario(Base):
     salidas = relationship("Salida", back_populates="usuario")
     ventas = relationship("Venta", back_populates="usuario")
 
+
 # Modelo para Roles
 class Rol(Base):
     __tablename__ = "rol"
@@ -94,6 +100,7 @@ class Rol(Base):
     descripcion = Column(String(200))
     permisos = Column(Text)
     usuarios = relationship("Usuario", back_populates="rol")
+
 
 # Modelo para Lotes
 class Lote(Base):
@@ -114,6 +121,7 @@ class Lote(Base):
     salidas = relationship("Salida", back_populates="lote")
     detalle_ventas = relationship("DetalleVenta", back_populates="lote")
 
+
 # Modelo para Entradas
 class Entrada(Base):
     __tablename__ = "entrada"
@@ -131,6 +139,7 @@ class Entrada(Base):
     usuario = relationship("Usuario", back_populates="entradas")
     lote = relationship("Lote", back_populates="entradas")
 
+
 # Modelo para Salidas
 class Salida(Base):
     __tablename__ = "salida"
@@ -145,6 +154,7 @@ class Salida(Base):
     observaciones = Column(Text)
     usuario = relationship("Usuario", back_populates="salidas")
     lote = relationship("Lote", back_populates="salidas")
+
 
 # Modelo para Ventas
 class Venta(Base):
@@ -164,6 +174,7 @@ class Venta(Base):
     cliente = relationship("Cliente", back_populates="ventas")
     detalles = relationship("DetalleVenta", back_populates="venta")
 
+
 # Modelo para Detalle de Ventas
 class DetalleVenta(Base):
     __tablename__ = "detalle_venta"
@@ -176,6 +187,7 @@ class DetalleVenta(Base):
     subtotal = Column(Float, nullable=False)
     venta = relationship("Venta", back_populates="detalles")
     lote = relationship("Lote", back_populates="detalle_ventas")
+
 
 # Modelo para Alertas
 class Alerta(Base):

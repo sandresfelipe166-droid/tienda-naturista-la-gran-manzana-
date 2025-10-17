@@ -2,11 +2,13 @@
 """
 Script para verificar y configurar Redis
 """
+
+import os
 import socket
 import subprocess
 import sys
-import os
 from pathlib import Path
+
 
 def check_redis_running():
     """Verificar si Redis está ejecutándose"""
@@ -19,14 +21,15 @@ def check_redis_running():
     except:
         return False
 
+
 def check_redis_installed():
     """Verificar si Redis está instalado"""
     try:
-        result = subprocess.run(['redis-cli', '--version'],
-                              capture_output=True, text=True)
+        result = subprocess.run(['redis-cli', '--version'], capture_output=True, text=True)
         return result.returncode == 0
     except FileNotFoundError:
         return False
+
 
 def start_redis_service():
     """Intentar iniciar el servicio de Redis"""
@@ -34,26 +37,30 @@ def start_redis_service():
         print("🔄 Intentando iniciar Redis...")
         if os.name == 'nt':  # Windows
             # Para Windows, intentar iniciar Redis desde servicios
-            result = subprocess.run(['net', 'start', 'Redis'],
-                                  capture_output=True, text=True)
+            result = subprocess.run(['net', 'start', 'Redis'], capture_output=True, text=True)
             return result.returncode == 0
         else:  # Linux/Mac
-            result = subprocess.run(['sudo', 'service', 'redis-server', 'start'],
-                                  capture_output=True, text=True)
+            result = subprocess.run(
+                ['sudo', 'service', 'redis-server', 'start'], capture_output=True, text=True
+            )
             if result.returncode != 0:
-                result = subprocess.run(['redis-server', '--daemonize', 'yes'],
-                                      capture_output=True, text=True)
+                result = subprocess.run(
+                    ['redis-server', '--daemonize', 'yes'], capture_output=True, text=True
+                )
             return result.returncode == 0
     except Exception as e:
         print(f"❌ Error iniciando Redis: {e}")
         return False
+
 
 def install_redis():
     """Instalar Redis (solo para Linux/Mac)"""
     print("📦 Instalando Redis...")
     try:
         if os.name == 'nt':
-            print("⚠️  En Windows, descarga Redis desde: https://github.com/microsoftarchive/redis/releases")
+            print(
+                "⚠️  En Windows, descarga Redis desde: https://github.com/microsoftarchive/redis/releases"
+            )
             print("   Luego ejecuta: redis-server.exe")
             return False
 
@@ -73,6 +80,7 @@ def install_redis():
     except subprocess.CalledProcessError as e:
         print(f"❌ Error instalando Redis: {e}")
         return False
+
 
 def main():
     print("🔍 Verificando Redis...")
@@ -113,8 +121,7 @@ def main():
 
         # Probar conexión con redis-cli
         try:
-            result = subprocess.run(['redis-cli', 'ping'],
-                                  capture_output=True, text=True)
+            result = subprocess.run(['redis-cli', 'ping'], capture_output=True, text=True)
             if result.returncode == 0 and 'PONG' in result.stdout:
                 print("✅ Conexión Redis verificada: PONG")
             else:
@@ -128,6 +135,7 @@ def main():
     print("🎉 ¡Redis está listo para usar!")
     print("💡 Para verificar desde tu aplicación:")
     print("   python scripts/test_configuration.py")
+
 
 if __name__ == "__main__":
     main()

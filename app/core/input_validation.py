@@ -1,13 +1,15 @@
 """
 Middleware de validación de entrada para proteger contra ataques comunes
 """
+
+import json
 import re
-from typing import Dict, List, Any
-from fastapi import Request, HTTPException
+from typing import Any, Dict, List
+from urllib.parse import unquote
+
+from fastapi import HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
-import json
-from urllib.parse import unquote
 
 from app.core.exceptions import ValidationException
 from app.core.logging_config import inventario_logger
@@ -86,19 +88,27 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
 
             # Verificar caracteres de control
             if any(ord(c) < 32 and c not in '\t\n\r' for c in value):
-                violations.append(f"Campo '{field_name}' contiene caracteres de control no permitidos")
+                violations.append(
+                    f"Campo '{field_name}' contiene caracteres de control no permitidos"
+                )
 
             # Verificar patrones de ataque
-            sql_violations = self._check_patterns(value, self.sql_injection_patterns, "SQL Injection")
+            sql_violations = self._check_patterns(
+                value, self.sql_injection_patterns, "SQL Injection"
+            )
             violations.extend(sql_violations)
 
             xss_violations = self._check_patterns(value, self.xss_patterns, "XSS")
             violations.extend(xss_violations)
 
-            traversal_violations = self._check_patterns(value, self.path_traversal_patterns, "Path Traversal")
+            traversal_violations = self._check_patterns(
+                value, self.path_traversal_patterns, "Path Traversal"
+            )
             violations.extend(traversal_violations)
 
-            cmd_violations = self._check_patterns(value, self.command_injection_patterns, "Command Injection")
+            cmd_violations = self._check_patterns(
+                value, self.command_injection_patterns, "Command Injection"
+            )
             violations.extend(cmd_violations)
 
         elif isinstance(value, (list, dict)):
@@ -161,13 +171,12 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
                     ip_address=request.client.host if request.client else "unknown",
                     path=request.url.path,
                     violations=violations[:5],  # Limitar para evitar logs demasiado largos
-                    user_agent=request.headers.get("User-Agent", "")[:100]
+                    user_agent=request.headers.get("User-Agent", "")[:100],
                 )
 
                 # Lanzar excepción de validación
                 raise ValidationException(
-                    message="Entrada inválida detectada",
-                    details={"violations": violations}
+                    message="Entrada inválida detectada", details={"violations": violations}
                 )
 
             # Continuar con la solicitud
@@ -179,11 +188,14 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
             raise
         except Exception as e:
             # Log de errores inesperados
-            logger.log_error(e, {
-                "middleware": "InputValidationMiddleware",
-                "path": request.url.path,
-                "client_ip": request.client.host if request.client else "unknown"
-            })
+            logger.log_error(
+                e,
+                {
+                    "middleware": "InputValidationMiddleware",
+                    "path": request.url.path,
+                    "client_ip": request.client.host if request.client else "unknown",
+                },
+            )
             # Continuar sin validación en caso de error
             return await call_next(request)
 

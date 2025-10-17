@@ -1,19 +1,32 @@
+from typing import Any, Dict, List, Optional, Tuple
+
 from sqlalchemy.orm import Session
-from app.models.models import Producto, Seccion, Laboratorio
-from typing import List, Optional, Dict, Any, Tuple
+
 from app.core.logging_config import get_logger
 from app.crud.producto import (
-    get_productos, count_productos, search_productos,
-    get_productos_bajo_stock, get_productos_por_vencer,
-    get_producto_by_id, create_producto, update_producto, delete_producto,
-    get_total_productos_activos, get_valor_total_stock, count_productos_bajo_stock
+    count_productos,
+    count_productos_bajo_stock,
+    create_producto,
+    delete_producto,
+    get_producto_by_id,
+    get_productos,
+    get_productos_bajo_stock,
+    get_productos_por_vencer,
+    get_total_productos_activos,
+    get_valor_total_stock,
+    search_productos,
+    update_producto,
 )
+from app.models.models import Laboratorio, Producto, Seccion
 
 logger = get_logger()
 
+
 class ProductoService:
     @staticmethod
-    def listar(db: Session, page: int, size: int, filtros: Dict[str, Any]) -> Tuple[List[Producto], int]:
+    def listar(
+        db: Session, page: int, size: int, filtros: Dict[str, Any]
+    ) -> Tuple[List[Producto], int]:
         query = db.query(Producto)
         for attr, value in filtros.items():
             query = query.filter(getattr(Producto, attr) == value)
@@ -37,7 +50,11 @@ class ProductoService:
 
             # Validar que el laboratorio exista
             if 'id_laboratorio' in data:
-                laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == data['id_laboratorio']).first()
+                laboratorio = (
+                    db.query(Laboratorio)
+                    .filter(Laboratorio.id_laboratorio == data['id_laboratorio'])
+                    .first()
+                )
                 if not laboratorio:
                     raise ValueError("El laboratorio especificado no existe")
 
@@ -61,14 +78,20 @@ class ProductoService:
             # Validar seccion
             id_seccion_to_check = updates.get('id_seccion', producto.id_seccion)
             if id_seccion_to_check is not None:
-                seccion = db.query(Seccion).filter(Seccion.id_seccion == id_seccion_to_check).first()
+                seccion = (
+                    db.query(Seccion).filter(Seccion.id_seccion == id_seccion_to_check).first()
+                )
                 if not seccion:
                     raise ValueError("La sección especificada no existe")
 
             # Validar laboratorio
             id_laboratorio_to_check = updates.get('id_laboratorio', producto.id_laboratorio)
             if id_laboratorio_to_check is not None:
-                laboratorio = db.query(Laboratorio).filter(Laboratorio.id_laboratorio == id_laboratorio_to_check).first()
+                laboratorio = (
+                    db.query(Laboratorio)
+                    .filter(Laboratorio.id_laboratorio == id_laboratorio_to_check)
+                    .first()
+                )
                 if not laboratorio:
                     raise ValueError("El laboratorio especificado no existe")
 
@@ -78,7 +101,9 @@ class ProductoService:
             # Return the updated product
             return db.query(Producto).filter(Producto.id_producto == id_producto).first()
         except Exception as e:
-            logger.error("Error updating product %s: %s", id_producto, e, extra={"updates": updates})
+            logger.error(
+                "Error updating product %s: %s", id_producto, e, extra={"updates": updates}
+            )
             db.rollback()
             raise
 
@@ -102,12 +127,26 @@ class ProductoService:
             raise
 
     @staticmethod
-    def get_productos(db: Session, skip: int = 0, limit: int = 100, nombre: Optional[str] = None, id_seccion: Optional[int] = None, id_laboratorio: Optional[int] = None, estado: Optional[str] = "Activo") -> List[Producto]:
+    def get_productos(
+        db: Session,
+        skip: int = 0,
+        limit: int = 100,
+        nombre: Optional[str] = None,
+        id_seccion: Optional[int] = None,
+        id_laboratorio: Optional[int] = None,
+        estado: Optional[str] = "Activo",
+    ) -> List[Producto]:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return get_productos(db, skip, limit, nombre, id_seccion, id_laboratorio, estado)
 
     @staticmethod
-    def count_productos(db: Session, nombre: Optional[str] = None, id_seccion: Optional[int] = None, id_laboratorio: Optional[int] = None, estado: Optional[str] = "Activo") -> int:
+    def count_productos(
+        db: Session,
+        nombre: Optional[str] = None,
+        id_seccion: Optional[int] = None,
+        id_laboratorio: Optional[int] = None,
+        estado: Optional[str] = "Activo",
+    ) -> int:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return count_productos(db, nombre, id_seccion, id_laboratorio, estado)
 

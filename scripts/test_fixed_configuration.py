@@ -2,20 +2,23 @@
 """
 Script de prueba para verificar las configuraciones corregidas
 """
-import sys
-import os
+
 import asyncio
+import os
+import sys
 from pathlib import Path
 
 # Agregar el directorio raíz al path
 sys.path.append(str(Path(__file__).parent.parent))
 
+import redis
+
 from app.core.config import settings
 from app.core.database import db_manager
 from app.core.logging_config import inventario_logger
-import redis
 
 logger = inventario_logger
+
 
 def test_configuration():
     """Probar configuración avanzada"""
@@ -64,6 +67,7 @@ def test_configuration():
 
     print("✅ Todas las configuraciones se cargaron correctamente!")
 
+
 def test_database_connection():
     """Probar conexión a la base de datos (CORREGIDO)"""
     print("🗄️ Probando conexión a base de datos...")
@@ -80,6 +84,7 @@ def test_database_connection():
     except Exception as e:
         print(f"❌ Error conectando a base de datos: {e}")
 
+
 def test_redis_connection():
     """Probar conexión a Redis"""
     print("⚡ Probando conexión a Redis...")
@@ -89,7 +94,7 @@ def test_redis_connection():
             port=settings.redis_port,
             db=settings.redis_db,
             password=settings.redis_password,
-            socket_timeout=settings.redis_socket_timeout
+            socket_timeout=settings.redis_socket_timeout,
         )
         redis_client.ping()
         print("✅ Conexión a Redis exitosa")
@@ -101,6 +106,7 @@ def test_redis_connection():
         print("💡 Solución: Ejecuta 'python scripts/check_redis.py' para configurar Redis")
     except Exception as e:
         print(f"❌ Error inesperado con Redis: {e}")
+
 
 def test_logging():
     """Probar sistema de logging"""
@@ -114,6 +120,7 @@ def test_logging():
         print("✅ Sistema de logging funcionando correctamente")
     except Exception as e:
         print(f"❌ Error en sistema de logging: {e}")
+
 
 async def main():
     """Función principal de prueba"""
@@ -143,6 +150,7 @@ async def main():
     print("💡 Para ver los health checks:")
     print("   curl http://localhost:8000/api/v1/health")
     print("   curl http://localhost:8000/api/v1/health/detailed")
+
 
 if __name__ == "__main__":
     asyncio.run(main())

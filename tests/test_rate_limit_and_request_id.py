@@ -1,14 +1,14 @@
 import os
-import sys
 import re
+import sys
 
 # Ensure TESTING mode
 os.environ["TESTING"] = "true"
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fastapi.testclient import TestClient  # noqa: E402
-from main import app  # noqa: E402
 
+from main import app  # noqa: E402
 
 client = TestClient(app)
 

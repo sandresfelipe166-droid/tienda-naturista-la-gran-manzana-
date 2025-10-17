@@ -1,27 +1,28 @@
 # app/routers/users.py
-from fastapi import APIRouter, Depends, HTTPException, status, Request, Query
-from sqlalchemy.orm import Session
 from typing import List, Optional
-from app.models.database import get_db
-from app.models.schemas import UserResponse, UserUpdate
-from app.crud.user import get_users, get_user_by_username, update_user, delete_user
-from app.core.auth_middleware import get_current_active_user
+
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from sqlalchemy.orm import Session
+
 from app.core.audit_logging import audit_logger
+from app.core.auth_middleware import get_current_active_user
+from app.crud.user import delete_user, get_user_by_username, get_users, update_user
+from app.models.database import get_db
 from app.models.models import Usuario
+from app.models.schemas import UserResponse, UserUpdate
 
 router = APIRouter(tags=["Users"])
 
-def get_pagination_params(
-    limit: int = Query(50, ge=1, le=1000),
-    skip: int = Query(0, ge=0)
-):
+
+def get_pagination_params(limit: int = Query(50, ge=1, le=1000), skip: int = Query(0, ge=0)):
     return {"limit": limit, "skip": skip}
+
 
 @router.get("/users", response_model=List[UserResponse])
 async def list_users(
     pagination: dict = Depends(get_pagination_params),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user)
+    current_user: Usuario = Depends(get_current_active_user),
 ):
     """
     Listar usuarios (solo administradores)
@@ -32,11 +33,12 @@ async def list_users(
     users = get_users(db, skip=skip, limit=limit)
     return [UserResponse.model_validate(user) for user in users]
 
+
 @router.get("/users/{user_id}", response_model=UserResponse)
 async def get_user(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user)
+    current_user: Usuario = Depends(get_current_active_user),
 ):
     """
     Obtener usuario por ID
@@ -46,13 +48,14 @@ async def get_user(
         raise HTTPException(status_code=404, detail="User not found")
     return UserResponse.model_validate(user)
 
+
 @router.put("/users/{user_id}", response_model=UserResponse)
 async def update_user_endpoint(
     user_id: int,
     user_data: UserUpdate,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-    request: Request = None
+    request: Request = None,
 ):
     """
     Actualizar usuario
@@ -69,19 +72,23 @@ async def update_user_endpoint(
                 event="user_updated",
                 user_id=current_user.id_usuario,
                 ip_address=request.client.host if request.client else "unknown",
-                details={"updated_user_id": user_id, "fields": list(user_data.model_dump(exclude_unset=True).keys())}
+                details={
+                    "updated_user_id": user_id,
+                    "fields": list(user_data.model_dump(exclude_unset=True).keys()),
+                },
             )
 
         return UserResponse.model_validate(updated_user)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.delete("/users/{user_id}")
 async def delete_user_endpoint(
     user_id: int,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-    request: Request = None
+    request: Request = None,
 ):
     """
     Eliminar usuario (lógico)
@@ -100,7 +107,7 @@ async def delete_user_endpoint(
             event="user_deleted",
             user_id=current_user.id_usuario,
             ip_address=request.client.host if request.client else "unknown",
-            details={"deleted_user_id": user_id}
+            details={"deleted_user_id": user_id},
         )
 
     return {"message": "User deleted successfully"}

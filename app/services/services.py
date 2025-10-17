@@ -1,11 +1,16 @@
-from sqlalchemy.orm import Session
-from app.models.models import Seccion, Alerta
-from typing import List, Optional, Dict, Any, Tuple
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+
+from sqlalchemy.orm import Session
+
+from app.models.models import Alerta, Seccion
+
 
 class SeccionService:
     @staticmethod
-    def listar(db: Session, page: int, size: int, filtros: Dict[str, Any]) -> Tuple[List[Seccion], int]:
+    def listar(
+        db: Session, page: int, size: int, filtros: Dict[str, Any]
+    ) -> Tuple[List[Seccion], int]:
         query = db.query(Seccion)
         for attr, value in filtros.items():
             query = query.filter(getattr(Seccion, attr) == value)
@@ -49,9 +54,12 @@ class SeccionService:
         db.commit()
         return True
 
+
 class AlertaService:
     @staticmethod
-    def listar(db: Session, page: int, size: int, filtros: Dict[str, Any]) -> Tuple[List[Alerta], int]:
+    def listar(
+        db: Session, page: int, size: int, filtros: Dict[str, Any]
+    ) -> Tuple[List[Alerta], int]:
         query = db.query(Alerta)
         for attr, value in filtros.items():
             query = query.filter(getattr(Alerta, attr) == value)

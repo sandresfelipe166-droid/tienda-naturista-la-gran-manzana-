@@ -2,10 +2,11 @@
 Cliente de correo simple usando smtplib (stdlib).
 Funciona en modo no-op si no hay configuración SMTP.
 """
+
 import smtplib
 import ssl
 from email.message import EmailMessage
-from typing import List, Optional, Dict, Any, cast
+from typing import Any, Dict, List, Optional, cast
 
 from app.core.config import settings
 from app.core.logging_config import inventario_logger

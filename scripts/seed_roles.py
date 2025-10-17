@@ -13,9 +13,9 @@ if PROJECT_ROOT not in sys.path:
 
 from sqlalchemy.orm import Session
 
-from app.models.database import SessionLocal, Base, engine
-from app.models.models import Rol
 from app.core.roles import DEFAULT_ROLES
+from app.models.database import Base, SessionLocal, engine
+from app.models.models import Rol
 
 
 def ensure_tables():

@@ -5,16 +5,18 @@ Request ID middleware
 - Echoes/generates X-Request-Id header on responses
 - If an incoming X-Request-Id header exists, uses a safe, validated value; otherwise generates a new UUID4
 """
+
 from __future__ import annotations
 
+import string
+import uuid
 from typing import Optional
+
+from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.types import ASGIApp
-from fastapi import Request, Response
-import uuid
-import string
-from app.core.log_context import set_request_id, clear_request_id
 
+from app.core.log_context import clear_request_id, set_request_id
 
 REQUEST_ID_HEADER = "X-Request-Id"
 

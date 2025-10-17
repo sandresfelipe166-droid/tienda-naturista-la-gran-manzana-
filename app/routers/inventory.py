@@ -1,16 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from app.models.database import get_db
-from app.services.producto_service import ProductoService
+
 from app.core.auth_middleware import require_product_read
+from app.models.database import get_db
 from app.models.schemas import InventorySummaryResponse
+from app.services.producto_service import ProductoService
 
 router = APIRouter(prefix="/inventory", tags=["Inventario"])
 
+
 @router.get("", response_model=InventorySummaryResponse)
 async def obtener_resumen_inventario(
-    db: Session = Depends(get_db),
-    _: dict = Depends(require_product_read())
+    db: Session = Depends(get_db), _: dict = Depends(require_product_read())
 ):
     """Obtener resumen general del inventario"""
     try:
@@ -25,11 +26,10 @@ async def obtener_resumen_inventario(
             "data": {
                 "total_productos": total_productos,
                 "valor_total_stock": round(valor_total_stock, 2),
-                "productos_bajo_stock": productos_bajo_stock
-            }
+                "productos_bajo_stock": productos_bajo_stock,
+            },
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al obtener resumen de inventario: {str(e)}")
-
-
-
+        raise HTTPException(
+            status_code=500, detail=f"Error al obtener resumen de inventario: {str(e)}"
+        )

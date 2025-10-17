@@ -1,18 +1,26 @@
-from fastapi import APIRouter, Query, Path, Depends, HTTPException, Body, Response
+import logging
+from typing import Optional
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Response
 from sqlalchemy.orm import Session
+
+from app.core.auth_middleware import require_product_read, require_product_write
+from app.models.database import get_db
+from app.models.schemas import (
+    AlertaBase,
+    AlertaCreate,
+    AlertaCreateResponse,
+    AlertaPaginatedResponse,
+    AlertaResponse,
+    AlertaUpdate,
+    MessageResponse,
+)
 from app.services import AlertaService
 from app.utils import crear_respuesta
-from typing import Optional
-from app.models.schemas import (
-    AlertaPaginatedResponse, AlertaCreate, AlertaUpdate,
-    AlertaBase, MessageResponse, AlertaResponse, AlertaCreateResponse
-)
-from app.models.database import get_db
-from app.core.auth_middleware import require_product_read, require_product_write
-import logging
 
 router = APIRouter(prefix="/alertas", tags=["Alertas"])
 logger = logging.getLogger(__name__)
+
 
 @router.get("", response_model=AlertaPaginatedResponse)
 async def listar_alertas(
@@ -24,17 +32,19 @@ async def listar_alertas(
     id_producto: Optional[int] = Query(None),
     id_seccion: Optional[int] = Query(None),
     estado: Optional[str] = Query("Activo"),
-    _: dict = Depends(require_product_read())
+    _: dict = Depends(require_product_read()),
 ):
     try:
         filtros = {
-            k: v for k, v in {
+            k: v
+            for k, v in {
                 "tipo_alerta": tipo_alerta,
                 "prioridad": prioridad,
                 "id_producto": id_producto,
                 "id_seccion": id_seccion,
-                "estado": estado
-            }.items() if v is not None
+                "estado": estado,
+            }.items()
+            if v is not None
         }
 
         alertas, total = AlertaService.listar(db, page, size, filtros)
@@ -51,54 +61,49 @@ async def listar_alertas(
                 "total": total,
                 "pages": total_pages,
                 "has_next": page < total_pages,
-                "has_prev": page > 1
+                "has_prev": page > 1,
             },
-            filters_applied=filtros
+            filters_applied=filtros,
         )
     except Exception as e:
         logger.error(f"Error en endpoint listar_alertas: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/{id_alerta}", response_model=AlertaResponse)
 async def obtener_alerta(
     id_alerta: int = Path(..., gt=0),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_read())
+    _: dict = Depends(require_product_read()),
 ):
     alerta = AlertaService.obtener_por_id(db, id_alerta)
     if not alerta:
         raise HTTPException(status_code=404, detail="Alerta no encontrada")
     alerta_data = AlertaBase.model_validate(alerta)
-    return crear_respuesta(
-        message="Alerta encontrada",
-        data=alerta_data
-    )
+    return crear_respuesta(message="Alerta encontrada", data=alerta_data)
+
 
 @router.post("", response_model=AlertaCreateResponse)
 async def crear_alerta(
-    alerta: AlertaCreate,
-    db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    alerta: AlertaCreate, db: Session = Depends(get_db), _: dict = Depends(require_product_write())
 ):
     try:
         alerta_data = alerta.model_dump()
         nuevo_id = AlertaService.crear(db, alerta_data)
-        resp = crear_respuesta(
-            message="Alerta creada exitosamente",
-            data={"id_alerta": nuevo_id}
-        )
+        resp = crear_respuesta(message="Alerta creada exitosamente", data={"id_alerta": nuevo_id})
         # Optional Location header (no contract change)
         resp.headers["Location"] = f"/api/v1/alertas/{nuevo_id}"
         return resp
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.put("/{id_alerta}", response_model=MessageResponse)
 async def actualizar_alerta(
     id_alerta: int = Path(..., gt=0),
     alerta: AlertaUpdate = Body(...),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
 ):
     try:
         updates = alerta.model_dump(exclude_unset=True)
@@ -108,12 +113,13 @@ async def actualizar_alerta(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.delete("/{id_alerta}", response_model=MessageResponse)
 async def eliminar_alerta(
     id_alerta: int = Path(..., gt=0),
     modo: str = Query("logico", pattern="^(logico|fisico)$"),
     db: Session = Depends(get_db),
-    _: dict = Depends(require_product_write())
+    _: dict = Depends(require_product_write()),
 ):
     if not AlertaService.eliminar(db, id_alerta, modo):
         raise HTTPException(status_code=404, detail="Alerta no encontrada")

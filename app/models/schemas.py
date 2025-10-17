@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field, ConfigDict, EmailStr
-from typing import Optional, List, Dict, Any, TypeVar, Generic
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, Generic, List, Optional, TypeVar
+
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 T = TypeVar('T')
 
@@ -55,10 +56,12 @@ class PaginatedResponse(BaseModel, Generic[T]):
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
 
+
 # Generic simple message response
 class MessageResponse(BaseModel):
     success: bool
     message: str
+
 
 # Inventory summary responses
 class InventorySummary(BaseModel):
@@ -66,10 +69,12 @@ class InventorySummary(BaseModel):
     valor_total_stock: float
     productos_bajo_stock: int
 
+
 class InventorySummaryResponse(BaseModel):
     success: bool
     message: str
     data: InventorySummary
+
 
 # Alertas specific responses
 class AlertaResponse(BaseModel):
@@ -77,8 +82,10 @@ class AlertaResponse(BaseModel):
     message: str
     data: AlertaBase
 
+
 class AlertaId(BaseModel):
     id_alerta: int
+
 
 class AlertaCreateResponse(BaseModel):
     success: bool
@@ -108,13 +115,16 @@ class SeccionPaginatedResponse(BaseModel):
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
 
+
 class SeccionResponse(BaseModel):
     success: bool
     message: str
     data: SeccionBase
 
+
 class SeccionId(BaseModel):
     id_seccion: int
+
 
 class SeccionCreateResponse(BaseModel):
     success: bool
@@ -175,19 +185,21 @@ class ProductoPaginatedResponse(BaseModel):
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
 
+
 class ProductoResponse(BaseModel):
     success: bool
     message: str
     data: ProductoBase
 
+
 class ProductoId(BaseModel):
     id_producto: int
+
 
 class ProductoCreateResponse(BaseModel):
     success: bool
     message: str
     data: ProductoId
-
 
 
 class ProductoCreate(ProductoBase):
@@ -221,18 +233,14 @@ class LaboratorioBase(BaseModel):
 
 class LaboratorioCreate(LaboratorioBase):
     # En creación permitimos caracteres comunes de teléfono, con longitud
-    telefono: Optional[str] = Field(
-        None, max_length=25, pattern=r'^[+0-9()\s-]{7,25}$'
-    )
+    telefono: Optional[str] = Field(None, max_length=25, pattern=r'^[+0-9()\s-]{7,25}$')
     email: Optional[EmailStr] = None
 
 
 class LaboratorioUpdate(BaseModel):
     nombre_laboratorio: Optional[str] = Field(None, min_length=1, max_length=100)
     pais_origen: Optional[str] = Field(None, max_length=100)
-    telefono: Optional[str] = Field(
-        None, max_length=25, pattern=r'^[+0-9()\s-]{7,25}$'
-    )
+    telefono: Optional[str] = Field(None, max_length=25, pattern=r'^[+0-9()\s-]{7,25}$')
     email: Optional[EmailStr] = Field(None)
     direccion: Optional[str] = Field(None, max_length=200)
     estado: Optional[EstadoEnum] = None
@@ -247,13 +255,16 @@ class LaboratorioPaginatedResponse(BaseModel):
     pagination: Dict[str, Any]
     filters_applied: Optional[Dict[str, Any]] = None
 
+
 class LaboratorioResponse(BaseModel):
     success: bool
     message: str
     data: LaboratorioBase
 
+
 class LaboratorioId(BaseModel):
     id_laboratorio: int
+
 
 class LaboratorioCreateResponse(BaseModel):
     success: bool
