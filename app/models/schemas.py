@@ -97,6 +97,7 @@ class AlertaCreateResponse(BaseModel):
 # Secciones
 # ==========================
 class SeccionBase(BaseModel):
+    id_seccion: Optional[int] = None
     nombre_seccion: str = Field(..., min_length=1, max_length=100)
     descripcion: Optional[str] = None
     ubicacion_fisica: Optional[str] = Field(None, max_length=100)
@@ -202,24 +203,47 @@ class ProductoCreateResponse(BaseModel):
     data: ProductoId
 
 
-class ProductoCreate(ProductoBase):
+class ProductoCreate(BaseModel):
     id_seccion: int
     id_laboratorio: int
     nombre_producto: str
-    estado: EstadoEnum
+    principio_activo: Optional[str] = None
+    concentracion: Optional[str] = None
+    forma_farmaceutica: Optional[str] = None
+    codigo_barras: Optional[str] = None
+    requiere_receta: Optional[bool] = None
+    precio_compra: Optional[float] = None
+    stock_actual: Optional[int] = None
+    stock_minimo: Optional[int] = None
+    descripcion: Optional[str] = None
+    estado: EstadoEnum = EstadoEnum.ACTIVO
+
+    model_config = ConfigDict(from_attributes=True)
 
 
-class ProductoUpdate(ProductoBase):
+class ProductoUpdate(BaseModel):
     id_seccion: Optional[int] = None
     id_laboratorio: Optional[int] = None
     nombre_producto: Optional[str] = None
+    principio_activo: Optional[str] = None
+    concentracion: Optional[str] = None
+    forma_farmaceutica: Optional[str] = None
+    codigo_barras: Optional[str] = None
+    requiere_receta: Optional[bool] = None
+    precio_compra: Optional[float] = None
+    stock_actual: Optional[int] = None
+    stock_minimo: Optional[int] = None
+    descripcion: Optional[str] = None
     estado: Optional[EstadoEnum] = None
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 # ==========================
 # Laboratorios
 # ==========================
 class LaboratorioBase(BaseModel):
+    id_laboratorio: Optional[int] = None
     nombre_laboratorio: str = Field(..., min_length=1, max_length=100)
     pais_origen: Optional[str] = Field(None, max_length=100)
     # Sin patrón para lectura/serialización de datos existentes, solo límite de longitud
@@ -378,3 +402,206 @@ class PasswordResetConfirm(BaseModel):
 class ChangePasswordRequest(BaseModel):
     current_password: str
     new_password: str
+
+
+# ==========================
+# Ventas y Detalles
+# ==========================
+class DetalleVentaBase(BaseModel):
+    id_lote: int
+    cantidad: int = Field(..., gt=0)
+    precio_unitario: float = Field(..., gt=0)
+    subtotal: float = Field(..., ge=0)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DetalleVentaCreate(DetalleVentaBase):
+    pass
+
+
+class DetalleVentaResponse(DetalleVentaBase):
+    id_detalle: int
+    id_venta: int
+
+
+class VentaBase(BaseModel):
+    id_cliente: int
+    fecha_venta: datetime
+    subtotal: float = Field(..., ge=0)
+    descuento: float = Field(default=0.0, ge=0)
+    impuestos: float = Field(default=0.0, ge=0)
+    total: float = Field(..., gt=0)
+    metodo_pago: str = Field(..., max_length=50)
+    estado: EstadoEnum = EstadoEnum.ACTIVO
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class VentaCreate(BaseModel):
+    id_cliente: int
+    fecha_venta: Optional[datetime] = None
+    descuento: float = Field(default=0.0, ge=0)
+    impuestos: float = Field(default=0.0, ge=0)
+    metodo_pago: str = Field(..., max_length=50)
+    detalles: List[DetalleVentaCreate] = Field(..., min_length=1)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class VentaResponse(VentaBase):
+    id_venta: int
+    id_usuario: int
+    detalles: Optional[List[DetalleVentaResponse]] = []
+
+
+class VentaUpdate(BaseModel):
+    estado: Optional[EstadoEnum] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Estadísticas de Ventas
+class VentaEstadisticasMes(BaseModel):
+    mes: int  # 1-12
+    año: int
+    total_ventas: float
+    cantidad_ventas: int
+    promedio_venta: float
+
+
+class VentaEstadisticasAño(BaseModel):
+    año: int
+    total_ventas: float
+    cantidad_ventas: int
+    meses: List[VentaEstadisticasMes]
+
+
+# ==========================
+# Gastos
+# ==========================
+class GastoBase(BaseModel):
+    fecha_gasto: datetime
+    concepto: str = Field(..., min_length=1, max_length=200)
+    categoria: str = Field(..., min_length=1, max_length=50)  # Compras, Servicios, Mantenimiento, Otros
+    monto: float = Field(..., gt=0)
+    metodo_pago: Optional[str] = Field(None, max_length=50)
+    numero_factura: Optional[str] = Field(None, max_length=50)
+    proveedor: Optional[str] = Field(None, max_length=100)
+    observaciones: Optional[str] = None
+    estado: EstadoEnum = EstadoEnum.ACTIVO
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class GastoCreate(GastoBase):
+    pass
+
+
+class GastoResponse(GastoBase):
+    id_gasto: int
+    id_usuario: int
+
+
+class GastoUpdate(BaseModel):
+    concepto: Optional[str] = Field(None, min_length=1, max_length=200)
+    categoria: Optional[str] = Field(None, min_length=1, max_length=50)
+    monto: Optional[float] = Field(None, gt=0)
+    metodo_pago: Optional[str] = Field(None, max_length=50)
+    numero_factura: Optional[str] = Field(None, max_length=50)
+    proveedor: Optional[str] = Field(None, max_length=100)
+    observaciones: Optional[str] = None
+    estado: Optional[EstadoEnum] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Estadísticas de Gastos
+class GastoEstadisticasMes(BaseModel):
+    mes: int
+    año: int
+    total_gastos: float
+    cantidad_gastos: int
+    por_categoria: Dict[str, float]
+
+
+class GastoEstadisticasAño(BaseModel):
+    año: int
+    total_gastos: float
+    cantidad_gastos: int
+    meses: List[GastoEstadisticasMes]
+
+
+# ==========================
+# Cotizaciones
+# ==========================
+class DetalleCotizacionBase(BaseModel):
+    id_producto: int
+    cantidad: int = Field(..., gt=0)
+    precio_unitario: float = Field(..., gt=0)
+    subtotal: float = Field(..., ge=0)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DetalleCotizacionCreate(DetalleCotizacionBase):
+    pass
+
+
+class DetalleCotizacionResponse(DetalleCotizacionBase):
+    id_detalle: int
+    id_cotizacion: int
+
+
+class CotizacionBase(BaseModel):
+    id_cliente: int
+    numero_cotizacion: str = Field(..., max_length=50)
+    fecha_cotizacion: datetime
+    fecha_vencimiento: Optional[datetime] = None
+    subtotal: float = Field(..., ge=0)
+    descuento: float = Field(default=0.0, ge=0)
+    impuestos: float = Field(default=0.0, ge=0)
+    total: float = Field(..., gt=0)
+    estado: str = Field(default="Pendiente", max_length=20)  # Pendiente, Aceptada, Rechazada, Convertida
+    observaciones: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class CotizacionCreate(BaseModel):
+    id_cliente: int
+    numero_cotizacion: Optional[str] = None  # Se auto-genera si no se provee
+    fecha_cotizacion: Optional[datetime] = None
+    fecha_vencimiento: Optional[datetime] = None
+    descuento: float = Field(default=0.0, ge=0)
+    impuestos: float = Field(default=0.0, ge=0)
+    observaciones: Optional[str] = None
+    detalles: List[DetalleCotizacionCreate] = Field(..., min_length=1)
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class CotizacionResponse(CotizacionBase):
+    id_cotizacion: int
+    id_usuario: int
+    id_venta_relacionada: Optional[int] = None
+    detalles: Optional[List[DetalleCotizacionResponse]] = []
+
+
+class CotizacionUpdate(BaseModel):
+    estado: Optional[str] = None
+    fecha_vencimiento: Optional[datetime] = None
+    observaciones: Optional[str] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# Estadísticas de Cotizaciones
+class CotizacionEstadisticas(BaseModel):
+    total_cotizaciones: int
+    pendientes: int
+    aceptadas: int
+    rechazadas: int
+    convertidas: int
+    tasa_conversion: float  # Porcentaje de cotizaciones convertidas a ventas
+

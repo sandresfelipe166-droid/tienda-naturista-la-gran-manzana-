@@ -69,6 +69,7 @@ class Cliente(Base):
     direccion = Column(String(200))
     estado = Column(String(20), default="Activo")
     ventas = relationship("Venta", back_populates="cliente")
+    cotizaciones = relationship("Cotizacion", back_populates="cliente")
 
 
 # Modelo para Usuario
@@ -89,6 +90,8 @@ class Usuario(Base):
     entradas = relationship("Entrada", back_populates="usuario")
     salidas = relationship("Salida", back_populates="usuario")
     ventas = relationship("Venta", back_populates="usuario")
+    gastos = relationship("Gasto", back_populates="usuario")
+    cotizaciones = relationship("Cotizacion", back_populates="usuario")
 
 
 # Modelo para Roles
@@ -187,6 +190,60 @@ class DetalleVenta(Base):
     subtotal = Column(Float, nullable=False)
     venta = relationship("Venta", back_populates="detalles")
     lote = relationship("Lote", back_populates="detalle_ventas")
+
+
+# Modelo para Gastos
+class Gasto(Base):
+    __tablename__ = "gasto"
+
+    id_gasto = Column(Integer, primary_key=True, index=True)
+    id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"))
+    fecha_gasto = Column(DateTime, nullable=False, index=True)
+    concepto = Column(String(200), nullable=False)
+    categoria = Column(String(50), nullable=False, index=True)  # Compras, Servicios, Mantenimiento, Otros
+    monto = Column(Float, nullable=False)
+    metodo_pago = Column(String(50))
+    numero_factura = Column(String(50))
+    proveedor = Column(String(100))
+    observaciones = Column(Text)
+    estado = Column(String(20), default="Activo")
+    usuario = relationship("Usuario", back_populates="gastos")
+
+
+# Modelo para Cotizaciones
+class Cotizacion(Base):
+    __tablename__ = "cotizacion"
+
+    id_cotizacion = Column(Integer, primary_key=True, index=True)
+    id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"))
+    id_cliente = Column(Integer, ForeignKey("cliente.id_cliente"))
+    numero_cotizacion = Column(String(50), unique=True, nullable=False)
+    fecha_cotizacion = Column(DateTime, nullable=False, index=True)
+    fecha_vencimiento = Column(DateTime)
+    subtotal = Column(Float, nullable=False)
+    descuento = Column(Float, default=0.0)
+    impuestos = Column(Float, default=0.0)
+    total = Column(Float, nullable=False)
+    estado = Column(String(20), default="Pendiente", index=True)  # Pendiente, Aceptada, Rechazada, Convertida
+    observaciones = Column(Text)
+    id_venta_relacionada = Column(Integer, ForeignKey("venta.id_venta"))  # Si se convirtió en venta
+    usuario = relationship("Usuario", back_populates="cotizaciones")
+    cliente = relationship("Cliente", back_populates="cotizaciones")
+    detalles = relationship("DetalleCotizacion", back_populates="cotizacion")
+
+
+# Modelo para Detalle de Cotizaciones
+class DetalleCotizacion(Base):
+    __tablename__ = "detalle_cotizacion"
+
+    id_detalle = Column(Integer, primary_key=True, index=True)
+    id_cotizacion = Column(Integer, ForeignKey("cotizacion.id_cotizacion"))
+    id_producto = Column(Integer, ForeignKey("producto.id_producto"))
+    cantidad = Column(Integer, nullable=False)
+    precio_unitario = Column(Float, nullable=False)
+    subtotal = Column(Float, nullable=False)
+    cotizacion = relationship("Cotizacion", back_populates="detalles")
+    producto = relationship("Producto")
 
 
 # Modelo para Alertas

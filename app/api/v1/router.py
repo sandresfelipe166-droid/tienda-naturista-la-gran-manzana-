@@ -1,6 +1,17 @@
 from fastapi import APIRouter
 
-from app.routers import alertas, auth, inventory, laboratorios, productos, secciones
+from app.routers import (
+    alertas,
+    auth,
+    inventory,
+    laboratorios,
+    productos,
+    secciones,
+    ventas,
+    gastos,
+    cotizaciones,
+    entradas,
+)
 from app.routers.dashboard import router as dashboard_router
 from app.routers.notificaciones import router as notificaciones_router
 from app.routers.productos_advanced import router as productos_advanced_router
@@ -20,12 +31,17 @@ api_router.include_router(inventory.router)
 api_router.include_router(productos.router, prefix="/productos")
 api_router.include_router(auth.router, prefix="/auth")
 api_router.include_router(users_router)
+# Nuevos routers: ventas, gastos y cotizaciones
+api_router.include_router(ventas.router)
+api_router.include_router(gastos.router)
+api_router.include_router(cotizaciones.router)
 # Advanced and Phase 2 routers
 api_router.include_router(productos_advanced_router)
 api_router.include_router(reportes_router)
 api_router.include_router(dashboard_router)
 api_router.include_router(notificaciones_router)
 api_router.include_router(scheduler_router)
+api_router.include_router(entradas.router)
 
 
 # API info endpoint
@@ -43,6 +59,10 @@ async def api_info():
             "productos": "/api/v1/productos",
             "productos_advanced": "/api/v1/productos",
             "inventory": "/api/v1/inventory",
+            "ventas": "/api/v1/ventas",
+            "gastos": "/api/v1/gastos",
+            "cotizaciones": "/api/v1/cotizaciones",
+            "entradas": "/api/v1/entradas",
             "reportes": "/api/v1/reportes",
             "dashboard": "/api/v1/dashboard",
             "notificaciones": "/api/v1/notificaciones",
