@@ -215,9 +215,15 @@ __pycache__/
 
 # Bases de datos de prueba y logs
 test.db
+test_db.sqlite
 *.sqlite
 logs/
 *.log
+app.log
+inventario.log
+
+# Archivos temporales de git
+rdyjkj
 
 # Producción / secretos
 .env

@@ -5,7 +5,8 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import require_permission
+from app.core.roles import Permission
 from app.models import models
 from app.models.database import get_db
 
@@ -22,7 +23,7 @@ def crear_entrada(
     proveedor: str | None = None,
     observaciones: str | None = None,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    current_user: models.Usuario = Depends(require_permission(Permission.INVENTORY_WRITE)),
 ):
     if cantidad <= 0:
         raise HTTPException(status_code=400, detail="Cantidad debe ser mayor a 0")
@@ -50,12 +51,12 @@ def crear_entrada(
     db.add(entrada)
 
     # Actualizar stock del lote y del producto
-    lote.cantidad_disponible = int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad)
+    setattr(lote, "cantidad_disponible", int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad))
     producto = (
         db.query(models.Producto).filter(models.Producto.id_producto == lote.id_producto).first()
     )
     if producto:
-        producto.stock_actual = int(getattr(producto, "stock_actual", 0)) + int(cantidad)
+        setattr(producto, "stock_actual", int(getattr(producto, "stock_actual", 0)) + int(cantidad))
 
     db.commit()
     db.refresh(entrada)
@@ -70,7 +71,7 @@ def listar_entradas(
     mes: int | None = Query(None, ge=1, le=12),
     año: int | None = Query(None, alias="año"),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     from sqlalchemy import extract
 
@@ -103,7 +104,7 @@ def listar_entradas(
 def obtener_entrada(
     id_entrada: int,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     e = db.query(models.Entrada).filter(models.Entrada.id_entrada == id_entrada).first()
     if not e:
@@ -126,7 +127,7 @@ def estadisticas_entradas_mes(
     mes: int = Query(..., ge=1, le=12),
     año: int = Query(..., alias="año"),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     from sqlalchemy import extract, func
 
@@ -154,7 +155,7 @@ def estadisticas_entradas_mes(
 def estadisticas_entradas_año(
     año: int = Query(..., alias="año"),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     from sqlalchemy import extract, func
 

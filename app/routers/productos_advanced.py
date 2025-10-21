@@ -5,8 +5,9 @@ Router avanzado de productos con filtros, paginación y caché
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import require_permission
 from app.core.cache import cache_manager
+from app.core.roles import Permission
 from app.crud.producto_advanced import (
     get_productos_advanced,
     get_productos_por_laboratorio_stats,
@@ -17,7 +18,6 @@ from app.crud.producto_advanced import (
 )
 from app.models.database import get_db
 from app.models.filters import ProductoFilters
-from app.models.models import Usuario
 from app.models.pagination import PaginationParams
 from app.models.schemas import MessageResponse
 
@@ -48,7 +48,7 @@ async def get_productos_with_filters(
     order: str = Query("asc", pattern="^(asc|desc)$", description="Dirección del ordenamiento"),
     # Dependencias
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """
     Obtener productos con filtros avanzados y paginación
@@ -103,7 +103,7 @@ async def search_productos(
     id_seccion: int | None = Query(None, description="Filtrar por sección"),
     estado: str | None = Query("Activo", description="Estado del producto"),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """
     Búsqueda avanzada de productos
@@ -142,7 +142,7 @@ async def get_stats(
     id_seccion: int | None = Query(None, description="Filtrar por sección"),
     estado: str | None = Query("Activo", description="Estado del producto"),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """
     Obtener estadísticas de productos
@@ -188,7 +188,7 @@ async def get_top(
         description="Criterio de ordenamiento",
     ),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """
     Obtener top productos según criterio
@@ -240,7 +240,7 @@ async def get_top(
 
 @router.get("/stats/por-laboratorio", response_model=dict)
 async def get_stats_por_laboratorio(
-    db: Session = Depends(get_db), current_user: Usuario = Depends(get_current_active_user)
+    db: Session = Depends(get_db), _: dict = Depends(require_permission(Permission.PRODUCT_READ))
 ):
     """
     Obtener estadísticas de productos agrupados por laboratorio
@@ -277,7 +277,7 @@ async def get_stats_por_laboratorio(
 
 @router.get("/stats/por-seccion", response_model=dict)
 async def get_stats_por_seccion(
-    db: Session = Depends(get_db), current_user: Usuario = Depends(get_current_active_user)
+    db: Session = Depends(get_db), _: dict = Depends(require_permission(Permission.PRODUCT_READ))
 ):
     """
     Obtener estadísticas de productos agrupados por sección
@@ -313,16 +313,12 @@ async def get_stats_por_seccion(
 
 
 @router.post("/cache/clear", response_model=MessageResponse)
-async def clear_productos_cache(current_user: Usuario = Depends(get_current_active_user)):
+async def clear_productos_cache(_: dict = Depends(require_permission(Permission.ADMIN_ACCESS))):
     """
-    Limpiar caché de productos (requiere autenticación)
+    Limpiar caché de productos (solo administradores)
 
     Útil después de operaciones masivas de actualización
     """
-    # Verificar que el usuario tenga permisos (admin)
-    if not hasattr(current_user, 'rol') or current_user.rol.nombre_rol != 'admin':
-        raise HTTPException(status_code=403, detail="No tiene permisos para esta operación")
-
     # Limpiar caché de productos
     deleted = cache_manager.delete_pattern("productos:*")
 
@@ -333,7 +329,7 @@ async def clear_productos_cache(current_user: Usuario = Depends(get_current_acti
 
 
 @router.get("/cache/stats", response_model=dict)
-async def get_cache_stats(current_user: Usuario = Depends(get_current_active_user)):
+async def get_cache_stats(_: dict = Depends(require_permission(Permission.ADMIN_ACCESS))):
     """
     Obtener estadísticas del caché
 

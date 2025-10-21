@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract, func
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import require_permission
+from app.core.roles import Permission
 from app.models import models, schemas
 from app.models.database import get_db
 
@@ -15,7 +16,7 @@ router = APIRouter(prefix="/gastos", tags=["Gastos"])
 def crear_gasto(
     gasto: schemas.GastoCreate,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    current_user: models.Usuario = Depends(require_permission(Permission.INVENTORY_WRITE)),
 ):
     """Crear un nuevo gasto."""
     db_gasto = models.Gasto(id_usuario=current_user.id_usuario, **gasto.model_dump())
@@ -33,7 +34,7 @@ def listar_gastos(
     año: int | None = Query(None, ge=2000),
     categoria: str | None = None,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Listar gastos con filtros opcionales."""
     query = db.query(models.Gasto)
@@ -53,7 +54,7 @@ def listar_gastos(
 def obtener_gasto(
     id_gasto: int,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Obtener detalles de un gasto específico."""
     gasto = db.query(models.Gasto).filter(models.Gasto.id_gasto == id_gasto).first()
@@ -67,7 +68,7 @@ def estadisticas_gastos_mes(
     mes: int = Query(..., ge=1, le=12),
     año: int = Query(..., ge=2000),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Obtener estadísticas de gastos de un mes específico."""
     # Total del mes
@@ -111,7 +112,7 @@ def estadisticas_gastos_mes(
 def estadisticas_gastos_año(
     año: int = Query(..., ge=2000),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Obtener estadísticas de gastos de un año completo."""
     # Total del año
@@ -175,7 +176,7 @@ def actualizar_gasto(
     id_gasto: int,
     gasto_update: schemas.GastoUpdate,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_WRITE)),
 ):
     """Actualizar un gasto."""
     gasto = db.query(models.Gasto).filter(models.Gasto.id_gasto == id_gasto).first()
@@ -195,13 +196,13 @@ def actualizar_gasto(
 def eliminar_gasto(
     id_gasto: int,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_DELETE)),
 ):
     """Eliminar (marcar como inactivo) un gasto."""
     gasto = db.query(models.Gasto).filter(models.Gasto.id_gasto == id_gasto).first()
     if not gasto:
         raise HTTPException(status_code=404, detail="Gasto no encontrado")
 
-    gasto.estado = "Inactivo"
+    setattr(gasto, "estado", "Inactivo")
     db.commit()
     return None

@@ -7,15 +7,15 @@ from typing import Any
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import require_permission
 from app.core.cache import cache_manager
+from app.core.roles import Permission
 from app.crud.producto_advanced import (
     get_productos_por_laboratorio_stats,
     get_productos_por_seccion_stats,
     get_productos_stats,
 )
 from app.models.database import get_db
-from app.models.models import Usuario
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
@@ -23,7 +23,7 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 @router.get("/metrics", response_model=dict)
 def get_metrics(
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ) -> dict[str, Any]:
     """
     Retorna métricas consolidadas del inventario:

@@ -4,7 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app.core.audit_logging import audit_logger
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import get_current_active_user, require_permission
+from app.core.roles import Permission
 from app.crud.user import delete_user, get_users, update_user
 from app.models.database import get_db
 from app.models.models import Usuario
@@ -21,12 +22,11 @@ def get_pagination_params(limit: int = Query(50, ge=1, le=1000), skip: int = Que
 async def list_users(
     pagination: dict = Depends(get_pagination_params),
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.USER_READ)),
 ):
     """
-    Listar usuarios (solo administradores)
+    Listar usuarios (requiere permiso USER_READ)
     """
-    # TODO: Agregar verificación de permisos de admin
     limit = pagination.get("limit", 50)
     skip = pagination.get("skip", 0)
     users = get_users(db, skip=skip, limit=limit)
@@ -37,10 +37,10 @@ async def list_users(
 async def get_user(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.USER_READ)),
 ):
     """
-    Obtener usuario por ID
+    Obtener usuario por ID (requiere permiso USER_READ)
     """
     user = db.query(Usuario).filter(Usuario.id_usuario == user_id).first()
     if not user:
@@ -53,13 +53,12 @@ async def update_user_endpoint(
     user_id: int,
     user_data: UserUpdate,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    current_user: Usuario = Depends(require_permission(Permission.USER_WRITE)),
     request: Request = None,  # type: ignore[assignment]
 ):
     """
-    Actualizar usuario
+    Actualizar usuario (requiere permiso USER_WRITE)
     """
-    # TODO: Verificar permisos (solo admin o el propio usuario)
     try:
         updated_user = update_user(db, user_id, user_data.model_dump(exclude_unset=True))
         if not updated_user:
@@ -86,13 +85,12 @@ async def update_user_endpoint(
 async def delete_user_endpoint(
     user_id: int,
     db: Session = Depends(get_db),
-    current_user: Usuario = Depends(get_current_active_user),
+    current_user: Usuario = Depends(require_permission(Permission.USER_DELETE)),
     request: Request = None,  # type: ignore[assignment]
 ):
     """
-    Eliminar usuario (lógico)
+    Eliminar usuario lógicamente (requiere permiso USER_DELETE)
     """
-    # TODO: Verificar permisos
     if int(getattr(current_user, "id_usuario", 0)) == user_id:
         raise HTTPException(status_code=400, detail="Cannot delete yourself")
 

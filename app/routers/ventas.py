@@ -7,7 +7,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract, func
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import get_current_active_user, require_permission
+from app.core.roles import Permission
 from app.models import models, schemas
 from app.models.database import get_db
 
@@ -18,7 +19,7 @@ router = APIRouter(prefix="/ventas", tags=["Ventas"])
 def crear_venta(
     venta: schemas.VentaCreate,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    current_user: models.Usuario = Depends(require_permission(Permission.INVENTORY_WRITE)),
 ):
     """Crear una nueva venta con sus detalles."""
     # Verificar que el cliente existe
@@ -111,7 +112,7 @@ def listar_ventas(
     año: int | None = Query(None, ge=2000),
     id_cliente: int | None = None,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Listar ventas con filtros opcionales."""
     query = db.query(models.Venta)
@@ -131,7 +132,7 @@ def listar_ventas(
 def obtener_venta(
     id_venta: int,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Obtener detalles de una venta específica."""
     venta = db.query(models.Venta).filter(models.Venta.id_venta == id_venta).first()
@@ -145,7 +146,7 @@ def estadisticas_ventas_mes(
     mes: int = Query(..., ge=1, le=12),
     año: int = Query(..., ge=2000),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Obtener estadísticas de ventas de un mes específico."""
     resultado = (
@@ -175,7 +176,7 @@ def estadisticas_ventas_mes(
 def estadisticas_ventas_año(
     año: int = Query(..., ge=2000),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_READ)),
 ):
     """Obtener estadísticas de ventas de un año completo."""
     # Estadísticas totales del año
@@ -225,7 +226,7 @@ def actualizar_venta(
     id_venta: int,
     venta_update: schemas.VentaUpdate,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.INVENTORY_WRITE)),
 ):
     """Actualizar estado de una venta (anular, etc.)."""
     venta = db.query(models.Venta).filter(models.Venta.id_venta == id_venta).first()

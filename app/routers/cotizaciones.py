@@ -6,7 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user
+from app.core.auth_middleware import get_current_active_user, require_permission
+from app.core.roles import Permission
 from app.models import models, schemas
 from app.models.database import get_db
 
@@ -41,7 +42,7 @@ def generar_numero_cotizacion(db: Session, año: int) -> str:
 def crear_cotizacion(
     cotizacion: schemas.CotizacionCreate,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    current_user: models.Usuario = Depends(require_permission(Permission.PRODUCT_WRITE)),
 ):
     """Crear una nueva cotización."""
     # Verificar que el cliente existe
@@ -125,7 +126,7 @@ def listar_cotizaciones(
     año: int | None = Query(None, ge=2000),
     id_cliente: int | None = None,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """Listar cotizaciones con filtros opcionales."""
     query = db.query(models.Cotizacion)
@@ -149,7 +150,7 @@ def listar_cotizaciones(
 def estadisticas_cotizaciones(
     año: int | None = Query(None, ge=2000),
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """Obtener estadísticas de cotizaciones."""
     query = db.query(models.Cotizacion)
@@ -179,7 +180,7 @@ def estadisticas_cotizaciones(
 def obtener_cotizacion(
     id_cotizacion: int,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_READ)),
 ):
     """Obtener detalles de una cotización específica."""
     cotizacion = (
@@ -195,7 +196,7 @@ def actualizar_cotizacion(
     id_cotizacion: int,
     cotizacion_update: schemas.CotizacionUpdate,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    _: dict = Depends(require_permission(Permission.PRODUCT_WRITE)),
 ):
     """Actualizar estado de una cotización."""
     cotizacion = (
@@ -218,7 +219,7 @@ def convertir_cotizacion_a_venta(
     id_cotizacion: int,
     metodo_pago: str,
     db: Session = Depends(get_db),
-    current_user: models.Usuario = Depends(get_current_active_user),
+    current_user: models.Usuario = Depends(require_permission(Permission.INVENTORY_WRITE)),
 ):
     """Convertir una cotización en una venta."""
     cotizacion = (
@@ -288,8 +289,8 @@ def convertir_cotizacion_a_venta(
             producto.stock_actual -= detalle_cot.cantidad
 
     # Actualizar cotización
-    cotizacion.estado = "Convertida"
-    cotizacion.id_venta_relacionada = db_venta.id_venta
+    setattr(cotizacion, "estado", "Convertida")
+    setattr(cotizacion, "id_venta_relacionada", db_venta.id_venta)
 
     db.commit()
     db.refresh(db_venta)
