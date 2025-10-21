@@ -27,8 +27,8 @@ def get_current_user_from_token(token: str, db: Session):
 
 
 def get_current_active_user(
-    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)
-):  # noqa: B008 - FastAPI dependency injection pattern
+    token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)  # noqa: B008
+):
     """Dependency para obtener usuario activo actual"""
     return get_current_user_from_token(token, db)
 
@@ -37,8 +37,8 @@ def require_role(required_role: str):
     """Decorator para requerir un rol específico"""
 
     def role_checker(
-        user=Depends(get_current_active_user),
-    ):  # noqa: B008 - FastAPI dependency injection pattern
+        user=Depends(get_current_active_user),  # noqa: B008
+    ):
         # Compare role name as string to support both enums and DB-stored strings
         current_role = getattr(getattr(user, "rol", None), "nombre_rol", None)
         required_role_value = required_role.value if hasattr(required_role, "value") else required_role  # type: ignore[attr-defined]
@@ -52,8 +52,8 @@ def require_role(required_role: str):
 
 
 def require_admin(
-    user=Depends(get_current_active_user),
-):  # noqa: B008 - FastAPI dependency injection pattern
+    user=Depends(get_current_active_user),  # noqa: B008
+):
     """Dependency para requerir rol de administrador"""
     current_role = getattr(getattr(user, "rol", None), "nombre_rol", None)
     if current_role != Role.ADMIN.value:
@@ -64,8 +64,8 @@ def require_admin(
 
 
 def require_manager(
-    user=Depends(get_current_active_user),
-):  # noqa: B008 - FastAPI dependency injection pattern
+    user=Depends(get_current_active_user),  # noqa: B008
+):
     """Dependency para requerir rol de manager"""
     current_role = getattr(getattr(user, "rol", None), "nombre_rol", None)
     if current_role != Role.MANAGER.value:
@@ -86,8 +86,8 @@ def require_permission(required_permission: str):
     """Decorator para requerir un permiso específico"""
 
     def permission_checker(
-        user=Depends(get_current_active_user),
-    ):  # noqa: B008 - FastAPI dependency injection pattern
+        user=Depends(get_current_active_user),  # noqa: B008
+    ):
         user_permissions = get_user_permissions(user)
         if not has_permission(user_permissions, required_permission):
             raise HTTPException(
@@ -103,8 +103,8 @@ def require_any_permission(required_permissions: list[str]):
     """Decorator para requerir cualquiera de los permisos especificados"""
 
     def permission_checker(
-        user=Depends(get_current_active_user),
-    ):  # noqa: B008 - FastAPI dependency injection pattern
+        user=Depends(get_current_active_user),  # noqa: B008
+    ):
         user_permissions = get_user_permissions(user)
         if not any(perm in user_permissions for perm in required_permissions):
             raise HTTPException(
@@ -120,8 +120,8 @@ def require_all_permissions(required_permissions: list[str]):
     """Decorator para requerir todos los permisos especificados"""
 
     def permission_checker(
-        user=Depends(get_current_active_user),
-    ):  # noqa: B008 - FastAPI dependency injection pattern
+        user=Depends(get_current_active_user),  # noqa: B008
+    ):
         user_permissions = get_user_permissions(user)
         if not all(perm in user_permissions for perm in required_permissions):
             raise HTTPException(

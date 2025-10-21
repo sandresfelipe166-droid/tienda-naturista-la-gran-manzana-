@@ -5,7 +5,8 @@ from collections.abc import Generator
 from sqlalchemy import event, text
 
 from app.core.logging_config import inventario_logger
-from app.models.database import SessionLocal as SharedSessionLocal, engine as shared_engine
+from app.models.database import SessionLocal as SharedSessionLocal
+from app.models.database import engine as shared_engine
 
 logger = inventario_logger
 
