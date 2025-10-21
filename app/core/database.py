@@ -5,7 +5,8 @@ from collections.abc import Generator
 from sqlalchemy import event, text
 
 from app.core.logging_config import inventario_logger
-from app.models.database import SessionLocal as SharedSessionLocal, engine as shared_engine
+from app.models.database import SessionLocal as SharedSessionLocal
+from app.models.database import engine as shared_engine
 
 logger = inventario_logger
 
@@ -96,10 +97,10 @@ class DatabaseManager:
         """Obtener información de la conexión"""
         pool = engine.pool
         return {
-            "pool_size": pool.size(),
-            "checked_in": pool.checkedin(),
-            "checked_out": pool.checkedout(),
-            "overflow": pool.overflow(),
+            "pool_size": pool.size(),  # type: ignore[attr-defined]
+            "checked_in": pool.checkedin(),  # type: ignore[attr-defined]
+            "checked_out": pool.checkedout(),  # type: ignore[attr-defined]
+            "overflow": pool.overflow(),  # type: ignore[attr-defined]
         }
 
 
