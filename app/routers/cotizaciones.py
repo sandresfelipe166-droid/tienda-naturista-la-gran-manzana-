@@ -289,8 +289,8 @@ def convertir_cotizacion_a_venta(
             producto.stock_actual -= detalle_cot.cantidad
 
     # Actualizar cotización
-    setattr(cotizacion, "estado", "Convertida")
-    setattr(cotizacion, "id_venta_relacionada", db_venta.id_venta)
+    cotizacion.estado = "Convertida"  # type: ignore[assignment]
+    cotizacion.id_venta_relacionada = db_venta.id_venta  # type: ignore[assignment]
 
     db.commit()
     db.refresh(db_venta)

@@ -51,12 +51,12 @@ def crear_entrada(
     db.add(entrada)
 
     # Actualizar stock del lote y del producto
-    lote.cantidad_disponible = int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad)
+    lote.cantidad_disponible = int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad)  # type: ignore[assignment]
     producto = (
         db.query(models.Producto).filter(models.Producto.id_producto == lote.id_producto).first()
     )
     if producto:
-        producto.stock_actual = int(getattr(producto, "stock_actual", 0)) + int(cantidad)
+        producto.stock_actual = int(getattr(producto, "stock_actual", 0)) + int(cantidad)  # type: ignore[assignment]
 
     db.commit()
     db.refresh(entrada)

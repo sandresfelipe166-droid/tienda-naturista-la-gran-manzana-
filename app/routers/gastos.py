@@ -203,6 +203,6 @@ def eliminar_gasto(
     if not gasto:
         raise HTTPException(status_code=404, detail="Gasto no encontrado")
 
-    gasto.estado = "Inactivo"
+    gasto.estado = "Inactivo"  # type: ignore[assignment]
     db.commit()
     return None
