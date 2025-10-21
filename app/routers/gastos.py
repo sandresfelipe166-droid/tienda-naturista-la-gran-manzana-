@@ -203,6 +203,6 @@ def eliminar_gasto(
     if not gasto:
         raise HTTPException(status_code=404, detail="Gasto no encontrado")
 
-    setattr(gasto, "estado", "Inactivo")
+    gasto.estado = "Inactivo"
     db.commit()
     return None

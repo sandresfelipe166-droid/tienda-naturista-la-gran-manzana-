@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user, require_permission
+from app.core.auth_middleware import require_permission
 from app.core.roles import Permission
 from app.models import models, schemas
 from app.models.database import get_db
@@ -289,8 +289,8 @@ def convertir_cotizacion_a_venta(
             producto.stock_actual -= detalle_cot.cantidad
 
     # Actualizar cotización
-    setattr(cotizacion, "estado", "Convertida")
-    setattr(cotizacion, "id_venta_relacionada", db_venta.id_venta)
+    cotizacion.estado = "Convertida"
+    cotizacion.id_venta_relacionada = db_venta.id_venta
 
     db.commit()
     db.refresh(db_venta)

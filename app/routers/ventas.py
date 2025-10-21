@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract, func
 from sqlalchemy.orm import Session
 
-from app.core.auth_middleware import get_current_active_user, require_permission
+from app.core.auth_middleware import require_permission
 from app.core.roles import Permission
 from app.models import models, schemas
 from app.models.database import get_db

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app.core.audit_logging import audit_logger
-from app.core.auth_middleware import get_current_active_user, require_permission
+from app.core.auth_middleware import require_permission
 from app.core.roles import Permission
 from app.crud.user import delete_user, get_users, update_user
 from app.models.database import get_db
