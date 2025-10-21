@@ -19,6 +19,7 @@ from app.models.schemas import (
     PasswordResetRequest,
     RegisterRequest,
     Token,
+    UserCreate,
     UserResponse,
 )
 
@@ -29,7 +30,9 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 @router.post("/register", response_model=UserResponse)
 async def register_user(
-    user_data: RegisterRequest, db: Session = Depends(get_db), request: Request | None = None
+    user_data: RegisterRequest,
+    db: Session = Depends(get_db),
+    request: Request = None,  # type: ignore[assignment]
 ):
     """
     Registrar un nuevo usuario
@@ -53,13 +56,21 @@ async def register_user(
 
     # Crear el usuario
     try:
-        user = create_user(db, user_data)
+        # Convertir RegisterRequest a UserCreate
+        user_create = UserCreate(
+            username=user_data.username,
+            email=user_data.email,
+            password=user_data.password,
+            nombre_completo=user_data.nombre_completo,
+            rol_id=user_data.rol_id,
+        )
+        user = create_user(db, user_create)
 
         # Log de auditoría
         if request:
             audit_logger.log_audit_event(
                 event="user_registered",
-                user_id=user.id_usuario,
+                user_id=int(user.id_usuario),  # type: ignore[arg-type]
                 ip_address=request.client.host if request.client else "unknown",
                 details={"username": user.nombre_usuario, "email": user.email},
             )
@@ -81,7 +92,7 @@ async def register_user(
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
-    request: Request | None = None,
+    request: Request = None,  # type: ignore[assignment]
 ):
     """
     Autenticar usuario y obtener token de acceso
@@ -95,14 +106,14 @@ async def login_for_access_token(
         )
 
     # Actualizar último acceso
-    user.ultima_acceso = datetime.utcnow()
+    user.ultima_acceso = datetime.utcnow()  # type: ignore[assignment]
     db.commit()
 
     # Log de auditoría
     if request:
         audit_logger.log_audit_event(
             event="login",
-            user_id=user.id_usuario,
+            user_id=int(user.id_usuario),  # type: ignore[arg-type]
             ip_address=request.client.host if request.client else "unknown",
             details={"username": user.nombre_usuario},
         )
@@ -127,7 +138,7 @@ async def login_json(login_data: LoginRequest, db: Session = Depends(get_db)):
         )
 
     # Actualizar último acceso
-    user.ultima_acceso = datetime.utcnow()
+    user.ultima_acceso = datetime.utcnow()  # type: ignore[assignment]
     db.commit()
 
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
@@ -180,13 +191,13 @@ async def change_password(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     # Verificar contraseña actual
-    if not verify_password(password_data.current_password, user.password_hash):
+    if not verify_password(password_data.current_password, str(user.password_hash)):  # type: ignore[arg-type]
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Current password is incorrect"
         )
 
     # Actualizar contraseña
-    user.password_hash = get_password_hash(password_data.new_password)
+    user.password_hash = get_password_hash(password_data.new_password)  # type: ignore[assignment]
     db.commit()
 
     return {"message": "Password changed successfully"}

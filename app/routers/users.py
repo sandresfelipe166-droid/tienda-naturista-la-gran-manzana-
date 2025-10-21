@@ -54,7 +54,7 @@ async def update_user_endpoint(
     user_data: UserUpdate,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-    request: Request | None = None,
+    request: Request = None,  # type: ignore[assignment]
 ):
     """
     Actualizar usuario
@@ -87,7 +87,7 @@ async def delete_user_endpoint(
     user_id: int,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-    request: Request | None = None,
+    request: Request = None,  # type: ignore[assignment]
 ):
     """
     Eliminar usuario (lógico)

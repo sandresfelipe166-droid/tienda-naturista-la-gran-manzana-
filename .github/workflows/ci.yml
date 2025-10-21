@@ -34,7 +34,7 @@ jobs:
       - name: Run ruff (lint) and auto-fix
         run: |
           ruff check . || true
-          ruff --fix .
+          ruff check --fix .
           # If ruff --fix changed files, fail the job so PRs must be formatted
           git --no-pager diff --exit-code || (echo "Code not formatted by ruff --fix" && exit 1)
 

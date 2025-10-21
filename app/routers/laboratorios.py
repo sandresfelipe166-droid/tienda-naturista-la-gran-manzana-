@@ -78,7 +78,7 @@ async def crear_laboratorio(
     laboratorio: LaboratorioCreate,
     db: Session = Depends(get_db),
     _: dict = Depends(require_product_write()),
-    response: Response | None = None,
+    response: Response = None,  # type: ignore[assignment]
 ):
     laboratorio_data = laboratorio.model_dump()
     nuevo_id = LaboratorioService.crear(db, laboratorio_data)
