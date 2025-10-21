@@ -3,11 +3,10 @@ Health check endpoints para el API
 """
 
 import time
-from typing import Any, Dict
+from typing import Any
 
 import redis
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException
 
 from app.core.config import settings
 from app.core.database import db_manager
@@ -19,7 +18,7 @@ logger = inventario_logger
 
 
 @router.get("/health", summary="Health Check Básico")
-async def health_check() -> Dict[str, Any]:
+async def health_check() -> dict[str, Any]:
     """
     Health check básico del API
     """
@@ -33,7 +32,7 @@ async def health_check() -> Dict[str, Any]:
 
 
 @router.get("/health/detailed", summary="Health Check Detallado")
-async def detailed_health_check() -> Dict[str, Any]:
+async def detailed_health_check() -> dict[str, Any]:
     """
     Health check detallado con información de servicios
     """
@@ -102,7 +101,7 @@ async def detailed_health_check() -> Dict[str, Any]:
 
 
 @router.get("/health/database", summary="Database Health Check")
-async def database_health_check() -> Dict[str, Any]:
+async def database_health_check() -> dict[str, Any]:
     """
     Health check específico de la base de datos
     """
@@ -118,11 +117,11 @@ async def database_health_check() -> Dict[str, Any]:
         }
     except Exception as e:
         logger.log_error(e, {"context": "database_health_check"})
-        raise HTTPException(status_code=503, detail=f"Database health check failed: {str(e)}")
+        raise HTTPException(status_code=503, detail=f"Database health check failed: {str(e)}") from e
 
 
 @router.get("/health/metrics", summary="Application Metrics")
-async def application_metrics() -> Dict[str, Any]:
+async def application_metrics() -> dict[str, Any]:
     """
     Métricas básicas de la aplicación (reales). Si psutil no está disponible, los datos
     de memoria serán None. Para conexiones activas se usa el pool info del db_manager.
@@ -134,7 +133,7 @@ async def application_metrics() -> Dict[str, Any]:
     latency = summary.get("latency", {})
 
     # Intentar obtener uso de memoria con psutil (opcional)
-    mem_info: Dict[str, Any] = {"available": False, "rss": None, "vms": None, "percent": None}
+    mem_info: dict[str, Any] = {"available": False, "rss": None, "vms": None, "percent": None}
     try:
         import psutil  # type: ignore
 
@@ -186,7 +185,7 @@ async def application_metrics() -> Dict[str, Any]:
 
 
 @router.get("/health/config", summary="Configuration Info")
-async def configuration_info() -> Dict[str, Any]:
+async def configuration_info() -> dict[str, Any]:
     """
     Información de configuración (sin datos sensibles)
     """

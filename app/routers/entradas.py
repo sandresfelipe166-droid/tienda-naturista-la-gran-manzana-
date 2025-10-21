@@ -1,6 +1,5 @@
 """Router para gestión de entradas (compras/recepciones)."""
 from datetime import datetime
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
@@ -17,10 +16,10 @@ def crear_entrada(
     id_lote: int,
     cantidad: int,
     precio_compra_unitario: float,
-    fecha_entrada: Optional[datetime] = None,
-    numero_factura_compra: Optional[str] = None,
-    proveedor: Optional[str] = None,
-    observaciones: Optional[str] = None,
+    fecha_entrada: datetime | None = None,
+    numero_factura_compra: str | None = None,
+    proveedor: str | None = None,
+    observaciones: str | None = None,
     db: Session = Depends(get_db),
     current_user: models.Usuario = Depends(get_current_active_user),
 ):
@@ -50,23 +49,23 @@ def crear_entrada(
     db.add(entrada)
 
     # Actualizar stock del lote y del producto
-    setattr(lote, "cantidad_disponible", int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad))
+    lote.cantidad_disponible = int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad)
     producto = db.query(models.Producto).filter(models.Producto.id_producto == lote.id_producto).first()
     if producto:
-        setattr(producto, "stock_actual", int(getattr(producto, "stock_actual", 0)) + int(cantidad))
+        producto.stock_actual = int(getattr(producto, "stock_actual", 0)) + int(cantidad)
 
     db.commit()
     db.refresh(entrada)
     return entrada
 
 
-@router.get("/", response_model=List[dict])
+@router.get("/", response_model=list[dict])
 def listar_entradas(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    id_lote: Optional[int] = None,
-    mes: Optional[int] = Query(None, ge=1, le=12),
-    año: Optional[int] = Query(None, alias="año"),
+    id_lote: int | None = None,
+    mes: int | None = Query(None, ge=1, le=12),
+    año: int | None = Query(None, alias="año"),
     db: Session = Depends(get_db),
     current_user: models.Usuario = Depends(get_current_active_user),
 ):

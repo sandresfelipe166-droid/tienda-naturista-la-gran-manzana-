@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -8,9 +8,9 @@ from pydantic import BaseModel
 def crear_respuesta(
     success: bool = True,
     message: str = "",
-    data: Optional[Any] = None,
+    data: Any | None = None,
     status_code: int = 200,
-    extra: Optional[Dict[str, Any]] = None,
+    extra: dict[str, Any] | None = None,
 ) -> JSONResponse:
     # Convert Pydantic models to dictionaries
     if isinstance(data, BaseModel):
@@ -24,7 +24,7 @@ def crear_respuesta(
     return JSONResponse(content=contenido, status_code=status_code)
 
 
-def calcular_dias_para_vencer(fecha_vencimiento: Optional[datetime]) -> Optional[int]:
+def calcular_dias_para_vencer(fecha_vencimiento: datetime | None) -> int | None:
     if fecha_vencimiento is None:
         return None
     hoy = datetime.now().date()

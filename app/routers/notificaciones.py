@@ -2,7 +2,7 @@
 Router de notificaciones (email) para alertas del sistema
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, Depends
 from sqlalchemy.orm import Session
@@ -21,7 +21,7 @@ def enviar_alerta_stock_bajo_test(
     background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Envía un correo con el resumen de productos con stock bajo (ejecución en background).
     Requiere rol admin. Si SMTP no está configurado, se retorna estado 'skipped' (no-op).
@@ -55,7 +55,7 @@ def programar_alerta_stock_bajo(
     intervalo_horas: int = 24,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Punto de integración para programar alertas (stub). En un siguiente paso
     puede integrarse con APScheduler o un cron externo.

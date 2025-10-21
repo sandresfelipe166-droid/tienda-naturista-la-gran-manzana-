@@ -1,4 +1,3 @@
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
@@ -50,7 +49,7 @@ async def buscar_productos(
             "query": q,
         }
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error en búsqueda: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error en búsqueda: {str(e)}") from e
 
 
 @router.get("/bajo-stock", response_model=dict)
@@ -71,7 +70,7 @@ async def productos_bajo_stock(
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Error al obtener productos con stock bajo: {str(e)}"
-        )
+        ) from e
 
 
 @router.get("/por-vencer", response_model=dict)
@@ -95,17 +94,17 @@ async def productos_por_vencer(
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Error al obtener productos por vencer: {str(e)}"
-        )
+        ) from e
 
 
 @router.get("", response_model=ProductoPaginatedResponse)
 async def listar_productos(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    nombre: Optional[str] = None,
-    id_seccion: Optional[int] = None,
-    id_laboratorio: Optional[int] = None,
-    estado: Optional[str] = Query("Activo"),
+    nombre: str | None = None,
+    id_seccion: int | None = None,
+    id_laboratorio: int | None = None,
+    estado: str | None = Query("Activo"),
     db: Session = Depends(get_db),
     _: dict = Depends(require_product_read()),
 ):
@@ -178,7 +177,7 @@ async def listar_productos(
             filters_applied=filters_applied if filters_applied else None,
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al obtener productos: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al obtener productos: {str(e)}") from e
 
 
 @router.get("/{producto_id}", response_model=ProductoResponse)
@@ -213,7 +212,7 @@ async def obtener_producto(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al obtener producto: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al obtener producto: {str(e)}") from e
 
 
 @router.post("", response_model=dict)
@@ -247,9 +246,9 @@ async def crear_producto(
         }
         return {"success": True, "message": "Producto creado exitosamente", "data": producto_dict}
     except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=422, detail=str(e)) from e
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al crear producto: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al crear producto: {str(e)}") from e
 
 
 @router.put("/{producto_id}", response_model=ProductoResponse)
@@ -289,11 +288,11 @@ async def actualizar_producto(
             "data": producto_dict,
         }
     except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e))
+        raise HTTPException(status_code=422, detail=str(e)) from e
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar producto: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al actualizar producto: {str(e)}") from e
 
 
 @router.delete("/{producto_id}", response_model=MessageResponse)
@@ -314,4 +313,4 @@ async def eliminar_producto(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al eliminar producto: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al eliminar producto: {str(e)}") from e

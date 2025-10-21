@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, cast
 
 from sqlalchemy.orm import Session
 
@@ -25,8 +25,8 @@ logger = get_logger()
 class ProductoService:
     @staticmethod
     def listar(
-        db: Session, page: int, size: int, filtros: Dict[str, Any]
-    ) -> Tuple[List[Producto], int]:
+        db: Session, page: int, size: int, filtros: dict[str, Any]
+    ) -> tuple[list[Producto], int]:
         query = db.query(Producto)
         for attr, value in filtros.items():
             query = query.filter(getattr(Producto, attr) == value)
@@ -35,12 +35,12 @@ class ProductoService:
         return productos, total
 
     @staticmethod
-    def obtener_por_id(db: Session, id_producto: int) -> Optional[Producto]:
+    def obtener_por_id(db: Session, id_producto: int) -> Producto | None:
         producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
         return producto
 
     @staticmethod
-    def crear(db: Session, data: Dict[str, Any]) -> Producto:
+    def crear(db: Session, data: dict[str, Any]) -> Producto:
         try:
             # Validar que la sección exista
             if 'id_seccion' in data:
@@ -69,7 +69,7 @@ class ProductoService:
             raise
 
     @staticmethod
-    def actualizar(db: Session, id_producto: int, updates: Dict[str, Any]) -> Producto:
+    def actualizar(db: Session, id_producto: int, updates: dict[str, Any]) -> Producto | None:
         try:
             producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
             if not producto:
@@ -96,7 +96,8 @@ class ProductoService:
                     raise ValueError("El laboratorio especificado no existe")
 
             # Update only the provided fields
-            db.query(Producto).filter(Producto.id_producto == id_producto).update(updates)
+            # SQLAlchemy expects a mapping of column arguments; cast for static type checkers
+            db.query(Producto).filter(Producto.id_producto == id_producto).update(cast(Any, updates))
             db.commit()
             # Return the updated product
             return db.query(Producto).filter(Producto.id_producto == id_producto).first()
@@ -114,7 +115,7 @@ class ProductoService:
             if not producto:
                 return False
             if modo == "logico":
-                producto.estado = "Inactivo"
+                cast(Any, producto).estado = "Inactivo"
             elif modo == "fisico":
                 db.delete(producto)
             else:
@@ -131,32 +132,42 @@ class ProductoService:
         db: Session,
         skip: int = 0,
         limit: int = 100,
-        nombre: Optional[str] = None,
-        id_seccion: Optional[int] = None,
-        id_laboratorio: Optional[int] = None,
-        estado: Optional[str] = "Activo",
-    ) -> List[Producto]:
+        nombre: str | None = None,
+        id_seccion: int | None = None,
+        id_laboratorio: int | None = None,
+        estado: str | None = "Activo",
+    ) -> list[Producto]:
         """Delegar a CRUD - método mantenido por compatibilidad"""
-        return get_productos(db, skip, limit, nombre, id_seccion, id_laboratorio, estado)
+        return get_productos(
+            db,
+            {
+                "skip": skip,
+                "limit": limit,
+                "nombre": nombre,
+                "id_seccion": id_seccion,
+                "id_laboratorio": id_laboratorio,
+                "estado": estado,
+            },
+        )
 
     @staticmethod
     def count_productos(
         db: Session,
-        nombre: Optional[str] = None,
-        id_seccion: Optional[int] = None,
-        id_laboratorio: Optional[int] = None,
-        estado: Optional[str] = "Activo",
+        nombre: str | None = None,
+        id_seccion: int | None = None,
+        id_laboratorio: int | None = None,
+        estado: str | None = "Activo",
     ) -> int:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return count_productos(db, nombre, id_seccion, id_laboratorio, estado)
 
     @staticmethod
-    def search_productos(db: Session, q: str, skip: int = 0, limit: int = 50) -> List[Producto]:
+    def search_productos(db: Session, q: str, skip: int = 0, limit: int = 50) -> list[Producto]:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return search_productos(db, q, skip, limit)
 
     @staticmethod
-    def get_productos_bajo_stock(db: Session) -> List[Producto]:
+    def get_productos_bajo_stock(db: Session) -> list[Producto]:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return get_productos_bajo_stock(db)
 
@@ -176,12 +187,12 @@ class ProductoService:
         return count_productos_bajo_stock(db)
 
     @staticmethod
-    def get_productos_por_vencer(db: Session, dias: int) -> List[Producto]:
+    def get_productos_por_vencer(db: Session, dias: int) -> list[Producto]:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return get_productos_por_vencer(db, dias)
 
     @staticmethod
-    def get_producto_by_id(db: Session, producto_id: int) -> Optional[Producto]:
+    def get_producto_by_id(db: Session, producto_id: int) -> Producto | None:
         """Delegar a CRUD - método mantenido por compatibilidad"""
         return get_producto_by_id(db, producto_id)
 
@@ -201,6 +212,6 @@ class ProductoService:
         return delete_producto(db, producto_id, modo == "logico")
 
     @staticmethod
-    def buscar_productos(db: Session, q: str, skip: int = 0, limit: int = 50) -> List[Producto]:
+    def buscar_productos(db: Session, q: str, skip: int = 0, limit: int = 50) -> list[Producto]:
         """Buscar productos por query string"""
         return search_productos(db, q, skip, limit)

@@ -1,6 +1,6 @@
 """Router para gestión de ventas."""
 from datetime import datetime
-from typing import List, Optional
+from typing import Any, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract, func
@@ -98,13 +98,13 @@ def crear_venta(
     return db_venta
 
 
-@router.get("/", response_model=List[schemas.VentaResponse])
+@router.get("/", response_model=list[schemas.VentaResponse])
 def listar_ventas(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    mes: Optional[int] = Query(None, ge=1, le=12),
-    año: Optional[int] = Query(None, ge=2000),
-    id_cliente: Optional[int] = None,
+    mes: int | None = Query(None, ge=1, le=12),
+    año: int | None = Query(None, ge=2000),
+    id_cliente: int | None = None,
     db: Session = Depends(get_db),
     current_user: models.Usuario = Depends(get_current_active_user)
 ):
@@ -223,7 +223,7 @@ def actualizar_venta(
         raise HTTPException(status_code=404, detail="Venta no encontrada")
     
     if venta_update.estado:
-        setattr(venta, "estado", venta_update.estado)
+        cast(Any, venta).estado = venta_update.estado
     
     db.commit()
     db.refresh(venta)

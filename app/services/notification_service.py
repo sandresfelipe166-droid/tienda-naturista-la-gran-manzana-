@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
@@ -11,7 +11,7 @@ from app.models.models import Producto
 logger = inventario_logger
 
 
-def get_stock_bajo_productos(db: Session, limit: int = 50) -> List[Producto]:
+def get_stock_bajo_productos(db: Session, limit: int = 50) -> list[Producto]:
     """
     Obtiene productos con stock bajo (stock_actual <= stock_minimo) y estado Activo.
     """
@@ -29,7 +29,7 @@ def get_stock_bajo_productos(db: Session, limit: int = 50) -> List[Producto]:
     )
 
 
-def build_stock_bajo_summary(db: Session, max_items: int = 20) -> Dict[str, Any]:
+def build_stock_bajo_summary(db: Session, max_items: int = 20) -> dict[str, Any]:
     """
     Construye un resumen de productos con stock bajo para enviar por email.
     """
@@ -56,7 +56,7 @@ def build_stock_bajo_summary(db: Session, max_items: int = 20) -> Dict[str, Any]
     return summary
 
 
-def format_stock_bajo_email(summary: Dict[str, Any]) -> str:
+def format_stock_bajo_email(summary: dict[str, Any]) -> str:
     """
     Da formato al cuerpo del correo para el resumen de stock bajo.
     """
@@ -90,7 +90,7 @@ def format_stock_bajo_email(summary: Dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def send_stock_bajo_email(db: Session, recipients: Optional[List[str]] = None) -> Dict[str, Any]:
+def send_stock_bajo_email(db: Session, recipients: list[str] | None = None) -> dict[str, Any]:
     """
     Genera y envía correo de alerta de stock bajo.
     Si SMTP no está configurado, realiza no-op y retorna estado con skipped.

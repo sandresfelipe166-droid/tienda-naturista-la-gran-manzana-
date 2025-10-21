@@ -29,6 +29,8 @@ line-length = 100
 target-version = "py311"
 respect-gitignore = true
 extend-exclude = ["alembic/versions/*"]
+
+[tool.ruff.lint]
 select = [
   "E",  # pycodestyle errors
   "F",  # pyflakes
@@ -39,6 +41,31 @@ select = [
 ignore = [
   "E501", # line length handled by formatter
 ]
+
+# Tests and scripts often have dynamic imports or looser style; reduce noise there.
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*" = [
+  "E402",  # module level import not at top (fixtures setup)
+  "F401",  # imported but unused (doc fixtures, readability)
+  "F811",  # redefinition (pytest param names)
+  "I001",  # import sort in tests less strict
+  "UP035", # typing.List/Dict in legacy test code
+  "B007",  # unused loop var in tests
+]
+"test_*.py" = ["E402", "F401", "F811", "I001", "UP035", "B007"]
+"scripts/**/*" = [
+  "E402",
+  "F401",
+  "I001",
+  "E722",  # bare except in quick scripts
+  "UP035",
+  "F541",  # f-string without placeholders
+]
+"app/routers/*.py" = [
+  "B008", # FastAPI Depends in function params is idiomatic
+  "I001", # Let import order be flexible for readability
+]
+"simple_tag_test.py" = ["F401"]
 
 [tool.ruff.format]
 quote-style = "preserve"

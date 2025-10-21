@@ -1,9 +1,8 @@
 """Router para gestión de cotizaciones."""
 from datetime import datetime
-from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import extract, func
+from sqlalchemy import extract
 from sqlalchemy.orm import Session
 
 from app.core.auth_middleware import get_current_active_user
@@ -104,14 +103,14 @@ def crear_cotizacion(
     return db_cotizacion
 
 
-@router.get("/", response_model=List[schemas.CotizacionResponse])
+@router.get("/", response_model=list[schemas.CotizacionResponse])
 def listar_cotizaciones(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    estado: Optional[str] = None,
-    mes: Optional[int] = Query(None, ge=1, le=12),
-    año: Optional[int] = Query(None, ge=2000),
-    id_cliente: Optional[int] = None,
+    estado: str | None = None,
+    mes: int | None = Query(None, ge=1, le=12),
+    año: int | None = Query(None, ge=2000),
+    id_cliente: int | None = None,
     db: Session = Depends(get_db),
     current_user: models.Usuario = Depends(get_current_active_user)
 ):
@@ -133,7 +132,7 @@ def listar_cotizaciones(
 
 @router.get("/estadisticas", response_model=schemas.CotizacionEstadisticas)
 def estadisticas_cotizaciones(
-    año: Optional[int] = Query(None, ge=2000),
+    año: int | None = Query(None, ge=2000),
     db: Session = Depends(get_db),
     current_user: models.Usuario = Depends(get_current_active_user)
 ):
@@ -269,7 +268,7 @@ def convertir_cotizacion_a_venta(
             producto.stock_actual -= detalle_cot.cantidad
     
     # Actualizar cotización
-    setattr(cotizacion, "estado", "Convertida")
+    cotizacion.estado = "Convertida"
     cotizacion.id_venta_relacionada = db_venta.id_venta
     
     db.commit()

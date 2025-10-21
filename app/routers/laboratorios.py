@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Response
 from sqlalchemy.orm import Session
@@ -27,8 +26,8 @@ async def listar_laboratorios(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     size: int = Query(10, ge=1, le=100),
-    nombre_laboratorio: Optional[str] = Query(None),
-    estado: Optional[str] = Query("Activo"),
+    nombre_laboratorio: str | None = Query(None),
+    estado: str | None = Query("Activo"),
     _: dict = Depends(require_product_read()),
 ):
     try:
@@ -41,7 +40,7 @@ async def listar_laboratorios(
         laboratorios, total = LaboratorioService.listar(db, page, size, filtros)
         total_pages = (total + size - 1) // size
 
-        laboratorios_data = [LaboratorioBase.model_validate(l) for l in laboratorios]
+        laboratorios_data = [LaboratorioBase.model_validate(lab) for lab in laboratorios]
         return LaboratorioPaginatedResponse(
             success=True,
             message=f"Se encontraron {total} laboratorios",
@@ -58,7 +57,7 @@ async def listar_laboratorios(
         )
     except Exception as e:
         logger.error(f"Error en endpoint listar_laboratorios: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @router.get("/{id_laboratorio}", response_model=LaboratorioResponse)
@@ -79,7 +78,7 @@ async def crear_laboratorio(
     laboratorio: LaboratorioCreate,
     db: Session = Depends(get_db),
     _: dict = Depends(require_product_write()),
-    response: Response = None,
+    response: Response | None = None,
 ):
     laboratorio_data = laboratorio.model_dump()
     nuevo_id = LaboratorioService.crear(db, laboratorio_data)
@@ -103,7 +102,7 @@ async def actualizar_laboratorio(
             raise HTTPException(status_code=404, detail="Laboratorio no encontrado")
         return crear_respuesta(message="Laboratorio actualizado exitosamente")
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.delete("/{id_laboratorio}", response_model=MessageResponse)

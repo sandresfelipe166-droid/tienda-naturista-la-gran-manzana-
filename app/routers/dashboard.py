@@ -2,7 +2,7 @@
 Router de Dashboard de métricas
 """
 
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -24,7 +24,7 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 def get_metrics(
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Retorna métricas consolidadas del inventario:
     - Estadísticas generales de productos

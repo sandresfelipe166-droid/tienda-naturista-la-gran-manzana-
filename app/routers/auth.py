@@ -1,6 +1,5 @@
 # app/routers/auth.py
 from datetime import datetime, timedelta
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -30,7 +29,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
 @router.post("/register", response_model=UserResponse)
 async def register_user(
-    user_data: RegisterRequest, db: Session = Depends(get_db), request: Request = None
+    user_data: RegisterRequest, db: Session = Depends(get_db), request: Request | None = None
 ):
     """
     Registrar un nuevo usuario
@@ -70,19 +69,19 @@ async def register_user(
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="User already exists or invalid data"
-        )
+        ) from None
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error creating user: {str(e)}",
-        )
+        ) from e
 
 
 @router.post("/login", response_model=Token)
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db),
-    request: Request = None,
+    request: Request | None = None,
 ):
     """
     Autenticar usuario y obtener token de acceso

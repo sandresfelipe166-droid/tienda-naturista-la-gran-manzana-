@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Response
 from sqlalchemy.orm import Session
@@ -27,8 +26,8 @@ async def listar_secciones(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     size: int = Query(10, ge=1, le=100),
-    nombre_seccion: Optional[str] = Query(None),
-    estado: Optional[str] = Query("Activo"),
+    nombre_seccion: str | None = Query(None),
+    estado: str | None = Query("Activo"),
     _: dict = Depends(require_product_read()),
 ):
     try:
@@ -58,7 +57,7 @@ async def listar_secciones(
         )
     except Exception as e:
         logger.error(f"Error en endpoint listar_secciones: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @router.get("/{id_seccion}", response_model=SeccionResponse)
@@ -88,7 +87,7 @@ async def crear_seccion(
             response.headers["Location"] = f"/api/v1/secciones/{nuevo_id}"
         return crear_respuesta(message="Sección creada exitosamente", data={"id_seccion": nuevo_id})
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.put("/{id_seccion}", response_model=MessageResponse)
@@ -104,7 +103,7 @@ async def actualizar_seccion(
             raise HTTPException(status_code=404, detail="Sección no encontrada")
         return crear_respuesta(message="Sección actualizada exitosamente")
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.delete("/{id_seccion}", response_model=MessageResponse)
@@ -121,4 +120,4 @@ async def eliminar_seccion(
             message=f"Sección {'eliminada' if modo == 'fisico' else 'desactivada'} exitosamente"
         )
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e

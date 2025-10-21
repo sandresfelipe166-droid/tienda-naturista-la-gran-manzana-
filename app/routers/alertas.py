@@ -1,7 +1,6 @@
 import logging
-from typing import Optional
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query, Response
+from fastapi import APIRouter, Body, Depends, HTTPException, Path, Query
 from sqlalchemy.orm import Session
 
 from app.core.auth_middleware import require_product_read, require_product_write
@@ -27,11 +26,11 @@ async def listar_alertas(
     db: Session = Depends(get_db),
     page: int = Query(1, ge=1),
     size: int = Query(10, ge=1, le=100),
-    tipo_alerta: Optional[str] = Query(None),
-    prioridad: Optional[str] = Query(None),
-    id_producto: Optional[int] = Query(None),
-    id_seccion: Optional[int] = Query(None),
-    estado: Optional[str] = Query("Activo"),
+    tipo_alerta: str | None = Query(None),
+    prioridad: str | None = Query(None),
+    id_producto: int | None = Query(None),
+    id_seccion: int | None = Query(None),
+    estado: str | None = Query("Activo"),
     _: dict = Depends(require_product_read()),
 ):
     try:
@@ -67,7 +66,7 @@ async def listar_alertas(
         )
     except Exception as e:
         logger.error(f"Error en endpoint listar_alertas: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 
 @router.get("/{id_alerta}", response_model=AlertaResponse)
@@ -95,7 +94,7 @@ async def crear_alerta(
         resp.headers["Location"] = f"/api/v1/alertas/{nuevo_id}"
         return resp
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.put("/{id_alerta}", response_model=MessageResponse)
@@ -111,7 +110,7 @@ async def actualizar_alerta(
             raise HTTPException(status_code=404, detail="Alerta no encontrada")
         return crear_respuesta(message="Alerta actualizada exitosamente")
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.delete("/{id_alerta}", response_model=MessageResponse)

@@ -1,12 +1,11 @@
 # app/routers/users.py
-from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app.core.audit_logging import audit_logger
 from app.core.auth_middleware import get_current_active_user
-from app.crud.user import delete_user, get_user_by_username, get_users, update_user
+from app.crud.user import delete_user, get_users, update_user
 from app.models.database import get_db
 from app.models.models import Usuario
 from app.models.schemas import UserResponse, UserUpdate
@@ -18,7 +17,7 @@ def get_pagination_params(limit: int = Query(50, ge=1, le=1000), skip: int = Que
     return {"limit": limit, "skip": skip}
 
 
-@router.get("/users", response_model=List[UserResponse])
+@router.get("/users", response_model=list[UserResponse])
 async def list_users(
     pagination: dict = Depends(get_pagination_params),
     db: Session = Depends(get_db),
@@ -55,7 +54,7 @@ async def update_user_endpoint(
     user_data: UserUpdate,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-    request: Request = None,
+    request: Request | None = None,
 ):
     """
     Actualizar usuario
@@ -70,7 +69,7 @@ async def update_user_endpoint(
         if request:
             audit_logger.log_audit_event(
                 event="user_updated",
-                user_id=current_user.id_usuario,
+                user_id=int(getattr(current_user, "id_usuario", 0)),
                 ip_address=request.client.host if request.client else "unknown",
                 details={
                     "updated_user_id": user_id,
@@ -80,7 +79,7 @@ async def update_user_endpoint(
 
         return UserResponse.model_validate(updated_user)
     except ValueError as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=400, detail=str(e)) from e
 
 
 @router.delete("/users/{user_id}")
@@ -88,13 +87,13 @@ async def delete_user_endpoint(
     user_id: int,
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
-    request: Request = None,
+    request: Request | None = None,
 ):
     """
     Eliminar usuario (lógico)
     """
     # TODO: Verificar permisos
-    if current_user.id_usuario == user_id:
+    if int(getattr(current_user, "id_usuario", 0)) == user_id:
         raise HTTPException(status_code=400, detail="Cannot delete yourself")
 
     success = delete_user(db, user_id, logical=True)
@@ -105,7 +104,7 @@ async def delete_user_endpoint(
     if request:
         audit_logger.log_audit_event(
             event="user_deleted",
-            user_id=current_user.id_usuario,
+            user_id=int(getattr(current_user, "id_usuario", 0)),
             ip_address=request.client.host if request.client else "unknown",
             details={"deleted_user_id": user_id},
         )

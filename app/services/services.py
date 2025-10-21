@@ -1,5 +1,4 @@
-from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, cast
 
 from sqlalchemy.orm import Session
 
@@ -9,8 +8,8 @@ from app.models.models import Alerta, Seccion
 class SeccionService:
     @staticmethod
     def listar(
-        db: Session, page: int, size: int, filtros: Dict[str, Any]
-    ) -> Tuple[List[Seccion], int]:
+        db: Session, page: int, size: int, filtros: dict[str, Any]
+    ) -> tuple[list[Seccion], int]:
         query = db.query(Seccion)
         for attr, value in filtros.items():
             query = query.filter(getattr(Seccion, attr) == value)
@@ -19,19 +18,20 @@ class SeccionService:
         return secciones, total
 
     @staticmethod
-    def obtener_por_id(db: Session, id_seccion: int) -> Optional[Seccion]:
+    def obtener_por_id(db: Session, id_seccion: int) -> Seccion | None:
         return db.query(Seccion).filter(Seccion.id_seccion == id_seccion).first()
 
     @staticmethod
-    def crear(db: Session, data: Dict[str, Any]) -> int:
+    def crear(db: Session, data: dict[str, Any]) -> int:
         nueva_seccion = Seccion(**data)
         db.add(nueva_seccion)
         db.commit()
         db.refresh(nueva_seccion)
-        return nueva_seccion.id_seccion
+        # Help static type checkers that view SQLAlchemy columns as Column[int]
+        return int(cast(Any, nueva_seccion).id_seccion)
 
     @staticmethod
-    def actualizar(db: Session, id_seccion: int, updates: Dict[str, Any]) -> bool:
+    def actualizar(db: Session, id_seccion: int, updates: dict[str, Any]) -> bool:
         seccion = db.query(Seccion).filter(Seccion.id_seccion == id_seccion).first()
         if not seccion:
             return False
@@ -46,7 +46,8 @@ class SeccionService:
         if not seccion:
             return False
         if modo == "logico":
-            seccion.estado = "Inactivo"
+            # Cast to Any to satisfy static type checkers (Column[str] attribute)
+            cast(Any, seccion).estado = "Inactivo"
         elif modo == "fisico":
             db.delete(seccion)
         else:
@@ -58,8 +59,8 @@ class SeccionService:
 class AlertaService:
     @staticmethod
     def listar(
-        db: Session, page: int, size: int, filtros: Dict[str, Any]
-    ) -> Tuple[List[Alerta], int]:
+        db: Session, page: int, size: int, filtros: dict[str, Any]
+    ) -> tuple[list[Alerta], int]:
         query = db.query(Alerta)
         for attr, value in filtros.items():
             query = query.filter(getattr(Alerta, attr) == value)
@@ -68,19 +69,20 @@ class AlertaService:
         return alertas, total
 
     @staticmethod
-    def obtener_por_id(db: Session, id_alerta: int) -> Optional[Alerta]:
+    def obtener_por_id(db: Session, id_alerta: int) -> Alerta | None:
         return db.query(Alerta).filter(Alerta.id_alerta == id_alerta).first()
 
     @staticmethod
-    def crear(db: Session, data: Dict[str, Any]) -> int:
+    def crear(db: Session, data: dict[str, Any]) -> int:
         nueva_alerta = Alerta(**data)
         db.add(nueva_alerta)
         db.commit()
         db.refresh(nueva_alerta)
-        return nueva_alerta.id_alerta
+        # Help static type checkers that view SQLAlchemy columns as Column[int]
+        return int(cast(Any, nueva_alerta).id_alerta)
 
     @staticmethod
-    def actualizar(db: Session, id_alerta: int, updates: Dict[str, Any]) -> bool:
+    def actualizar(db: Session, id_alerta: int, updates: dict[str, Any]) -> bool:
         alerta = db.query(Alerta).filter(Alerta.id_alerta == id_alerta).first()
         if not alerta:
             return False
@@ -95,7 +97,8 @@ class AlertaService:
         if not alerta:
             return False
         if modo == "logico":
-            alerta.estado = "Inactivo"
+            # Cast to Any to satisfy static type checkers (Column[str] attribute)
+            cast(Any, alerta).estado = "Inactivo"
         elif modo == "fisico":
             db.delete(alerta)
         else:

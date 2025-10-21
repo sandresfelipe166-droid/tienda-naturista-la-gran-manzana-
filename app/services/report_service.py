@@ -1,6 +1,6 @@
 import csv
 import io
-from typing import Any, Iterator, List, Optional, cast
+from typing import Any
 
 from sqlalchemy.orm import Session, joinedload
 
@@ -63,14 +63,14 @@ def _safe_bool(value: Any) -> bool:
         return False
 
 
-def _safe_float(value: Any) -> Optional[float]:
+def _safe_float(value: Any) -> float | None:
     try:
         return float(value) if value is not None else None
     except Exception:
         return None
 
 
-def _producto_row(p: Producto) -> List[str]:
+def _producto_row(p: Producto) -> list[str]:
     """
     Convierte un producto a una fila CSV en el orden de columnas definido.
     Fuerza tipos de salida a str para cumplir con la firma.

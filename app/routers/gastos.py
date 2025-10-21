@@ -1,6 +1,4 @@
 """Router para gestión de gastos."""
-from datetime import datetime
-from typing import Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import extract, func
@@ -30,13 +28,13 @@ def crear_gasto(
     return db_gasto
 
 
-@router.get("/", response_model=List[schemas.GastoResponse])
+@router.get("/", response_model=list[schemas.GastoResponse])
 def listar_gastos(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    mes: Optional[int] = Query(None, ge=1, le=12),
-    año: Optional[int] = Query(None, ge=2000),
-    categoria: Optional[str] = None,
+    mes: int | None = Query(None, ge=1, le=12),
+    año: int | None = Query(None, ge=2000),
+    categoria: str | None = None,
     db: Session = Depends(get_db),
     current_user: models.Usuario = Depends(get_current_active_user)
 ):
@@ -196,6 +194,6 @@ def eliminar_gasto(
     if not gasto:
         raise HTTPException(status_code=404, detail="Gasto no encontrado")
     
-    setattr(gasto, "estado", "Inactivo")
+    gasto.estado = "Inactivo"
     db.commit()
     return None

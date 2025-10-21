@@ -32,4 +32,4 @@ async def obtener_resumen_inventario(
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Error al obtener resumen de inventario: {str(e)}"
-        )
+        ) from e

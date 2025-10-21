@@ -2,9 +2,8 @@
 Router avanzado de productos con filtros, paginación y caché
 """
 
-from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.core.auth_middleware import get_current_active_user
@@ -21,7 +20,7 @@ from app.models.database import get_db
 from app.models.filters import ProductoFilters
 from app.models.models import Usuario
 from app.models.pagination import PaginationParams
-from app.models.schemas import MessageResponse, ProductoResponse
+from app.models.schemas import MessageResponse
 
 router = APIRouter(prefix="/productos", tags=["productos-advanced"])
 
@@ -29,19 +28,19 @@ router = APIRouter(prefix="/productos", tags=["productos-advanced"])
 @router.get("/advanced", response_model=dict)
 async def get_productos_with_filters(
     # Filtros de búsqueda
-    nombre: Optional[str] = Query(None, description="Buscar por nombre"),
-    codigo_barras: Optional[str] = Query(None, description="Buscar por código de barras"),
-    principio_activo: Optional[str] = Query(None, description="Buscar por principio activo"),
-    id_laboratorio: Optional[int] = Query(None, description="Filtrar por laboratorio"),
-    id_seccion: Optional[int] = Query(None, description="Filtrar por sección"),
-    precio_min: Optional[float] = Query(None, ge=0, description="Precio mínimo"),
-    precio_max: Optional[float] = Query(None, ge=0, description="Precio máximo"),
-    stock_min: Optional[int] = Query(None, ge=0, description="Stock mínimo"),
-    stock_max: Optional[int] = Query(None, ge=0, description="Stock máximo"),
-    stock_bajo: Optional[bool] = Query(None, description="Solo productos con stock bajo"),
-    requiere_receta: Optional[bool] = Query(None, description="Filtrar por receta requerida"),
-    estado: Optional[str] = Query("Activo", description="Estado del producto"),
-    forma_farmaceutica: Optional[str] = Query(None, description="Forma farmacéutica"),
+    nombre: str | None = Query(None, description="Buscar por nombre"),
+    codigo_barras: str | None = Query(None, description="Buscar por código de barras"),
+    principio_activo: str | None = Query(None, description="Buscar por principio activo"),
+    id_laboratorio: int | None = Query(None, description="Filtrar por laboratorio"),
+    id_seccion: int | None = Query(None, description="Filtrar por sección"),
+    precio_min: float | None = Query(None, ge=0, description="Precio mínimo"),
+    precio_max: float | None = Query(None, ge=0, description="Precio máximo"),
+    stock_min: int | None = Query(None, ge=0, description="Stock mínimo"),
+    stock_max: int | None = Query(None, ge=0, description="Stock máximo"),
+    stock_bajo: bool | None = Query(None, description="Solo productos con stock bajo"),
+    requiere_receta: bool | None = Query(None, description="Filtrar por receta requerida"),
+    estado: str | None = Query("Activo", description="Estado del producto"),
+    forma_farmaceutica: str | None = Query(None, description="Forma farmacéutica"),
     # Paginación
     page: int = Query(1, ge=1, description="Número de página"),
     size: int = Query(50, ge=1, le=100, description="Elementos por página"),
@@ -101,9 +100,9 @@ async def search_productos(
     q: str = Query(..., min_length=2, description="Término de búsqueda"),
     page: int = Query(1, ge=1, description="Número de página"),
     size: int = Query(50, ge=1, le=100, description="Elementos por página"),
-    id_laboratorio: Optional[int] = Query(None, description="Filtrar por laboratorio"),
-    id_seccion: Optional[int] = Query(None, description="Filtrar por sección"),
-    estado: Optional[str] = Query("Activo", description="Estado del producto"),
+    id_laboratorio: int | None = Query(None, description="Filtrar por laboratorio"),
+    id_seccion: int | None = Query(None, description="Filtrar por sección"),
+    estado: str | None = Query("Activo", description="Estado del producto"),
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
 ):
@@ -140,9 +139,9 @@ async def search_productos(
 
 @router.get("/stats", response_model=dict)
 async def get_stats(
-    id_laboratorio: Optional[int] = Query(None, description="Filtrar por laboratorio"),
-    id_seccion: Optional[int] = Query(None, description="Filtrar por sección"),
-    estado: Optional[str] = Query("Activo", description="Estado del producto"),
+    id_laboratorio: int | None = Query(None, description="Filtrar por laboratorio"),
+    id_seccion: int | None = Query(None, description="Filtrar por sección"),
+    estado: str | None = Query("Activo", description="Estado del producto"),
     db: Session = Depends(get_db),
     current_user: Usuario = Depends(get_current_active_user),
 ):

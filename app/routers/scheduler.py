@@ -10,12 +10,11 @@ Endpoints (solo admin):
 - POST   /api/v1/scheduler/stop                 -> Detiene el scheduler
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 
 from app.core.auth_middleware import require_admin
-from app.core.config import settings
 
 # Importar manager del scheduler
 from app.core.scheduler import scheduler_manager
@@ -24,10 +23,10 @@ from app.models.models import Usuario
 router = APIRouter(prefix="/scheduler", tags=["scheduler"])
 
 
-@router.get("/jobs", response_model=Dict[str, Any])
+@router.get("/jobs", response_model=dict[str, Any])
 def list_jobs(
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Listar jobs del scheduler.
     """
@@ -42,11 +41,11 @@ def list_jobs(
     }
 
 
-@router.post("/stock-bajo/start", response_model=Dict[str, Any])
+@router.post("/stock-bajo/start", response_model=dict[str, Any])
 def start_stock_bajo_job(
     interval_horas: int = Query(..., ge=1, le=168, description="Intervalo en horas (1-168)"),
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Crear o actualizar el job de 'stock bajo' con el intervalo indicado.
     """
@@ -58,10 +57,10 @@ def start_stock_bajo_job(
     }
 
 
-@router.post("/stock-bajo/stop", response_model=Dict[str, Any])
+@router.post("/stock-bajo/stop", response_model=dict[str, Any])
 def stop_stock_bajo_job(
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Eliminar job de 'stock bajo' si existe.
     """
@@ -79,10 +78,10 @@ def stop_stock_bajo_job(
     }
 
 
-@router.post("/stock-bajo/run-now", response_model=Dict[str, Any])
+@router.post("/stock-bajo/run-now", response_model=dict[str, Any])
 def run_stock_bajo_now(
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Ejecutar inmediatamente la tarea de 'stock bajo'.
     """
@@ -93,10 +92,10 @@ def run_stock_bajo_now(
     }
 
 
-@router.post("/start", response_model=Dict[str, Any])
+@router.post("/start", response_model=dict[str, Any])
 def start_scheduler(
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Arrancar el scheduler manualmente.
     """
@@ -108,10 +107,10 @@ def start_scheduler(
     }
 
 
-@router.post("/stop", response_model=Dict[str, Any])
+@router.post("/stop", response_model=dict[str, Any])
 def stop_scheduler(
     current_user: Usuario = Depends(require_admin),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Detener el scheduler manualmente.
     """
