@@ -2,7 +2,6 @@
 Router de exportación de reportes (CSV)
 """
 
-
 from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 

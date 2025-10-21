@@ -97,7 +97,9 @@ class ProductoService:
 
             # Update only the provided fields
             # SQLAlchemy expects a mapping of column arguments; cast for static type checkers
-            db.query(Producto).filter(Producto.id_producto == id_producto).update(cast(Any, updates))
+            db.query(Producto).filter(Producto.id_producto == id_producto).update(
+                cast(Any, updates)
+            )
             db.commit()
             # Return the updated product
             return db.query(Producto).filter(Producto.id_producto == id_producto).first()

@@ -483,7 +483,9 @@ class VentaEstadisticasAño(BaseModel):
 class GastoBase(BaseModel):
     fecha_gasto: datetime
     concepto: str = Field(..., min_length=1, max_length=200)
-    categoria: str = Field(..., min_length=1, max_length=50)  # Compras, Servicios, Mantenimiento, Otros
+    categoria: str = Field(
+        ..., min_length=1, max_length=50
+    )  # Compras, Servicios, Mantenimiento, Otros
     monto: float = Field(..., gt=0)
     metodo_pago: str | None = Field(None, max_length=50)
     numero_factura: str | None = Field(None, max_length=50)
@@ -562,7 +564,9 @@ class CotizacionBase(BaseModel):
     descuento: float = Field(default=0.0, ge=0)
     impuestos: float = Field(default=0.0, ge=0)
     total: float = Field(..., gt=0)
-    estado: str = Field(default="Pendiente", max_length=20)  # Pendiente, Aceptada, Rechazada, Convertida
+    estado: str = Field(
+        default="Pendiente", max_length=20
+    )  # Pendiente, Aceptada, Rechazada, Convertida
     observaciones: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
@@ -604,4 +608,3 @@ class CotizacionEstadisticas(BaseModel):
     rechazadas: int
     convertidas: int
     tasa_conversion: float  # Porcentaje de cotizaciones convertidas a ventas
-

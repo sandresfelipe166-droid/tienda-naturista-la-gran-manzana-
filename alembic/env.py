@@ -1,20 +1,19 @@
 import os
 import sys
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context
 
+# Ensure project root is on path for imports
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 # Override DB URL from environment if present to avoid hardcoding
-import os
 
 _db_url = os.getenv("DATABASE_URL")
 if _db_url:
@@ -25,7 +24,7 @@ if _db_url:
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-from app.models.models import Base
+from app.models.models import Base  # noqa: E402  # type: ignore[reportMissingImports]
 
 target_metadata = Base.metadata
 

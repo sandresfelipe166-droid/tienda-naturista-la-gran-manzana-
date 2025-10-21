@@ -117,7 +117,9 @@ async def database_health_check() -> dict[str, Any]:
         }
     except Exception as e:
         logger.log_error(e, {"context": "database_health_check"})
-        raise HTTPException(status_code=503, detail=f"Database health check failed: {str(e)}") from e
+        raise HTTPException(
+            status_code=503, detail=f"Database health check failed: {str(e)}"
+        ) from e
 
 
 @router.get("/health/metrics", summary="Application Metrics")
@@ -144,9 +146,9 @@ async def application_metrics() -> dict[str, Any]:
                 "available": True,
                 "rss": getattr(mem, "rss", None),
                 "vms": getattr(mem, "vms", None),
-                "percent": psutil.virtual_memory().percent
-                if hasattr(psutil, "virtual_memory")
-                else None,
+                "percent": (
+                    psutil.virtual_memory().percent if hasattr(psutil, "virtual_memory") else None
+                ),
             }
     except Exception:
         # Mantener mem_info con available=False

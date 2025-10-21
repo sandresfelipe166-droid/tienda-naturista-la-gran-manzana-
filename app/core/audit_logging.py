@@ -2,7 +2,7 @@
 Sistema de auditoría para registrar operaciones sensibles y cambios importantes
 """
 
-from typing import Any, Dict
+from typing import Any
 
 from app.core.logging_config import inventario_logger
 
@@ -17,7 +17,7 @@ class AuditLogger:
         event: str,
         user_id: int = None,
         ip_address: str = None,
-        details: Dict[str, Any] = None,
+        details: dict[str, Any] = None,
     ):
         """Registrar evento de auditoría"""
         logger.log_business_event(

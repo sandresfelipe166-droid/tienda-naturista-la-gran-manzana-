@@ -1,12 +1,9 @@
-import asyncio
 import time
 from datetime import datetime
-from typing import Optional
 
 import redis.asyncio as aioredis
 
 from app.core.config import settings
-from app.core.logging_config import inventario_logger as logger
 
 
 class RedisRateLimiter:
@@ -16,7 +13,7 @@ class RedisRateLimiter:
     Key format: ratelimit:{key}
     """
 
-    def __init__(self, redis_url: Optional[str] = None):
+    def __init__(self, redis_url: str | None = None):
         self.redis_url = redis_url or (settings.get_redis_url() if settings.redis_host else None)
         self._client = None
 
@@ -31,7 +28,7 @@ class RedisRateLimiter:
         """Check and add the current request. Returns True if allowed."""
         client = await self._get_client()
         now = time.time()
-        window_start = now - window
+        window_start = now - window  # noqa: F841 used for zremrangebyscore
         rkey = f"ratelimit:{key}"
         async with client.pipeline() as pipe:
             # Remove old entries
@@ -55,10 +52,8 @@ class RedisRateLimiter:
         count = await client.zcard(rkey)
         return max(0, limit - int(count))
 
-    async def get_reset_time(self, key: str, window: int) -> Optional[datetime]:
+    async def get_reset_time(self, key: str, window: int) -> datetime | None:
         client = await self._get_client()
-        now = time.time()
-        window_start = now - window
         rkey = f"ratelimit:{key}"
         # Get the smallest score (oldest) to compute reset
         members = await client.zrange(rkey, 0, 0, withscores=True)

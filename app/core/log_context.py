@@ -9,10 +9,9 @@ from __future__ import annotations
 
 import logging
 from contextvars import ContextVar
-from typing import Optional
 
 # Context variable to hold the current request id
-request_id_var: ContextVar[Optional[str]] = ContextVar("request_id", default=None)
+request_id_var: ContextVar[str | None] = ContextVar("request_id", default=None)
 
 
 class RequestIdFilter(logging.Filter):
@@ -28,11 +27,11 @@ class RequestIdFilter(logging.Filter):
         except Exception:
             rid = None
         # Attach as attribute for formatters
-        setattr(record, "request_id", rid)
+        record.request_id = rid
         return True
 
 
-def set_request_id(request_id: Optional[str]) -> None:
+def set_request_id(request_id: str | None) -> None:
     """Set current request id in contextvar."""
     try:
         request_id_var.set(request_id)
@@ -41,7 +40,7 @@ def set_request_id(request_id: Optional[str]) -> None:
         pass
 
 
-def get_request_id() -> Optional[str]:
+def get_request_id() -> str | None:
     """Get current request id from contextvar."""
     try:
         return request_id_var.get()

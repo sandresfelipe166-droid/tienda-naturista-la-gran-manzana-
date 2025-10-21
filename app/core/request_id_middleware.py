@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import string
 import uuid
-from typing import Optional
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -44,14 +43,14 @@ class RequestIdMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next) -> Response:
         # Try to get incoming request id
-        incoming: Optional[str] = request.headers.get(REQUEST_ID_HEADER)
+        incoming: str | None = request.headers.get(REQUEST_ID_HEADER)
         if incoming and _is_safe_request_id(incoming):
             request_id = incoming
         else:
             request_id = _generate_request_id()
 
         # Attach to request state for downstream middlewares/handlers
-        setattr(request.state, "request_id", request_id)
+        request.state.request_id = request_id
         # Also set into contextvar so log filter can inject it into all log records
         set_request_id(request_id)
 

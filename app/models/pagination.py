@@ -3,7 +3,7 @@ Modelos y utilidades para paginación mejorada
 """
 
 from math import ceil
-from typing import Generic, List, Optional, TypeVar
+from typing import Generic, TypeVar
 
 from pydantic import BaseModel, Field
 
@@ -51,7 +51,7 @@ class PaginatedResponse(BaseModel, Generic[T]):
 
     success: bool = True
     message: str = "Datos obtenidos exitosamente"
-    data: List[T] = Field(description="Lista de elementos")
+    data: list[T] = Field(description="Lista de elementos")
     pagination: PaginationMeta = Field(description="Información de paginación")
 
     class Config:
@@ -75,7 +75,7 @@ class PaginatedResponse(BaseModel, Generic[T]):
 class SortParams(BaseModel):
     """Parámetros de ordenamiento"""
 
-    sort_by: Optional[str] = Field(default=None, description="Campo por el cual ordenar")
+    sort_by: str | None = Field(default=None, description="Campo por el cual ordenar")
     order: str = Field(
         default="asc", pattern="^(asc|desc)$", description="Dirección del ordenamiento"
     )
@@ -104,7 +104,7 @@ def paginate_query(query, page: int, size: int):
 
 
 def create_paginated_response(
-    items: List[T], total: int, page: int, size: int, message: str = "Datos obtenidos exitosamente"
+    items: list[T], total: int, page: int, size: int, message: str = "Datos obtenidos exitosamente"
 ) -> dict:
     """
     Crear respuesta paginada en formato dict

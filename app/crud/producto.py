@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from sqlalchemy import or_
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
 from app.models.models import Laboratorio, Lote, Producto, Seccion
@@ -10,10 +10,10 @@ from app.models.schemas import ProductoCreate, ProductoUpdate
 
 def _build_productos_query(
     db: Session,
-    nombre: Optional[str] = None,
-    id_seccion: Optional[int] = None,
-    id_laboratorio: Optional[int] = None,
-    estado: Optional[str] = None,
+    nombre: str | None = None,
+    id_seccion: int | None = None,
+    id_laboratorio: int | None = None,
+    estado: str | None = None,
 ):
     query = db.query(Producto)
     if nombre:
@@ -29,15 +29,15 @@ def _build_productos_query(
 
 def count_productos(
     db: Session,
-    nombre: Optional[str] = None,
-    id_seccion: Optional[int] = None,
-    id_laboratorio: Optional[int] = None,
-    estado: Optional[str] = None,
+    nombre: str | None = None,
+    id_seccion: int | None = None,
+    id_laboratorio: int | None = None,
+    estado: str | None = None,
 ) -> int:
     return _build_productos_query(db, nombre, id_seccion, id_laboratorio, estado).count()
 
 
-def get_productos(db: Session, params: Dict[str, Any]) -> List[Producto]:
+def get_productos(db: Session, params: dict[str, Any]) -> list[Producto]:
     """Obtener lista de productos con filtros opcionales"""
     skip = params.get('skip', 0)
     limit = params.get('limit', 100)
@@ -50,7 +50,7 @@ def get_productos(db: Session, params: Dict[str, Any]) -> List[Producto]:
     return query.offset(skip).limit(limit).all()
 
 
-def get_producto_by_id(db: Session, id_producto: int) -> Optional[Producto]:
+def get_producto_by_id(db: Session, id_producto: int) -> Producto | None:
     """Obtener un producto por ID"""
     return db.query(Producto).filter(Producto.id_producto == id_producto).first()
 
@@ -78,7 +78,7 @@ def create_producto(db: Session, producto_data: ProductoCreate) -> Producto:
 
 def update_producto(
     db: Session, id_producto: int, producto_data: ProductoUpdate
-) -> Optional[Producto]:
+) -> Producto | None:
     """Actualizar un producto existente"""
     producto = db.query(Producto).filter(Producto.id_producto == id_producto).first()
     if not producto:
@@ -114,7 +114,7 @@ def delete_producto(db: Session, id_producto: int, logical: bool = True) -> bool
         return False
 
     if logical:
-        producto.estado = "Inactivo"
+        producto.estado = "Inactivo"  # type: ignore[assignment]
         db.commit()
     else:
         db.delete(producto)
@@ -123,7 +123,7 @@ def delete_producto(db: Session, id_producto: int, logical: bool = True) -> bool
     return True
 
 
-def search_productos(db: Session, query: str, skip: int = 0, limit: int = 50) -> List[Producto]:
+def search_productos(db: Session, query: str, skip: int = 0, limit: int = 50) -> list[Producto]:
     """Buscar productos por nombre, principio activo o descripción"""
     search_filter = f"%{query}%"
     return (
@@ -142,7 +142,7 @@ def search_productos(db: Session, query: str, skip: int = 0, limit: int = 50) ->
     )
 
 
-def get_productos_bajo_stock(db: Session) -> List[Producto]:
+def get_productos_bajo_stock(db: Session) -> list[Producto]:
     """Obtener productos con stock actual menor o igual al mínimo, activos"""
     return (
         db.query(Producto)
@@ -157,9 +157,6 @@ def get_productos_bajo_stock(db: Session) -> List[Producto]:
 def get_total_productos_activos(db: Session) -> int:
     """Contar productos activos"""
     return db.query(Producto).filter(Producto.estado == "Activo").count()
-
-
-from sqlalchemy import func
 
 
 def get_valor_total_stock(db: Session) -> float:
@@ -181,7 +178,7 @@ def count_productos_bajo_stock(db: Session) -> int:
     )
 
 
-def get_productos_por_vencer(db: Session, dias: int = 30) -> List[Producto]:
+def get_productos_por_vencer(db: Session, dias: int = 30) -> list[Producto]:
     """Obtener productos que tienen lotes que vencen en los próximos 'dias' días"""
     fecha_limite = datetime.utcnow() + timedelta(days=dias)
     # Join con Lote para identificar productos con lotes próximos a vencer

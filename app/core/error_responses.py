@@ -4,35 +4,40 @@ Provides consistent error responses across all API endpoints and
 custom exception classes for common error scenarios.
 """
 
-from typing import Any, Dict, Optional
+from datetime import UTC
+from typing import Any
+
 from fastapi import FastAPI, Request, status
-from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from app.core.logging_config import inventario_logger as logger
 
-
 # ==================== Error Response Models ====================
+
 
 class ErrorDetail(BaseModel):
     """Details about a specific error."""
+
     code: str
     message: str
-    field: Optional[str] = None
+    field: str | None = None
 
 
 class ErrorResponse(BaseModel):
     """Standard error response format."""
+
     success: bool = False
     error: str
     message: str
-    details: Optional[list[ErrorDetail]] = None
-    request_id: Optional[str] = None
-    timestamp: Optional[str] = None
+    details: list[ErrorDetail] | None = None
+    request_id: str | None = None
+    timestamp: str | None = None
 
 
 # ==================== Custom Exceptions ====================
+
 
 class APIException(Exception):
     """Base exception for API errors."""
@@ -42,7 +47,7 @@ class APIException(Exception):
         message: str,
         error_code: str = "INTERNAL_ERROR",
         status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR,
-        details: Optional[Dict[str, Any]] = None,
+        details: dict[str, Any] | None = None,
     ):
         self.message = message
         self.error_code = error_code
@@ -57,7 +62,7 @@ class ValidationAPIException(APIException):
     def __init__(
         self,
         message: str = "Validation error",
-        details: Optional[Dict[str, Any]] = None,
+        details: dict[str, Any] | None = None,
     ):
         super().__init__(
             message=message,
@@ -73,7 +78,7 @@ class NotFoundAPIException(APIException):
     def __init__(
         self,
         resource: str,
-        resource_id: Optional[str] = None,
+        resource_id: str | None = None,
     ):
         message = f"{resource} not found"
         if resource_id:
@@ -103,7 +108,7 @@ class ForbiddenAPIException(APIException):
     def __init__(
         self,
         message: str = "Access forbidden",
-        required_role: Optional[str] = None,
+        required_role: str | None = None,
     ):
         if required_role:
             message += f" (required: {required_role})"
@@ -121,8 +126,8 @@ class ConflictAPIException(APIException):
     def __init__(
         self,
         resource: str,
-        field: Optional[str] = None,
-        value: Optional[str] = None,
+        field: str | None = None,
+        value: str | None = None,
     ):
         message = f"Resource conflict: {resource} already exists"
         if field and value:
@@ -141,7 +146,7 @@ class RateLimitAPIException(APIException):
     def __init__(
         self,
         message: str = "Rate limit exceeded",
-        retry_after: Optional[int] = None,
+        retry_after: int | None = None,
     ):
         super().__init__(
             message=message,
@@ -181,15 +186,16 @@ class ExternalServiceAPIException(APIException):
 
 # ==================== Error Handlers ====================
 
+
 def format_error_response(
     error_code: str,
     message: str,
     status_code: int,
-    details: Optional[Dict[str, Any] | list[ErrorDetail]] = None,
-    request_id: Optional[str] = None,
+    details: dict[str, Any] | list[ErrorDetail] | None = None,
+    request_id: str | None = None,
 ) -> ErrorResponse:
     """Format error response in standard format."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     error_details = None
 
@@ -211,7 +217,7 @@ def format_error_response(
         message=message,
         details=error_details,
         request_id=request_id,
-        timestamp=datetime.now(timezone.utc).isoformat(),
+        timestamp=datetime.now(UTC).isoformat(),
     )
 
 

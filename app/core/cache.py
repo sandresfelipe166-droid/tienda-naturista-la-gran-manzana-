@@ -5,9 +5,9 @@ Sistema de caché con Redis para mejorar performance
 import hashlib
 import inspect
 import json
-from datetime import timedelta
+from collections.abc import Callable
 from functools import wraps
-from typing import Any, Awaitable, Callable, Iterable, List, Optional, Union, cast
+from typing import Any, cast
 
 import redis
 
@@ -21,7 +21,7 @@ class CacheManager:
     """Gestor de caché con Redis"""
 
     def __init__(self):
-        self.redis_client: Optional[redis.Redis] = None
+        self.redis_client: redis.Redis | None = None
         self.enabled = False
         self._initialize_redis()
 
@@ -76,13 +76,13 @@ class CacheManager:
 
         return key_string
 
-    def get(self, key: str) -> Optional[Any]:
+    def get(self, key: str) -> Any | None:
         """Obtener valor del caché"""
         if not self.enabled or not self.redis_client:
             return None
 
         try:
-            value = cast(Optional[str], self.redis_client.get(key))
+            value = cast(str | None, self.redis_client.get(key))
             if value is not None and value != "":
                 logger.log_info(f"Cache HIT: {key}")
                 try:
@@ -100,7 +100,7 @@ class CacheManager:
         self,
         key: str,
         value: Any,
-        ttl: Optional[int] = None,
+        ttl: int | None = None,
     ) -> bool:
         """Guardar valor en caché con TTL opcional (en segundos)"""
         if not self.enabled or not self.redis_client:
@@ -210,7 +210,7 @@ class CacheManager:
         except Exception:
             return result
 
-    def cache_result(self, ttl: int = 300, key_prefix: Optional[str] = None):
+    def cache_result(self, ttl: int = 300, key_prefix: str | None = None):
         """
         Decorador para cachear resultados de funciones (sincronas o asíncronas)
 
@@ -311,12 +311,12 @@ cache_manager = CacheManager()
 
 
 # Funciones de utilidad para uso directo
-def get_cache(key: str) -> Optional[Any]:
+def get_cache(key: str) -> Any | None:
     """Obtener valor del caché"""
     return cache_manager.get(key)
 
 
-def set_cache(key: str, value: Any, ttl: Optional[int] = None) -> bool:
+def set_cache(key: str, value: Any, ttl: int | None = None) -> bool:
     """Guardar valor en caché"""
     return cache_manager.set(key, value, ttl)
 

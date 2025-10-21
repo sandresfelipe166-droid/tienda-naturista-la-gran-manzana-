@@ -2,12 +2,11 @@
 Middleware de validación de entrada para proteger contra ataques comunes
 """
 
-import json
 import re
-from typing import Any, Dict, List
+from typing import Any
 from urllib.parse import unquote
 
-from fastapi import HTTPException, Request
+from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
@@ -20,7 +19,7 @@ logger = inventario_logger
 class InputValidationMiddleware(BaseHTTPMiddleware):
     """Middleware para validar entradas y prevenir ataques comunes"""
 
-    def __init__(self, app, exclude_paths: List[str] = None):
+    def __init__(self, app, exclude_paths: list[str] | None = None):
         super().__init__(app)
         self.exclude_paths = exclude_paths or ["/docs", "/redoc", "/openapi.json"]
 
@@ -66,7 +65,7 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
             r'\|\s*del\s',  # Piped delete
         ]
 
-    def _check_patterns(self, value: str, patterns: List[str], attack_type: str) -> List[str]:
+    def _check_patterns(self, value: str, patterns: list[str], attack_type: str) -> list[str]:
         """Verificar si un valor contiene patrones de ataque"""
         violations = []
         value_lower = value.lower()
@@ -77,7 +76,7 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
 
         return violations
 
-    def _validate_value(self, value: Any, field_name: str = "") -> List[str]:
+    def _validate_value(self, value: Any, field_name: str = "") -> list[str]:
         """Validar un valor individual"""
         violations = []
 
@@ -111,7 +110,8 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
             )
             violations.extend(cmd_violations)
 
-        elif isinstance(value, (list, dict)):
+        # Use tuple for runtime isinstance; keep tuple and silence Ruff suggestion
+        elif isinstance(value, (list, dict)):  # noqa: UP038
             # Validar recursivamente estructuras anidadas
             if isinstance(value, dict):
                 for k, v in value.items():
@@ -124,7 +124,7 @@ class InputValidationMiddleware(BaseHTTPMiddleware):
 
         return violations
 
-    def _validate_request_data(self, request: Request) -> List[str]:
+    def _validate_request_data(self, request: Request) -> list[str]:
         """Validar datos de la solicitud"""
         violations = []
 

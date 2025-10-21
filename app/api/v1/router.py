@@ -3,14 +3,14 @@ from fastapi import APIRouter
 from app.routers import (
     alertas,
     auth,
+    cotizaciones,
+    entradas,
+    gastos,
     inventory,
     laboratorios,
     productos,
     secciones,
     ventas,
-    gastos,
-    cotizaciones,
-    entradas,
 )
 from app.routers.dashboard import router as dashboard_router
 from app.routers.notificaciones import router as notificaciones_router

@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 
@@ -292,7 +291,9 @@ async def actualizar_producto(
     except HTTPException:
         raise
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al actualizar producto: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Error al actualizar producto: {str(e)}"
+        ) from e
 
 
 @router.delete("/{producto_id}", response_model=MessageResponse)

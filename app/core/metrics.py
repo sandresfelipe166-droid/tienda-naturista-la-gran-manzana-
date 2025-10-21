@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import time
 from threading import Lock
-from typing import Any, Dict, List, Optional, Tuple, cast
+from typing import Any, cast
 
 from fastapi import Request, Response
 from fastapi.responses import Response as FastAPIResponse
@@ -23,10 +23,16 @@ from app.core.config import settings
 try:
     from prometheus_client import (  # type: ignore
         CONTENT_TYPE_LATEST,
-        CollectorRegistry as PromRegistry,
-        Counter as PromCounter,
-        Histogram as PromHistogram,
         generate_latest,
+    )
+    from prometheus_client import (
+        CollectorRegistry as PromRegistry,
+    )
+    from prometheus_client import (
+        Counter as PromCounter,
+    )
+    from prometheus_client import (
+        Histogram as PromHistogram,
     )
 
     PROMETHEUS_AVAILABLE = True
@@ -70,11 +76,11 @@ class MetricsManager:
     and optional Prometheus exporters when available.
     """
 
-    _instance: Optional["MetricsManager"] = None
+    _instance: MetricsManager | None = None
     _instance_lock: Lock = Lock()
 
     @classmethod
-    def instance(cls) -> "MetricsManager":
+    def instance(cls) -> MetricsManager:
         with cls._instance_lock:
             if cls._instance is None:
                 cls._instance = cls()
@@ -85,12 +91,12 @@ class MetricsManager:
         self.start_time: float = time.time()
         self.total_requests: int = 0
         self.total_errors: int = 0
-        self.status_counts: Dict[int, int] = {}
+        self.status_counts: dict[int, int] = {}
 
         # Latency histogram buckets (seconds)
         # Last bucket is +Inf to catch everything above the last finite bucket.
-        self.buckets: List[float] = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0, float("inf")]
-        self.bucket_counts: Dict[float, int] = {b: 0 for b in self.buckets}
+        self.buckets: list[float] = [0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 5.0, float("inf")]
+        self.bucket_counts: dict[float, int] = {b: 0 for b in self.buckets}
 
         # Latency aggregates
         self.latency_sum: float = 0.0
@@ -100,7 +106,7 @@ class MetricsManager:
         self._lock: Lock = Lock()
 
         # Prometheus registry and metrics (initialized lazily)
-        self._prom_registry: Optional[PromRegistry] = None
+        self._prom_registry: PromRegistry | None = None
         self._prom_counters_initialized: bool = False
         # Use Any to satisfy static type checkers whether Prometheus is available or not
         self._prom_requests_total: Any = None
@@ -184,7 +190,7 @@ class MetricsManager:
     def uptime_seconds(self) -> float:
         return max(0.0, time.time() - self.start_time)
 
-    def _approx_p95(self) -> Optional[float]:
+    def _approx_p95(self) -> float | None:
         """
         Approximate 95th percentile using histogram buckets.
         """
@@ -199,7 +205,7 @@ class MetricsManager:
                     return b if b != float("inf") else None
             return None
 
-    def summary(self) -> Dict[str, Any]:
+    def summary(self) -> dict[str, Any]:
         """
         Return a JSON-serializable metrics summary.
         """

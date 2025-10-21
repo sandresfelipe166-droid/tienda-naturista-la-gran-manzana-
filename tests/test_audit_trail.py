@@ -1,12 +1,13 @@
 """Tests for audit trail functionality."""
 
-import pytest
 from datetime import datetime, timedelta
 
+import pytest
+
 from app.core.audit_trail import (
-    AuditLogger,
     AuditAction,
     AuditLog,
+    AuditLogger,
     AuditQueryBuilder,
 )
 

@@ -1,4 +1,5 @@
 import os
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -12,7 +13,6 @@ os.environ.setdefault("DATABASE_URL", "sqlite:///./test_db.sqlite")
 # Import models so they are registered with Base.metadata (required for audit_trail)
 from app.core.audit_trail import AuditLog  # noqa: E402, F401
 from app.models.database import Base  # noqa: E402, F401
-
 
 # Create in-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"

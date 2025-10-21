@@ -2,7 +2,6 @@
 Router avanzado de productos con filtros, paginación y caché
 """
 
-
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 

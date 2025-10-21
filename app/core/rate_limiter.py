@@ -3,13 +3,12 @@ Sistema de rate limiting avanzado para el API
 """
 
 import asyncio
-import hashlib
 import time
 from collections import defaultdict, deque
-from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Tuple
+from datetime import datetime
+from typing import Any
 
-from fastapi import HTTPException, Request
+from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import Response
 
@@ -30,7 +29,7 @@ class InMemoryRateLimiter:
     """Rate limiter en memoria usando sliding window"""
 
     def __init__(self):
-        self.requests: Dict[str, deque] = defaultdict(deque)
+        self.requests: dict[str, deque] = defaultdict(deque)
         self.lock = asyncio.Lock()
 
     async def is_allowed(self, key: str, limit: int, window: int) -> bool:
@@ -63,7 +62,7 @@ class InMemoryRateLimiter:
 
             return max(0, limit - len(self.requests[key]))
 
-    async def get_reset_time(self, key: str, window: int) -> Optional[datetime]:
+    async def get_reset_time(self, key: str, window: int) -> datetime | None:
         """Obtener tiempo de reset de la ventana"""
         async with self.lock:
             if not self.requests[key]:
@@ -77,16 +76,16 @@ class InMemoryRateLimiter:
 class RateLimitMiddleware(BaseHTTPMiddleware):
     """Middleware de rate limiting avanzado"""
 
-    def __init__(self, app, limiter: Optional[InMemoryRateLimiter] = None):
+    def __init__(self, app, limiter: InMemoryRateLimiter | None = None):
         super().__init__(app)
         # Choose limiter based on settings: Redis if enabled and available, else provided limiter or in-memory
         if getattr(settings, "rate_limit_use_redis", False) and RedisRateLimiter is not None:
             # Create a simple async wrapper that forwards to Redis-based limiter
-            self._redis_limiter: Optional[Any] = RedisRateLimiter()
-            self.limiter: Optional[InMemoryRateLimiter] = None
+            self._redis_limiter: Any | None = RedisRateLimiter()
+            self.limiter: InMemoryRateLimiter | None = None
         else:
-            self._redis_limiter: Optional[Any] = None
-            self.limiter: Optional[InMemoryRateLimiter] = limiter or InMemoryRateLimiter()
+            self._redis_limiter: Any | None = None
+            self.limiter: InMemoryRateLimiter | None = limiter or InMemoryRateLimiter()
         self.default_limit = settings.rate_limit_requests
         self.default_window = settings.rate_limit_window
 
@@ -116,7 +115,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         return f"{client_ip}:{hash(user_agent)}"
 
-    def get_rate_limit_config(self, path: str, method: str = "GET") -> Dict[str, int]:
+    def get_rate_limit_config(self, path: str, method: str = "GET") -> dict[str, int]:
         """Obtener configuración de rate limit para un path y método"""
         # Buscar configuración específica por endpoint
         for endpoint, method_configs in self.endpoint_limits.items():

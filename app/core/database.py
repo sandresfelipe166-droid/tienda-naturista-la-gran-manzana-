@@ -1,15 +1,12 @@
 import logging
 import time
-from contextlib import contextmanager
-from typing import Generator
+from collections.abc import Generator
 
-from sqlalchemy import create_engine, event, text
-from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy.pool import QueuePool
+from sqlalchemy import event, text
 
-from app.core.config import settings
 from app.core.logging_config import inventario_logger
-from app.models.database import SessionLocal as SharedSessionLocal, engine as shared_engine
+from app.models.database import SessionLocal as SharedSessionLocal
+from app.models.database import engine as shared_engine
 
 logger = inventario_logger
 

@@ -4,12 +4,10 @@ Provides reusable validators for Pydantic that sanitize and validate
 common field types (emails, phones, strings, etc.).
 """
 
-from html import escape as html_escape
-from typing import Optional
 import re
+from html import escape as html_escape
 
-from pydantic import field_validator, BaseModel
-from pydantic_core import ValidationError as PydanticValidationError
+from pydantic import BaseModel, field_validator
 
 
 class SanitizedString(str):
@@ -126,7 +124,7 @@ def sanitize_for_display(value: str, max_length: int = 500) -> str:
     return value
 
 
-def detect_suspicious_input(value: str) -> Optional[str]:
+def detect_suspicious_input(value: str) -> str | None:
     """Detect common suspicious patterns in input.
 
     Returns error message if suspicious pattern found, None otherwise.
@@ -181,9 +179,9 @@ class ClienteSanitized(BaseModelSanitized):
     nombre_cliente: str
     apellido_cliente: str
     cedula: str
-    email: Optional[str] = None
-    telefono: Optional[str] = None
-    direccion: Optional[str] = None
+    email: str | None = None
+    telefono: str | None = None
+    direccion: str | None = None
 
     @field_validator("nombre_cliente", "apellido_cliente")
     @classmethod
@@ -205,21 +203,21 @@ class ClienteSanitized(BaseModelSanitized):
 
     @field_validator("email")
     @classmethod
-    def validate_email_field(cls, v: Optional[str]) -> Optional[str]:
+    def validate_email_field(cls, v: str | None) -> str | None:
         if v:
             return validate_email(v)
         return v
 
     @field_validator("telefono")
     @classmethod
-    def validate_telefono_field(cls, v: Optional[str]) -> Optional[str]:
+    def validate_telefono_field(cls, v: str | None) -> str | None:
         if v:
             return validate_phone(v)
         return v
 
     @field_validator("direccion")
     @classmethod
-    def validate_direccion_field(cls, v: Optional[str]) -> Optional[str]:
+    def validate_direccion_field(cls, v: str | None) -> str | None:
         if v:
             v = v.strip()
             if len(v) > 200:
@@ -239,7 +237,7 @@ class ProductoSanitized(BaseModelSanitized):
     precio_compra: float
     stock_actual: int
     stock_minimo: int
-    descripcion: Optional[str] = None
+    descripcion: str | None = None
 
     @field_validator("nombre_producto")
     @classmethod
@@ -272,7 +270,7 @@ class ProductoSanitized(BaseModelSanitized):
 
     @field_validator("descripcion")
     @classmethod
-    def validate_descripcion(cls, v: Optional[str]) -> Optional[str]:
+    def validate_descripcion(cls, v: str | None) -> str | None:
         if v:
             v = v.strip()
             if len(v) > 200:

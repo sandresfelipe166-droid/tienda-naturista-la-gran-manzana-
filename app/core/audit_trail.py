@@ -8,18 +8,19 @@ Provides comprehensive audit logging for critical operations:
 """
 
 from datetime import datetime
-from typing import Any, Dict, Optional
 from enum import Enum
+from typing import Any
 
-from sqlalchemy import Column, Integer, String, DateTime, Text, JSON
+from sqlalchemy import JSON, Column, DateTime, Integer, String, Text
 from sqlalchemy.orm import Session
 
-from app.models.database import Base
 from app.core.logging_config import inventario_logger as logger
+from app.models.database import Base
 
 
 class AuditAction(str, Enum):
     """Types of audit actions."""
+
     CREATE = "CREATE"
     READ = "READ"
     UPDATE = "UPDATE"
@@ -35,6 +36,7 @@ class AuditAction(str, Enum):
 
 class AuditLog(Base):
     """Audit log model for tracking critical operations."""
+
     __tablename__ = "audit_log"
 
     id_audit = Column(Integer, primary_key=True, index=True)
@@ -57,16 +59,16 @@ class AuditLogger:
     @staticmethod
     def log_audit(
         db: Session,
-        user_id: Optional[int] = None,
-        username: Optional[str] = None,
+        user_id: int | None = None,
+        username: str | None = None,
         action: AuditAction = AuditAction.READ,
         resource_type: str = "",
-        resource_id: Optional[int] = None,
-        ip_address: Optional[str] = None,
+        resource_id: int | None = None,
+        ip_address: str | None = None,
         status: str = "SUCCESS",
-        changes: Optional[Dict[str, Any]] = None,
-        message: Optional[str] = None,
-        request_id: Optional[str] = None,
+        changes: dict[str, Any] | None = None,
+        message: str | None = None,
+        request_id: str | None = None,
     ) -> AuditLog:
         """Log an audit event.
 
@@ -105,7 +107,6 @@ class AuditLogger:
         db.refresh(audit_entry)
 
         # Log to application logger
-        log_level = "info" if status == "SUCCESS" else "warning"
         log_message = f"[AUDIT] {action.value if isinstance(action, AuditAction) else action} on {resource_type}"
 
         if username:
@@ -135,13 +136,13 @@ class AuditLogger:
     @staticmethod
     def log_create(
         db: Session,
-        user_id: Optional[int],
-        username: Optional[str],
+        user_id: int | None,
+        username: str | None,
         resource_type: str,
         resource_id: int,
-        data: Dict[str, Any],
-        ip_address: Optional[str] = None,
-        request_id: Optional[str] = None,
+        data: dict[str, Any],
+        ip_address: str | None = None,
+        request_id: str | None = None,
     ) -> AuditLog:
         """Log resource creation."""
         return AuditLogger.log_audit(
@@ -159,13 +160,13 @@ class AuditLogger:
     @staticmethod
     def log_update(
         db: Session,
-        user_id: Optional[int],
-        username: Optional[str],
+        user_id: int | None,
+        username: str | None,
         resource_type: str,
         resource_id: int,
-        changes: Dict[str, Any],
-        ip_address: Optional[str] = None,
-        request_id: Optional[str] = None,
+        changes: dict[str, Any],
+        ip_address: str | None = None,
+        request_id: str | None = None,
     ) -> AuditLog:
         """Log resource update."""
         return AuditLogger.log_audit(
@@ -183,13 +184,13 @@ class AuditLogger:
     @staticmethod
     def log_delete(
         db: Session,
-        user_id: Optional[int],
-        username: Optional[str],
+        user_id: int | None,
+        username: str | None,
         resource_type: str,
         resource_id: int,
-        data: Dict[str, Any],
-        ip_address: Optional[str] = None,
-        request_id: Optional[str] = None,
+        data: dict[str, Any],
+        ip_address: str | None = None,
+        request_id: str | None = None,
     ) -> AuditLog:
         """Log resource deletion."""
         return AuditLogger.log_audit(
@@ -208,9 +209,9 @@ class AuditLogger:
     def log_login(
         db: Session,
         username: str,
-        ip_address: Optional[str] = None,
+        ip_address: str | None = None,
         success: bool = True,
-        request_id: Optional[str] = None,
+        request_id: str | None = None,
     ) -> AuditLog:
         """Log login attempt."""
         action = AuditAction.LOGIN if success else AuditAction.AUTH_FAILURE
@@ -230,12 +231,12 @@ class AuditLogger:
     @staticmethod
     def log_permission_denied(
         db: Session,
-        user_id: Optional[int],
-        username: Optional[str],
+        user_id: int | None,
+        username: str | None,
         resource_type: str,
         action: str,
-        ip_address: Optional[str] = None,
-        request_id: Optional[str] = None,
+        ip_address: str | None = None,
+        request_id: str | None = None,
     ) -> AuditLog:
         """Log permission denied event."""
         return AuditLogger.log_audit(
@@ -321,7 +322,7 @@ class AuditQueryBuilder:
         """Execute query and return all results."""
         return self.query.all()
 
-    def first(self) -> Optional[AuditLog]:
+    def first(self) -> AuditLog | None:
         """Execute query and return first result."""
         return self.query.first()
 

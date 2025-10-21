@@ -28,7 +28,7 @@ def list_roles(session: Session):
     return [(r.id_rol, r.nombre_rol) for r in roles]
 
 
-def seed_missing_roles(session: Session) -> List[str]:
+def seed_missing_roles(session: Session) -> list[str]:
     """Insert default roles that are missing. Returns names of inserted roles."""
     inserted = []
     existing_names = {r.nombre_rol for r in session.query(Rol).all()}

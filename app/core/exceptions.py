@@ -2,7 +2,7 @@
 Sistema de excepciones personalizadas para el inventario
 """
 
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class InventarioException(Exception):
@@ -13,7 +13,7 @@ class InventarioException(Exception):
         message: str,
         error_code: str,
         status_code: int = 400,
-        details: Optional[Dict[str, Any]] = None,
+        details: dict[str, Any] | None = None,
     ):
         self.message = message
         self.error_code = error_code
@@ -25,7 +25,7 @@ class InventarioException(Exception):
 class ValidationException(InventarioException):
     """Excepción para errores de validación"""
 
-    def __init__(self, message: str, field: str = None, details: Dict[str, Any] = None):
+    def __init__(self, message: str, field: str = None, details: dict[str, Any] = None):
         super().__init__(
             message=message, error_code="VALIDATION_ERROR", status_code=422, details=details or {}
         )

@@ -200,7 +200,9 @@ class Gasto(Base):
     id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"))
     fecha_gasto = Column(DateTime, nullable=False, index=True)
     concepto = Column(String(200), nullable=False)
-    categoria = Column(String(50), nullable=False, index=True)  # Compras, Servicios, Mantenimiento, Otros
+    categoria = Column(
+        String(50), nullable=False, index=True
+    )  # Compras, Servicios, Mantenimiento, Otros
     monto = Column(Float, nullable=False)
     metodo_pago = Column(String(50))
     numero_factura = Column(String(50))
@@ -224,7 +226,9 @@ class Cotizacion(Base):
     descuento = Column(Float, default=0.0)
     impuestos = Column(Float, default=0.0)
     total = Column(Float, nullable=False)
-    estado = Column(String(20), default="Pendiente", index=True)  # Pendiente, Aceptada, Rechazada, Convertida
+    estado = Column(
+        String(20), default="Pendiente", index=True
+    )  # Pendiente, Aceptada, Rechazada, Convertida
     observaciones = Column(Text)
     id_venta_relacionada = Column(Integer, ForeignKey("venta.id_venta"))  # Si se convirtió en venta
     usuario = relationship("Usuario", back_populates="cotizaciones")

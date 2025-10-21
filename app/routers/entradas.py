@@ -1,12 +1,13 @@
 """Router para gestión de entradas (compras/recepciones)."""
+
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.core.auth_middleware import get_current_active_user
-from app.models.database import get_db
 from app.models import models
+from app.models.database import get_db
 
 router = APIRouter(prefix="/entradas", tags=["Entradas"])
 
@@ -50,7 +51,9 @@ def crear_entrada(
 
     # Actualizar stock del lote y del producto
     lote.cantidad_disponible = int(getattr(lote, "cantidad_disponible", 0)) + int(cantidad)
-    producto = db.query(models.Producto).filter(models.Producto.id_producto == lote.id_producto).first()
+    producto = (
+        db.query(models.Producto).filter(models.Producto.id_producto == lote.id_producto).first()
+    )
     if producto:
         producto.stock_actual = int(getattr(producto, "stock_actual", 0)) + int(cantidad)
 
@@ -70,6 +73,7 @@ def listar_entradas(
     current_user: models.Usuario = Depends(get_current_active_user),
 ):
     from sqlalchemy import extract
+
     q = db.query(models.Entrada)
     if id_lote:
         q = q.filter(models.Entrada.id_lote == id_lote)
@@ -125,6 +129,7 @@ def estadisticas_entradas_mes(
     current_user: models.Usuario = Depends(get_current_active_user),
 ):
     from sqlalchemy import extract, func
+
     q = db.query(
         func.count(models.Entrada.id_entrada).label("cantidad_entradas"),
         func.sum(models.Entrada.precio_compra_total).label("total_compras"),
@@ -152,6 +157,7 @@ def estadisticas_entradas_año(
     current_user: models.Usuario = Depends(get_current_active_user),
 ):
     from sqlalchemy import extract, func
+
     q = db.query(
         func.count(models.Entrada.id_entrada).label("cantidad_entradas"),
         func.sum(models.Entrada.precio_compra_total).label("total_compras"),

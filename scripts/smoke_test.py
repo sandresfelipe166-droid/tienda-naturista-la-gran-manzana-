@@ -17,7 +17,7 @@ from main import app
 def run_smoke_tests():
     client = TestClient(app)
 
-    endpoints: List[Tuple[str, str]] = [
+    endpoints: list[tuple[str, str]] = [
         ("Root", "/"),
         ("API Info", "/api/v1/"),
         ("Health", "/api/v1/health"),

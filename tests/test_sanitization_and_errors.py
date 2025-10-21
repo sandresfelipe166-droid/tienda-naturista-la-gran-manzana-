@@ -3,24 +3,24 @@
 import pytest
 from pydantic import ValidationError
 
+from app.core.error_responses import (
+    ConflictAPIException,
+    ForbiddenAPIException,
+    NotFoundAPIException,
+    RateLimitAPIException,
+    UnauthorizedAPIException,
+    ValidationAPIException,
+    format_error_response,
+)
 from app.core.sanitization import (
-    validate_email,
-    validate_phone,
-    validate_cedula,
-    validate_username,
-    detect_suspicious_input,
-    sanitize_for_display,
     ClienteSanitized,
     ProductoSanitized,
-)
-from app.core.error_responses import (
-    ValidationAPIException,
-    NotFoundAPIException,
-    UnauthorizedAPIException,
-    ForbiddenAPIException,
-    ConflictAPIException,
-    RateLimitAPIException,
-    format_error_response,
+    detect_suspicious_input,
+    sanitize_for_display,
+    validate_cedula,
+    validate_email,
+    validate_phone,
+    validate_username,
 )
 
 

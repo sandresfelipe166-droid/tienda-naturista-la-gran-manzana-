@@ -7,16 +7,16 @@ Provides comprehensive monitoring capabilities including:
 - Prometheus integration
 """
 
-from typing import Dict, Optional, Any, List, Callable
-from datetime import datetime
 import time
+from collections.abc import Callable
+from datetime import datetime
+from typing import Any
 
-from prometheus_client import Counter, Histogram, Gauge, CollectorRegistry
 from fastapi import Request, Response
+from prometheus_client import CollectorRegistry, Counter, Gauge, Histogram
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.core.logging_config import inventario_logger as logger
-
 
 # ==================== Prometheus Metrics ====================
 
@@ -141,6 +141,7 @@ auth_token_validations_total = Counter(
 
 # ==================== Metrics Helpers ====================
 
+
 class MetricsCollector:
     """Helper class for recording metrics."""
 
@@ -158,9 +159,7 @@ class MetricsCollector:
             method=method, endpoint=endpoint, status_code=status_code
         ).observe(duration_seconds)
 
-        http_requests_total.labels(
-            method=method, endpoint=endpoint, status_code=status_code
-        ).inc()
+        http_requests_total.labels(method=method, endpoint=endpoint, status_code=status_code).inc()
 
         if request_size > 0:
             http_request_size_bytes.labels(method=method, endpoint=endpoint).observe(request_size)
@@ -195,9 +194,9 @@ class MetricsCollector:
     @staticmethod
     def record_db_query(query_type: str, table: str, duration_seconds: float) -> None:
         """Record database query metric."""
-        database_query_duration_seconds.labels(
-            query_type=query_type, table=table
-        ).observe(duration_seconds)
+        database_query_duration_seconds.labels(query_type=query_type, table=table).observe(
+            duration_seconds
+        )
 
     @staticmethod
     def set_db_pool_size(size: int) -> None:
@@ -229,10 +228,11 @@ class MetricsCollector:
 
 # ==================== Metrics Middleware ====================
 
+
 class AdvancedMetricsMiddleware(BaseHTTPMiddleware):
     """Middleware to collect detailed metrics from HTTP requests."""
 
-    def __init__(self, app, exclude_paths: Optional[list] = None):
+    def __init__(self, app, exclude_paths: list | None = None):
         super().__init__(app)
         self.exclude_paths = exclude_paths or ["/docs", "/redoc", "/openapi.json", "/metrics"]
 
@@ -313,14 +313,16 @@ class AdvancedMetricsMiddleware(BaseHTTPMiddleware):
 
 # ==================== Health Check ====================
 
+
 class HealthCheckCollector:
     """Collector for health check metrics."""
 
     @staticmethod
-    def get_system_health() -> Dict[str, Any]:
+    def get_system_health() -> dict[str, Any]:
         """Get overall system health status."""
-        from app.models.database import engine
         from sqlalchemy import text
+
+        from app.models.database import engine
 
         health = {
             "status": "healthy",
@@ -340,18 +342,24 @@ class HealthCheckCollector:
         return health
 
     @staticmethod
-    def get_inventory_metrics() -> Dict[str, Any]:
+    def get_inventory_metrics() -> dict[str, Any]:
         """Get current inventory metrics."""
+        from sqlalchemy import func
+
         from app.models.database import SessionLocal
         from app.models.models import Producto
-        from sqlalchemy import func
 
         db = SessionLocal()
         try:
-            total_value = db.query(func.sum(Producto.precio_compra * Producto.stock_actual)).scalar() or 0
-            low_stock = db.query(func.count(Producto.id_producto)).filter(
-                Producto.stock_actual <= Producto.stock_minimo
-            ).scalar() or 0
+            total_value = (
+                db.query(func.sum(Producto.precio_compra * Producto.stock_actual)).scalar() or 0
+            )
+            low_stock = (
+                db.query(func.count(Producto.id_producto))
+                .filter(Producto.stock_actual <= Producto.stock_minimo)
+                .scalar()
+                or 0
+            )
             total_products = db.query(func.count(Producto.id_producto)).scalar() or 0
 
             return {
@@ -363,7 +371,7 @@ class HealthCheckCollector:
             db.close()
 
     @staticmethod
-    def get_performance_metrics() -> Dict[str, Any]:
+    def get_performance_metrics() -> dict[str, Any]:
         """Get performance metrics."""
         from prometheus_client import REGISTRY
 

@@ -7,8 +7,7 @@ Scheduler de tareas en segundo plano (APScheduler - AsyncIOScheduler)
 
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -47,7 +46,7 @@ def _stock_bajo_job() -> None:
 
 class SchedulerManager:
     def __init__(self):
-        self.scheduler: Optional[AsyncIOScheduler] = None
+        self.scheduler: AsyncIOScheduler | None = None
         self.started: bool = False
 
     def start(self) -> None:
@@ -89,7 +88,7 @@ class SchedulerManager:
         if not self.started:
             self.start()
 
-    def add_or_update_stock_bajo_job(self, interval_hours: int) -> Dict[str, Any]:
+    def add_or_update_stock_bajo_job(self, interval_hours: int) -> dict[str, Any]:
         """
         Crea o actualiza el job de stock_bajo con el intervalo especificado.
         """
@@ -135,13 +134,13 @@ class SchedulerManager:
         """
         _stock_bajo_job()
 
-    def get_jobs(self) -> List[Dict[str, Any]]:
+    def get_jobs(self) -> list[dict[str, Any]]:
         """
         Devuelve listado de jobs con información básica.
         """
         if not self.started or not self.scheduler:
             return []
-        jobs_info: List[Dict[str, Any]] = []
+        jobs_info: list[dict[str, Any]] = []
         for job in self.scheduler.get_jobs():
             jobs_info.append(
                 {

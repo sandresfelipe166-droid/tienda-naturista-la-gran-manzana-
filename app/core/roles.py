@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import Dict, List, Set
 
 
 class Permission(str, Enum):
@@ -51,7 +50,7 @@ class Role(str, Enum):
 
 
 # Role-based permissions mapping
-ROLE_PERMISSIONS: Dict[str, List[str]] = {
+ROLE_PERMISSIONS: dict[str, list[str]] = {
     # Use string keys (e.g., "admin", "manager") for compatibility with stored role names
     Role.ADMIN.value: [
         # All permissions for admin
@@ -113,22 +112,22 @@ ROLE_PERMISSIONS: Dict[str, List[str]] = {
 }
 
 
-def get_role_permissions(role_name: str) -> List[str]:
+def get_role_permissions(role_name: str) -> list[str]:
     """Get permissions for a specific role"""
     return ROLE_PERMISSIONS.get(role_name, [])
 
 
-def has_permission(user_permissions: List[str], required_permission: str) -> bool:
+def has_permission(user_permissions: list[str], required_permission: str) -> bool:
     """Check if user has a specific permission"""
     return required_permission in user_permissions
 
 
-def has_any_permission(user_permissions: List[str], required_permissions: List[str]) -> bool:
+def has_any_permission(user_permissions: list[str], required_permissions: list[str]) -> bool:
     """Check if user has any of the required permissions"""
     return any(perm in user_permissions for perm in required_permissions)
 
 
-def has_all_permissions(user_permissions: List[str], required_permissions: List[str]) -> bool:
+def has_all_permissions(user_permissions: list[str], required_permissions: list[str]) -> bool:
     """Check if user has all required permissions"""
     return all(perm in user_permissions for perm in required_permissions)
 

@@ -7,9 +7,9 @@ import logging
 import logging.handlers
 import os
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
-from app.core.config import settings, settings as _settings
+from app.core.config import settings
 from app.core.log_context import RequestIdFilter
 
 
@@ -28,12 +28,12 @@ class JSONFormatter(logging.Formatter):
         }
 
         # Agregar request_id si viene en el registro (inyectado por RequestIdFilter)
-        req_id: Optional[str] = getattr(record, "request_id", None)
+        req_id: str | None = getattr(record, "request_id", None)
         if req_id:
             log_entry["request_id"] = req_id
 
         # Agregar información extra si existe (evitar errores de tipado con getattr)
-        extra_data: Optional[Any] = getattr(record, "extra_data", None)
+        extra_data: Any | None = getattr(record, "extra_data", None)
         if extra_data is not None:
             try:
                 if isinstance(extra_data, dict):
@@ -142,10 +142,10 @@ class InventarioLogger:
         self,
         operation: str,
         table: str,
-        duration: Optional[float] = None,
-        query: Optional[str] = None,
+        duration: float | None = None,
+        query: str | None = None,
     ):
-        extra_data: Dict[str, Any] = {
+        extra_data: dict[str, Any] = {
             "event_type": "database_operation",
             "operation": operation,
             "table": table,
@@ -158,8 +158,8 @@ class InventarioLogger:
             f"DB {operation} on {table}", extra={"extra_data": sanitize_for_log(extra_data)}
         )
 
-    def log_business_event(self, event: str, details: Optional[Dict[str, Any]] = None):
-        extra_data: Dict[str, Any] = {
+    def log_business_event(self, event: str, details: dict[str, Any] | None = None):
+        extra_data: dict[str, Any] = {
             "event_type": "business_event",
             "event": event,
             "details": details or {},
@@ -171,11 +171,11 @@ class InventarioLogger:
     def log_security_event(
         self,
         event: str,
-        user_id: Optional[int] = None,
-        ip_address: Optional[str] = None,
+        user_id: int | None = None,
+        ip_address: str | None = None,
         **kwargs: Any,
     ):
-        extra_data: Dict[str, Any] = {
+        extra_data: dict[str, Any] = {
             "event_type": "security_event",
             "event": event,
             "user_id": user_id,
@@ -186,8 +186,8 @@ class InventarioLogger:
             f"Security event: {event}", extra={"extra_data": sanitize_for_log(extra_data)}
         )
 
-    def log_error(self, error: Exception, context: Optional[Dict[str, Any]] = None):
-        extra_data: Dict[str, Any] = {
+    def log_error(self, error: Exception, context: dict[str, Any] | None = None):
+        extra_data: dict[str, Any] = {
             "event_type": "error",
             "error_type": type(error).__name__,
             "context": context or {},
@@ -199,23 +199,23 @@ class InventarioLogger:
         )
 
     # Métodos de compatibilidad y conveniencia
-    def log_info(self, message: str, extra_data: Optional[Dict[str, Any]] = None):
+    def log_info(self, message: str, extra_data: dict[str, Any] | None = None):
         self.logger.info(message, extra={"extra_data": sanitize_for_log(extra_data or {})})
 
-    def log_warning(self, message: str, extra_data: Optional[Dict[str, Any]] = None):
+    def log_warning(self, message: str, extra_data: dict[str, Any] | None = None):
         self.logger.warning(message, extra={"extra_data": sanitize_for_log(extra_data or {})})
 
     def log_request(
         self,
         method: str,
         path: str,
-        user_id: Optional[int] = None,
-        ip_address: Optional[str] = None,
+        user_id: int | None = None,
+        ip_address: str | None = None,
         user_agent: str = "",
-        request_id: Optional[str] = None,
+        request_id: str | None = None,
         **kwargs: Any,
     ):
-        extra_data: Dict[str, Any] = {
+        extra_data: dict[str, Any] = {
             "event_type": "http_request",
             "method": method,
             "path": path,
@@ -273,10 +273,10 @@ def sanitize_for_log(obj: Any) -> Any:
                 except Exception:
                     out[str(k)] = "[UNSERIALIZABLE_KEY]"
             return out
-        if isinstance(obj, (list, tuple)):
+        if isinstance(obj, (list, tuple)):  # noqa: UP038 - tuple required by isinstance
             return [sanitize_for_log(v) for v in obj]
         # JSON serializable primitives
-        if isinstance(obj, (str, int, float, bool)):
+        if isinstance(obj, (str, int, float, bool)):  # noqa: UP038 - tuple required by isinstance
             return obj
         # Fallback: convertir a str
         return str(obj)

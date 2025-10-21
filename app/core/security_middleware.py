@@ -5,7 +5,7 @@ Middleware de seguridad avanzada para el API
 import secrets
 import string
 import time
-from typing import Any, Dict, Literal, cast
+from typing import Literal, cast
 
 from fastapi import Request, Response
 from fastapi.responses import JSONResponse
@@ -14,7 +14,6 @@ from starlette.types import ASGIApp
 
 from app.core.config import settings
 from app.core.csrf import generate_csrf_token, validate_csrf_token
-from app.core.exceptions import SecurityException
 from app.core.logging_config import inventario_logger
 
 logger = inventario_logger

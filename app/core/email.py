@@ -6,7 +6,7 @@ Funciona en modo no-op si no hay configuración SMTP.
 import smtplib
 import ssl
 from email.message import EmailMessage
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, cast
 
 from app.core.config import settings
 from app.core.logging_config import inventario_logger
@@ -16,13 +16,13 @@ logger = inventario_logger
 
 class EmailClient:
     def __init__(self):
-        self.host: Optional[str] = getattr(settings, "smtp_host", None)
+        self.host: str | None = getattr(settings, "smtp_host", None)
         self.port: int = getattr(settings, "smtp_port", 587)
-        self.user: Optional[str] = getattr(settings, "smtp_user", None)
-        self.password: Optional[str] = getattr(settings, "smtp_password", None)
+        self.user: str | None = getattr(settings, "smtp_user", None)
+        self.password: str | None = getattr(settings, "smtp_password", None)
         self.use_tls: bool = getattr(settings, "smtp_use_tls", True)
         # Lista de correos destino por defecto
-        self.default_recipients: List[str] = getattr(settings, "alert_emails", []) or []
+        self.default_recipients: list[str] = getattr(settings, "alert_emails", []) or []
 
     @property
     def is_configured(self) -> bool:
@@ -32,9 +32,9 @@ class EmailClient:
         self,
         subject: str,
         body: str,
-        recipients: Optional[List[str]] = None,
-        sender: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        recipients: list[str] | None = None,
+        sender: str | None = None,
+    ) -> dict[str, Any]:
         """
         Envía un correo de texto plano. Retorna diccionario con status.
         Si no hay configuración SMTP o no hay destinatarios, funciona en modo no-op.

@@ -1,5 +1,5 @@
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -18,7 +18,7 @@ class Settings(BaseSettings):
         "DATABASE_URL",
         "postgresql+psycopg2://admin:admin123@localhost:5432/inventario",
     )
-    db_host: Optional[str] = os.getenv("DB_HOST")
+    db_host: str | None = os.getenv("DB_HOST")
     db_port: int = int(os.getenv("DB_PORT", "5432"))
     db_name: str = os.getenv("DB_NAME", "inventario")
     db_user: str = os.getenv("DB_USER", "admin")
@@ -29,7 +29,7 @@ class Settings(BaseSettings):
     db_max_overflow: int = int(os.getenv("DB_MAX_OVERFLOW", "30"))
     db_pool_timeout: int = int(os.getenv("DB_POOL_TIMEOUT", "30"))
     db_pool_recycle: int = int(os.getenv("DB_POOL_RECYCLE", "3600"))
-    db_connect_args: Dict[str, Any] = {}
+    db_connect_args: dict[str, Any] = {}
 
     # Schema creation on startup (for development only; prefer Alembic migrations)
     create_schema_on_startup: bool = (
@@ -64,7 +64,7 @@ class Settings(BaseSettings):
     # Security - Headers
     send_x_powered_by: bool = os.getenv("SEND_X_POWERED_BY", "false").lower() == "true"
     powered_by_header: str = os.getenv("POWERED_BY_HEADER", "Inventario-Backend")
-    security_headers: Dict[str, str] = {
+    security_headers: dict[str, str] = {
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY",
         "X-XSS-Protection": "1; mode=block",
@@ -81,8 +81,8 @@ class Settings(BaseSettings):
 
     # CORS
     cors_allow_credentials: bool = True
-    cors_allow_methods: List[str] = ["*"]
-    cors_allow_headers: List[str] = [
+    cors_allow_methods: list[str] = ["*"]
+    cors_allow_headers: list[str] = [
         "Authorization",
         "Content-Type",
         "X-Requested-With",
@@ -90,7 +90,7 @@ class Settings(BaseSettings):
         "X-CSRF-Token",
         "X-Request-Id",
     ]
-    cors_expose_headers: List[str] = [
+    cors_expose_headers: list[str] = [
         "X-RateLimit-Limit",
         "X-RateLimit-Remaining",
         "X-RateLimit-Window",
@@ -100,23 +100,23 @@ class Settings(BaseSettings):
     cors_max_age: int = 600
 
     # CORS & Hosts - Environment Specific
-    cors_origins_development: List[str] = [
+    cors_origins_development: list[str] = [
         "http://localhost:3000",
         "http://localhost:8000",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8000",
     ]
-    cors_origins_production: List[str] = [
+    cors_origins_production: list[str] = [
         "https://yourdomain.com",
         "https://www.yourdomain.com",
         "https://api.yourdomain.com",
     ]
-    trusted_hosts: List[str] = ["localhost", "127.0.0.1"]
+    trusted_hosts: list[str] = ["localhost", "127.0.0.1"]
 
     # Rate limiting
     rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
     rate_limit_window: int = int(os.getenv("RATE_LIMIT_WINDOW", "60"))
-    endpoint_rate_limits: Dict[str, Dict[str, int]] = {}
+    endpoint_rate_limits: dict[str, dict[str, int]] = {}
     # Optional Redis backend for rate limiting
     rate_limit_use_redis: bool = os.getenv("RATE_LIMIT_USE_REDIS", "false").lower() == "true"
     rate_limit_redis_prefix: str = os.getenv("RATE_LIMIT_REDIS_PREFIX", "ratelimit")
@@ -127,7 +127,7 @@ class Settings(BaseSettings):
     log_json_format: bool = os.getenv("LOG_JSON_FORMAT", "true").lower() == "true"
     log_max_file_size: int = int(os.getenv("LOG_MAX_FILE_SIZE", str(10 * 1024 * 1024)))
     log_backup_count: int = int(os.getenv("LOG_BACKUP_COUNT", "5"))
-    log_levels: Dict[str, str] = {
+    log_levels: dict[str, str] = {
         "app.core.database": "INFO",
         "sqlalchemy.engine": "WARNING",
         "sqlalchemy.pool": "WARNING",
@@ -135,21 +135,21 @@ class Settings(BaseSettings):
     }
 
     # Redis and caching
-    redis_host: Optional[str] = os.getenv("REDIS_HOST")
+    redis_host: str | None = os.getenv("REDIS_HOST")
     redis_port: int = int(os.getenv("REDIS_PORT", "6379"))
     redis_db: int = int(os.getenv("REDIS_DB", "0"))
-    redis_password: Optional[str] = os.getenv("REDIS_PASSWORD")
+    redis_password: str | None = os.getenv("REDIS_PASSWORD")
     redis_socket_timeout: float = float(os.getenv("REDIS_SOCKET_TIMEOUT", "1.0"))
     # Health check socket timeout for Redis (used in /health/detailed)
     redis_health_timeout: float = float(os.getenv("REDIS_HEALTH_TIMEOUT", "1.0"))
 
     # SMTP / Email
-    smtp_host: Optional[str] = os.getenv("SMTP_HOST")
+    smtp_host: str | None = os.getenv("SMTP_HOST")
     smtp_port: int = int(os.getenv("SMTP_PORT", "587"))
-    smtp_user: Optional[str] = os.getenv("SMTP_USER")
-    smtp_password: Optional[str] = os.getenv("SMTP_PASSWORD")
+    smtp_user: str | None = os.getenv("SMTP_USER")
+    smtp_password: str | None = os.getenv("SMTP_PASSWORD")
     smtp_use_tls: bool = os.getenv("SMTP_USE_TLS", "true").lower() == "true"
-    alert_emails: List[str] = []
+    alert_emails: list[str] = []
 
     # Scheduler
     scheduler_enabled: bool = os.getenv("SCHEDULER_ENABLED", "false").lower() == "true"
@@ -167,7 +167,7 @@ class Settings(BaseSettings):
     backup_enabled: bool = os.getenv("BACKUP_ENABLED", "false").lower() == "true"
     ssl_enabled: bool = os.getenv("SSL_ENABLED", "false").lower() == "true"
     # External services health checks configuration placeholder
-    external_services_health: List[Dict[str, Any]] = []
+    external_services_health: list[dict[str, Any]] = []
 
     # Pydantic settings model config
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
@@ -249,12 +249,12 @@ class Settings(BaseSettings):
             self.security_headers.pop("Content-Security-Policy", None)
 
     @property
-    def cors_origins(self) -> List[str]:
+    def cors_origins(self) -> list[str]:
         """Get CORS origins based on environment"""
         return getattr(self, "_cors_origins", self.cors_origins_development)
 
     @cors_origins.setter
-    def cors_origins(self, value: List[str]):
+    def cors_origins(self, value: list[str]):
         """Set CORS origins (explicit override)"""
         self._cors_origins = value
 

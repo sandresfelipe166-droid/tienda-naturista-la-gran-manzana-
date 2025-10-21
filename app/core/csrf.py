@@ -3,7 +3,6 @@ import hashlib
 import hmac
 import secrets
 import time
-from typing import Optional, Tuple
 
 from app.core.config import settings
 
@@ -13,9 +12,9 @@ def _make_signature(secret: str, payload: str) -> str:
 
 
 def generate_csrf_token(
-    secret: Optional[str] = None,
-    expire_seconds: Optional[int] = None,
-    timestamp: Optional[int] = None,
+    secret: str | None = None,
+    expire_seconds: int | None = None,
+    timestamp: int | None = None,
 ) -> str:
     """Generate a CSRF token signed with HMAC-SHA256.
 
@@ -33,8 +32,8 @@ def generate_csrf_token(
 
 
 def validate_csrf_token(
-    token: str, max_age_seconds: Optional[int] = None, secret: Optional[str] = None
-) -> Tuple[bool, Optional[int]]:
+    token: str, max_age_seconds: int | None = None, secret: str | None = None
+) -> tuple[bool, int | None]:
     """Validate a CSRF token. Returns (is_valid, timestamp).
 
     is_valid is True when signature matches and token is not expired. timestamp is the token's ts if parseable.

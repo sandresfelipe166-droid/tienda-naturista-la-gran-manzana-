@@ -8,12 +8,15 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from sqlalchemy.orm import Session
+
+from app.crud.user import create_user, get_user_by_email, get_user_by_username
 from app.models.database import Base, SessionLocal, engine
-from app.crud.user import get_user_by_username, get_user_by_email, create_user
 from app.models.schemas import UserCreate
+
 
 def ensure_tables():
     Base.metadata.create_all(bind=engine)
+
 
 def seed_admin_user():
     session = SessionLocal()
@@ -33,7 +36,7 @@ def seed_admin_user():
             email=email,
             password=password,
             rol_id=rol_id,
-            nombre_completo=nombre_completo
+            nombre_completo=nombre_completo,
         )
         user = create_user(session, user_data)
         print(f"Usuario creado: {user.nombre_usuario} ({user.email}) con rol_id {user.id_rol}")
@@ -43,6 +46,7 @@ def seed_admin_user():
         sys.exit(1)
     finally:
         session.close()
+
 
 if __name__ == "__main__":
     seed_admin_user()

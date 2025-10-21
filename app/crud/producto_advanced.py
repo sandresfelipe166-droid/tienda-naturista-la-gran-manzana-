@@ -2,7 +2,7 @@
 CRUD avanzado para productos con filtros, paginación y caché
 """
 
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session, joinedload
@@ -23,7 +23,7 @@ def get_productos_advanced(
     pagination: PaginationParams,
     sort_by: str = "nombre_producto",
     order: str = "asc",
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Obtener productos con filtros avanzados y paginación
 
@@ -107,8 +107,8 @@ def search_productos_advanced(
     db: Session,
     search_term: str,
     pagination: PaginationParams,
-    filters: Optional[ProductoFilters] = None,
-) -> Dict[str, Any]:
+    filters: ProductoFilters | None = None,
+) -> dict[str, Any]:
     """
     Búsqueda avanzada de productos con múltiples campos
 
@@ -165,7 +165,7 @@ def search_productos_advanced(
     )
 
 
-def get_productos_stats(db: Session, filters: Optional[ProductoFilters] = None) -> Dict[str, Any]:
+def get_productos_stats(db: Session, filters: ProductoFilters | None = None) -> dict[str, Any]:
     """
     Obtener estadísticas de productos con filtros opcionales
 
@@ -226,7 +226,7 @@ def get_productos_stats(db: Session, filters: Optional[ProductoFilters] = None) 
     }
 
 
-def get_top_productos(db: Session, limit: int = 10, criterio: str = "stock") -> List[Producto]:
+def get_top_productos(db: Session, limit: int = 10, criterio: str = "stock") -> list[Producto]:
     """
     Obtener top productos según criterio
 
@@ -254,7 +254,7 @@ def get_top_productos(db: Session, limit: int = 10, criterio: str = "stock") -> 
     return query.limit(limit).all()
 
 
-def get_productos_por_laboratorio_stats(db: Session) -> List[Dict[str, Any]]:
+def get_productos_por_laboratorio_stats(db: Session) -> list[dict[str, Any]]:
     """
     Obtener estadísticas de productos agrupados por laboratorio
 
@@ -286,7 +286,7 @@ def get_productos_por_laboratorio_stats(db: Session) -> List[Dict[str, Any]]:
     ]
 
 
-def get_productos_por_seccion_stats(db: Session) -> List[Dict[str, Any]]:
+def get_productos_por_seccion_stats(db: Session) -> list[dict[str, Any]]:
     """
     Obtener estadísticas de productos agrupados por sección
 

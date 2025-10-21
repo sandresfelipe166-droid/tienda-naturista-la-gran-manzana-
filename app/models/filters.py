@@ -3,7 +3,6 @@ Modelos y utilidades para filtros avanzados
 """
 
 from datetime import datetime
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -12,29 +11,29 @@ class ProductoFilters(BaseModel):
     """Filtros avanzados para productos"""
 
     # Búsqueda por texto
-    nombre: Optional[str] = Field(default=None, description="Buscar por nombre (parcial)")
-    codigo_barras: Optional[str] = Field(default=None, description="Buscar por código de barras")
-    principio_activo: Optional[str] = Field(default=None, description="Buscar por principio activo")
+    nombre: str | None = Field(default=None, description="Buscar por nombre (parcial)")
+    codigo_barras: str | None = Field(default=None, description="Buscar por código de barras")
+    principio_activo: str | None = Field(default=None, description="Buscar por principio activo")
 
     # Filtros por relaciones
-    id_laboratorio: Optional[int] = Field(default=None, description="Filtrar por laboratorio")
-    id_seccion: Optional[int] = Field(default=None, description="Filtrar por sección")
+    id_laboratorio: int | None = Field(default=None, description="Filtrar por laboratorio")
+    id_seccion: int | None = Field(default=None, description="Filtrar por sección")
 
     # Filtros por rangos
-    precio_min: Optional[float] = Field(default=None, ge=0, description="Precio mínimo")
-    precio_max: Optional[float] = Field(default=None, ge=0, description="Precio máximo")
-    stock_min: Optional[int] = Field(default=None, ge=0, description="Stock mínimo")
-    stock_max: Optional[int] = Field(default=None, ge=0, description="Stock máximo")
+    precio_min: float | None = Field(default=None, ge=0, description="Precio mínimo")
+    precio_max: float | None = Field(default=None, ge=0, description="Precio máximo")
+    stock_min: int | None = Field(default=None, ge=0, description="Stock mínimo")
+    stock_max: int | None = Field(default=None, ge=0, description="Stock máximo")
 
     # Filtros booleanos
-    stock_bajo: Optional[bool] = Field(default=None, description="Solo productos con stock bajo")
-    requiere_receta: Optional[bool] = Field(
+    stock_bajo: bool | None = Field(default=None, description="Solo productos con stock bajo")
+    requiere_receta: bool | None = Field(
         default=None, description="Filtrar por receta requerida"
     )
 
     # Filtros por estado
-    estado: Optional[str] = Field(default="Activo", description="Estado del producto")
-    forma_farmaceutica: Optional[str] = Field(default=None, description="Forma farmacéutica")
+    estado: str | None = Field(default="Activo", description="Estado del producto")
+    forma_farmaceutica: str | None = Field(default=None, description="Forma farmacéutica")
 
     class Config:
         json_schema_extra = {
@@ -52,9 +51,9 @@ class ProductoFilters(BaseModel):
 class LaboratorioFilters(BaseModel):
     """Filtros para laboratorios"""
 
-    nombre: Optional[str] = Field(default=None, description="Buscar por nombre")
-    pais_origen: Optional[str] = Field(default=None, description="Filtrar por país")
-    estado: Optional[str] = Field(default="Activo", description="Estado del laboratorio")
+    nombre: str | None = Field(default=None, description="Buscar por nombre")
+    pais_origen: str | None = Field(default=None, description="Filtrar por país")
+    estado: str | None = Field(default="Activo", description="Estado del laboratorio")
 
     class Config:
         json_schema_extra = {
@@ -65,9 +64,9 @@ class LaboratorioFilters(BaseModel):
 class SeccionFilters(BaseModel):
     """Filtros para secciones"""
 
-    nombre: Optional[str] = Field(default=None, description="Buscar por nombre")
-    ubicacion_fisica: Optional[str] = Field(default=None, description="Filtrar por ubicación")
-    estado: Optional[str] = Field(default="Activo", description="Estado de la sección")
+    nombre: str | None = Field(default=None, description="Buscar por nombre")
+    ubicacion_fisica: str | None = Field(default=None, description="Filtrar por ubicación")
+    estado: str | None = Field(default="Activo", description="Estado de la sección")
 
     class Config:
         json_schema_extra = {
@@ -82,13 +81,13 @@ class SeccionFilters(BaseModel):
 class AlertaFilters(BaseModel):
     """Filtros para alertas"""
 
-    tipo_alerta: Optional[str] = Field(default=None, description="Tipo de alerta")
-    prioridad: Optional[str] = Field(default=None, description="Prioridad (Alta, Media, Baja)")
-    estado: Optional[str] = Field(default="Activo", description="Estado de la alerta")
-    id_producto: Optional[int] = Field(default=None, description="Filtrar por producto")
-    id_seccion: Optional[int] = Field(default=None, description="Filtrar por sección")
-    fecha_desde: Optional[datetime] = Field(default=None, description="Fecha de creación desde")
-    fecha_hasta: Optional[datetime] = Field(default=None, description="Fecha de creación hasta")
+    tipo_alerta: str | None = Field(default=None, description="Tipo de alerta")
+    prioridad: str | None = Field(default=None, description="Prioridad (Alta, Media, Baja)")
+    estado: str | None = Field(default="Activo", description="Estado de la alerta")
+    id_producto: int | None = Field(default=None, description="Filtrar por producto")
+    id_seccion: int | None = Field(default=None, description="Filtrar por sección")
+    fecha_desde: datetime | None = Field(default=None, description="Fecha de creación desde")
+    fecha_hasta: datetime | None = Field(default=None, description="Fecha de creación hasta")
 
     class Config:
         json_schema_extra = {
@@ -99,14 +98,14 @@ class AlertaFilters(BaseModel):
 class VentaFilters(BaseModel):
     """Filtros para ventas"""
 
-    id_usuario: Optional[int] = Field(default=None, description="Filtrar por usuario")
-    id_cliente: Optional[int] = Field(default=None, description="Filtrar por cliente")
-    fecha_desde: Optional[datetime] = Field(default=None, description="Fecha desde")
-    fecha_hasta: Optional[datetime] = Field(default=None, description="Fecha hasta")
-    monto_min: Optional[float] = Field(default=None, ge=0, description="Monto mínimo")
-    monto_max: Optional[float] = Field(default=None, ge=0, description="Monto máximo")
-    metodo_pago: Optional[str] = Field(default=None, description="Método de pago")
-    estado: Optional[str] = Field(default="Activo", description="Estado de la venta")
+    id_usuario: int | None = Field(default=None, description="Filtrar por usuario")
+    id_cliente: int | None = Field(default=None, description="Filtrar por cliente")
+    fecha_desde: datetime | None = Field(default=None, description="Fecha desde")
+    fecha_hasta: datetime | None = Field(default=None, description="Fecha hasta")
+    monto_min: float | None = Field(default=None, ge=0, description="Monto mínimo")
+    monto_max: float | None = Field(default=None, ge=0, description="Monto máximo")
+    metodo_pago: str | None = Field(default=None, description="Método de pago")
+    estado: str | None = Field(default="Activo", description="Estado de la venta")
 
     class Config:
         json_schema_extra = {
@@ -119,7 +118,7 @@ class VentaFilters(BaseModel):
         }
 
 
-def apply_text_filter(query, model_field, filter_value: Optional[str]):
+def apply_text_filter(query, model_field, filter_value: str | None):
     """
     Aplicar filtro de texto con búsqueda parcial (ILIKE)
 
@@ -174,7 +173,7 @@ def apply_range_filter(query, model_field, min_value, max_value):
 
 
 def apply_date_range_filter(
-    query, model_field, fecha_desde: Optional[datetime], fecha_hasta: Optional[datetime]
+    query, model_field, fecha_desde: datetime | None, fecha_hasta: datetime | None
 ):
     """
     Aplicar filtro de rango de fechas

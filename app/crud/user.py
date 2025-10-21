@@ -1,19 +1,18 @@
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy.orm import Session
 
 from app.core.security import get_password_hash, verify_password
-from app.models.models import Rol, Usuario
+from app.models.models import Usuario
 from app.models.schemas import UserCreate
 
 
-def get_user_by_username(db: Session, username: str) -> Optional[Usuario]:
+def get_user_by_username(db: Session, username: str) -> Usuario | None:
     """Obtener usuario por username"""
     return db.query(Usuario).filter(Usuario.nombre_usuario == username).first()
 
 
-def get_user_by_email(db: Session, email: str) -> Optional[Usuario]:
+def get_user_by_email(db: Session, email: str) -> Usuario | None:
     """Obtener usuario por email"""
     return db.query(Usuario).filter(Usuario.email == email).first()
 
@@ -52,7 +51,7 @@ def authenticate_user(db: Session, username: str, password: str):
     return user
 
 
-def update_user(db: Session, user_id: int, user_data: dict) -> Optional[Usuario]:
+def update_user(db: Session, user_id: int, user_data: dict) -> Usuario | None:
     """Actualizar usuario"""
     user = db.query(Usuario).filter(Usuario.id_usuario == user_id).first()
     if not user:
@@ -72,7 +71,7 @@ def update_user(db: Session, user_id: int, user_data: dict) -> Optional[Usuario]
     for key, value in user_data.items():
         if key == 'password':
             value = get_password_hash(value)
-            setattr(user, 'password_hash', value)
+            user.password_hash = value
         elif hasattr(user, key):
             setattr(user, key, value)
 

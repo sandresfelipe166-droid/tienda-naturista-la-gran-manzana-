@@ -4,7 +4,7 @@ Manejadores de excepciones centralizados para FastAPI
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Union
+from typing import Any
 
 from fastapi import HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -21,7 +21,7 @@ def _error_response(
     status_code: int,
     code: str,
     message: str,
-    details: Dict[str, Any] = None,
+    details: dict[str, Any] = None,
 ) -> JSONResponse:
     """Crea una respuesta de error uniforme."""
     payload = {
@@ -65,7 +65,7 @@ async def validation_exception_handler(
     request: Request, exc: RequestValidationError
 ) -> JSONResponse:
     """Manejador para errores de validación de Pydantic/FastAPI."""
-    errors: List[Dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
     try:
         for err in exc.errors():
             field = ".".join(str(x) for x in err.get("loc", []))
@@ -111,7 +111,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
 
     # Normalizar message y details desde exc.detail
     message: str = "HTTP Error"
-    details: Dict[str, Any] = {}
+    details: dict[str, Any] = {}
 
     if isinstance(exc.detail, str):
         message = exc.detail
@@ -136,7 +136,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
 
 
 async def database_exception_handler(
-    request: Request, exc: Union[IntegrityError, SQLAlchemyError]
+    request: Request, exc: IntegrityError | SQLAlchemyError
 ) -> JSONResponse:
     """Manejador para errores de base de datos."""
     logger.error(
@@ -154,7 +154,7 @@ async def database_exception_handler(
     # Determinar el tipo de error específico
     code = "DATABASE_ERROR"
     message = "Error interno de base de datos"
-    details: Dict[str, Any] = {"database_error": True}
+    details: dict[str, Any] = {"database_error": True}
 
     if isinstance(exc, IntegrityError):
         lower_msg = str(exc).lower()
