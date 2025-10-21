@@ -27,9 +27,7 @@ class ProductoFilters(BaseModel):
 
     # Filtros booleanos
     stock_bajo: bool | None = Field(default=None, description="Solo productos con stock bajo")
-    requiere_receta: bool | None = Field(
-        default=None, description="Filtrar por receta requerida"
-    )
+    requiere_receta: bool | None = Field(default=None, description="Filtrar por receta requerida")
 
     # Filtros por estado
     estado: str | None = Field(default="Activo", description="Estado del producto")

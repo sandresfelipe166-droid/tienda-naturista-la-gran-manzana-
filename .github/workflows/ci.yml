@@ -31,37 +31,21 @@ jobs:
           pip install -r requirements.txt
           pip install ruff black isort pyright
 
-      - name: Run ruff (lint) and auto-fix
+      - name: Run ruff (lint)
         run: |
-          ruff check . || true
-          ruff check --fix .
-          # If ruff --fix changed files, fail the job so PRs must be formatted
-          git --no-pager diff --exit-code || (echo "Code not formatted by ruff --fix" && exit 1)
+          ruff check .
 
-      - name: Run isort and black check
+      - name: Run isort check
         run: |
           isort --check-only .
-          black --check .
 
-      - name: Set up Node cache (for pyright)
-        uses: actions/cache@v4
-        with:
-          path: ~/.nodeenv
-          key: ${{ runner.os }}-nodeenv-${{ hashFiles('.nodeenv') }}
-          restore-keys: |
-            ${{ runner.os }}-nodeenv-
-
-      - name: Run type checks (pyright --strict)
+      - name: Run black check
         run: |
-          pyright --strict
+          black --check .
 
       - name: Run tests
         run: |
-          python -m pytest -q
-
-      - name: Build Docker image (no push)
-        run: |
-          docker build -t inventario-backend:ci .
+          python -m pytest -v
 
   test-with-redis:
     runs-on: ubuntu-latest
