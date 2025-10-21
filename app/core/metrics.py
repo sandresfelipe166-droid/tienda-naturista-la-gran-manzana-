@@ -23,11 +23,11 @@ from app.core.config import settings
 try:
     from prometheus_client import (  # type: ignore
         CONTENT_TYPE_LATEST,
-        generate_latest,
+        generate_latest,  # type: ignore[assignment]
     )
-    from prometheus_client import CollectorRegistry as PromRegistry
-    from prometheus_client import Counter as PromCounter
-    from prometheus_client import Histogram as PromHistogram
+    from prometheus_client import CollectorRegistry as PromRegistry  # type: ignore[assignment]
+    from prometheus_client import Counter as PromCounter  # type: ignore[assignment]
+    from prometheus_client import Histogram as PromHistogram  # type: ignore[assignment]
 
     PROMETHEUS_AVAILABLE = True
 except Exception:
