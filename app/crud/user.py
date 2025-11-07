@@ -46,7 +46,7 @@ def authenticate_user(db: Session, username: str, password: str):
     user = get_user_by_username(db, username)
     if not user:
         return False
-    if not verify_password(password, user.password_hash):
+    if not verify_password(password, user.password_hash):  # type: ignore[arg-type]
         return False
     return user
 
@@ -71,7 +71,11 @@ def update_user(db: Session, user_id: int, user_data: dict) -> Usuario | None:
     for key, value in user_data.items():
         if key == 'password':
             value = get_password_hash(value)
-            user.password_hash = value
+            user.password_hash = value  # type: ignore[assignment]
+        elif key == 'username':
+            user.nombre_usuario = value  # type: ignore[assignment]
+        elif key == 'id_rol':
+            user.id_rol = value  # type: ignore[assignment]
         elif hasattr(user, key):
             setattr(user, key, value)
 
@@ -87,7 +91,7 @@ def delete_user(db: Session, user_id: int, logical: bool = True) -> bool:
         return False
 
     if logical:
-        user.estado = "Inactivo"
+        user.estado = "Inactivo"  # type: ignore[assignment]
         db.commit()
     else:
         db.delete(user)

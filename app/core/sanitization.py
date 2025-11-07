@@ -7,7 +7,7 @@ common field types (emails, phones, strings, etc.).
 import re
 from html import escape as html_escape
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, ConfigDict, field_validator
 
 
 class SanitizedString(str):
@@ -168,9 +168,7 @@ def detect_suspicious_input(value: str) -> str | None:
 class BaseModelSanitized(BaseModel):
     """Base model with common sanitization validators."""
 
-    class Config:
-        from_attributes = True
-        validate_assignment = True
+    model_config = ConfigDict(from_attributes=True, validate_assignment=True)
 
 
 class ClienteSanitized(BaseModelSanitized):

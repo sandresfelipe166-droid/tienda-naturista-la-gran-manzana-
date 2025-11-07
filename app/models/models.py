@@ -15,7 +15,7 @@ class Laboratorio(Base):
     email = Column(String(100))
     direccion = Column(String(200))
     estado = Column(String(20), default="Activo")
-    productos = relationship("Producto", back_populates="laboratorio")
+    productos = relationship(argument="Producto", back_populates="laboratorio")
 
 
 # Modelo para Secciones
@@ -30,7 +30,7 @@ class Seccion(Base):
     temperatura_recomendada = Column(String(50))
     fecha_ultimo_mantenimiento = Column(DateTime)
     estado = Column(String(20), default="Activo")
-    productos = relationship("Producto", back_populates="seccion")
+    productos = relationship(argument="Producto", back_populates="seccion")
 
 
 # Modelo para Productos
@@ -51,9 +51,9 @@ class Producto(Base):
     stock_minimo = Column(Integer, default=0)
     descripcion = Column(String(200))
     estado = Column(String(20), default="Activo", index=True)
-    seccion = relationship("Seccion", back_populates="productos")
-    laboratorio = relationship("Laboratorio", back_populates="productos")
-    lotes = relationship("Lote", back_populates="producto")
+    seccion = relationship(argument="Seccion", back_populates="productos")
+    laboratorio = relationship(argument="Laboratorio", back_populates="productos")
+    lotes = relationship(argument="Lote", back_populates="producto")
 
 
 # Modelo para Clientes
@@ -68,8 +68,8 @@ class Cliente(Base):
     email = Column(String(100))
     direccion = Column(String(200))
     estado = Column(String(20), default="Activo")
-    ventas = relationship("Venta", back_populates="cliente")
-    cotizaciones = relationship("Cotizacion", back_populates="cliente")
+    ventas = relationship(argument="Venta", back_populates="cliente")
+    cotizaciones = relationship(argument="Cotizacion", back_populates="cliente")
 
 
 # Modelo para Usuario
@@ -86,12 +86,16 @@ class Usuario(Base):
     fecha_creacion = Column(DateTime)
     ultima_acceso = Column(DateTime)
     estado = Column(String(20), default="Activo")
-    rol = relationship("Rol", back_populates="usuarios")
-    entradas = relationship("Entrada", back_populates="usuario")
-    salidas = relationship("Salida", back_populates="usuario")
-    ventas = relationship("Venta", back_populates="usuario")
-    gastos = relationship("Gasto", back_populates="usuario")
-    cotizaciones = relationship("Cotizacion", back_populates="usuario")
+    codigo_recuperacion = Column(String(10), nullable=True)
+    codigo_recuperacion_expiry = Column(DateTime, nullable=True)
+    reset_attempts = Column(Integer, default=0)
+    reset_locked_until = Column(DateTime, nullable=True)
+    rol = relationship(argument="Rol", back_populates="usuarios")
+    entradas = relationship(argument="Entrada", back_populates="usuario")
+    salidas = relationship(argument="Salida", back_populates="usuario")
+    ventas = relationship(argument="Venta", back_populates="usuario")
+    gastos = relationship(argument="Gasto", back_populates="usuario")
+    cotizaciones = relationship(argument="Cotizacion", back_populates="usuario")
 
 
 # Modelo para Roles
@@ -102,7 +106,7 @@ class Rol(Base):
     nombre_rol = Column(String(50), nullable=False)
     descripcion = Column(String(200))
     permisos = Column(Text)
-    usuarios = relationship("Usuario", back_populates="rol")
+    usuarios = relationship(argument="Usuario", back_populates="rol")
 
 
 # Modelo para Lotes
@@ -119,10 +123,10 @@ class Lote(Base):
     precio_compra_lote = Column(Float, nullable=False)
     temperatura_almacenamiento = Column(String(50))
     estado = Column(String(20), default="Activo")
-    producto = relationship("Producto", back_populates="lotes")
-    entradas = relationship("Entrada", back_populates="lote")
-    salidas = relationship("Salida", back_populates="lote")
-    detalle_ventas = relationship("DetalleVenta", back_populates="lote")
+    producto = relationship(argument="Producto", back_populates="lotes")
+    entradas = relationship(argument="Entrada", back_populates="lote")
+    salidas = relationship(argument="Salida", back_populates="lote")
+    detalle_ventas = relationship(argument="DetalleVenta", back_populates="lote")
 
 
 # Modelo para Entradas
@@ -139,8 +143,8 @@ class Entrada(Base):
     numero_factura_compra = Column(String(50))
     proveedor = Column(String(100))
     observaciones = Column(Text)
-    usuario = relationship("Usuario", back_populates="entradas")
-    lote = relationship("Lote", back_populates="entradas")
+    usuario = relationship(argument="Usuario", back_populates="entradas")
+    lote = relationship(argument="Lote", back_populates="entradas")
 
 
 # Modelo para Salidas
@@ -155,8 +159,8 @@ class Salida(Base):
     fecha_salida = Column(DateTime, nullable=False)
     motivo = Column(String(100))
     observaciones = Column(Text)
-    usuario = relationship("Usuario", back_populates="salidas")
-    lote = relationship("Lote", back_populates="salidas")
+    usuario = relationship(argument="Usuario", back_populates="salidas")
+    lote = relationship(argument="Lote", back_populates="salidas")
 
 
 # Modelo para Ventas
@@ -173,9 +177,9 @@ class Venta(Base):
     total = Column(Float, nullable=False)
     metodo_pago = Column(String(50))
     estado = Column(String(20), default="Activo")
-    usuario = relationship("Usuario", back_populates="ventas")
-    cliente = relationship("Cliente", back_populates="ventas")
-    detalles = relationship("DetalleVenta", back_populates="venta")
+    usuario = relationship(argument="Usuario", back_populates="ventas")
+    cliente = relationship(argument="Cliente", back_populates="ventas")
+    detalles = relationship(argument="DetalleVenta", back_populates="venta")
 
 
 # Modelo para Detalle de Ventas
@@ -188,8 +192,8 @@ class DetalleVenta(Base):
     cantidad = Column(Integer, nullable=False)
     precio_unitario = Column(Float, nullable=False)
     subtotal = Column(Float, nullable=False)
-    venta = relationship("Venta", back_populates="detalles")
-    lote = relationship("Lote", back_populates="detalle_ventas")
+    venta = relationship(argument="Venta", back_populates="detalles")
+    lote = relationship(argument="Lote", back_populates="detalle_ventas")
 
 
 # Modelo para Gastos
@@ -209,7 +213,7 @@ class Gasto(Base):
     proveedor = Column(String(100))
     observaciones = Column(Text)
     estado = Column(String(20), default="Activo")
-    usuario = relationship("Usuario", back_populates="gastos")
+    usuario = relationship(argument="Usuario", back_populates="gastos")
 
 
 # Modelo para Cotizaciones
@@ -231,9 +235,9 @@ class Cotizacion(Base):
     )  # Pendiente, Aceptada, Rechazada, Convertida
     observaciones = Column(Text)
     id_venta_relacionada = Column(Integer, ForeignKey("venta.id_venta"))  # Si se convirtió en venta
-    usuario = relationship("Usuario", back_populates="cotizaciones")
-    cliente = relationship("Cliente", back_populates="cotizaciones")
-    detalles = relationship("DetalleCotizacion", back_populates="cotizacion")
+    usuario = relationship(argument="Usuario", back_populates="cotizaciones")
+    cliente = relationship(argument="Cliente", back_populates="cotizaciones")
+    detalles = relationship(argument="DetalleCotizacion", back_populates="cotizacion")
 
 
 # Modelo para Detalle de Cotizaciones
@@ -246,8 +250,8 @@ class DetalleCotizacion(Base):
     cantidad = Column(Integer, nullable=False)
     precio_unitario = Column(Float, nullable=False)
     subtotal = Column(Float, nullable=False)
-    cotizacion = relationship("Cotizacion", back_populates="detalles")
-    producto = relationship("Producto")
+    cotizacion = relationship(argument="Cotizacion", back_populates="detalles")
+    producto = relationship(argument="Producto")
 
 
 # Modelo para Alertas

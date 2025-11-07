@@ -18,7 +18,12 @@ async def redis_limiter():
     try:
         r = await redis.from_url(redis_url)
         await r.ping()
-        await r.close()
+        # Limpiar la base de datos del Redis de pruebas para evitar interferencias entre ejecuciones
+        try:
+            await r.flushdb()
+        except Exception:
+            pass
+        await r.aclose()
     except Exception as e:
         pytest.skip(f"Redis not available: {e}")
 
@@ -28,7 +33,10 @@ async def redis_limiter():
     # Cleanup: close connection
     client = await limiter._get_client()
     if client:
-        await client.close()
+        try:
+            await client.aclose()
+        except Exception:
+            pass
 
 
 @pytest.mark.asyncio

@@ -208,14 +208,61 @@ async def request_password_reset(reset_data: PasswordResetRequest, db: Session =
     """
     Solicitar restablecimiento de contraseña
     """
+    import random
+    import string
+    import smtplib
+    from email.message import EmailMessage
+
+    codigo = None  # Inicializar fuera del bloque if
     user = get_user_by_email(db, reset_data.email)
     if user:
-        # En un sistema real, aquí enviaríamos un email con el token
-        # Por ahora, solo devolvemos un mensaje de éxito
-        pass
+        # Generar código de recuperación de 6 dígitos
+        codigo = ''.join(random.choices(string.digits, k=6))
+        user.codigo_recuperacion = codigo  # type: ignore[assignment]
+        # Expira en X minutos (configurable)
+        expiry = datetime.utcnow() + timedelta(minutes=getattr(settings, "password_reset_expire_minutes", 15))
+        user.codigo_recuperacion_expiry = expiry  # type: ignore[assignment]
+        # Limpiar intentos fallidos previos
+        user.reset_attempts = 0  # type: ignore[assignment]
+        user.reset_locked_until = None  # type: ignore[assignment]
+        db.commit()
+        
+        # Si SMTP está configurado, envia el correo; si no, en modo debug devolvemos el código para pruebas
+        try:
+            if settings.smtp_host and settings.smtp_user and settings.smtp_password:
+                msg = EmailMessage()
+                msg['Subject'] = 'Recuperación de contraseña - Código'
+                msg['From'] = settings.smtp_user
+                msg['To'] = reset_data.email
+                msg.set_content(f"Su código de recuperación es: {codigo}\nCaduca a las {expiry.isoformat()} UTC")
+                with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=10) as smtp:
+                    if settings.smtp_use_tls:
+                        smtp.starttls()
+                    smtp.login(settings.smtp_user, settings.smtp_password)
+                    smtp.send_message(msg)
+                # No devolvemos el código en la respuesta en producción
+                return {"message": "If the email exists, a password reset code has been sent"}
+        except Exception as e:
+            # Log the failure but don't raise so recovery still works in dev
+            try:
+                from app.core import audit_logging
 
+                audit_logging.audit_logger.log_audit_event(
+                    event="password_reset_email_failed",
+                    user_id=user.id_usuario if user.id_usuario is not None else 0,  # type: ignore[arg-type]
+                    ip_address="unknown",
+                    details={"error": str(e)},
+                )
+            except Exception:
+                pass
+            # If SMTP sending fails, fallback to returning code in debug
+
+        # En desarrollo o si SMTP no está configurado devolvemos el código para facilitar pruebas
+        if settings.debug and codigo:
+            return {"message": "Código de recuperación generado", "codigo": codigo}
+    
     # Siempre devolver el mismo mensaje para evitar enumeración de emails
-    return {"message": "If the email exists, a password reset link has been sent"}
+    return {"message": "If the email exists, a password reset code has been sent"}
 
 
 @router.post("/reset-password-confirm")
@@ -223,14 +270,66 @@ async def confirm_password_reset(reset_data: PasswordResetConfirm, db: Session =
     """
     Confirmar restablecimiento de contraseña
     """
-    # En un sistema real, verificaríamos el token aquí
-    # Por simplicidad, asumimos que el token es válido
-    # y actualizamos la contraseña
-
-    # Para este ejemplo, buscaremos por email en el token
-    # En producción, usaríamos un sistema de tokens JWT o similar
-
-    raise HTTPException(
-        status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Password reset functionality not fully implemented",
-    )
+    # Validar que las contraseñas cumplan con requisitos mínimos
+    if len(reset_data.new_password) < 6:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 6 characters long"
+        )
+    
+    user = get_user_by_email(db, reset_data.email)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    
+    # Verificar si el usuario está bloqueado por intentos fallidos
+    reset_locked_until = getattr(user, "reset_locked_until", None)
+    if reset_locked_until and datetime.utcnow() < reset_locked_until:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many failed attempts. Try again later."
+        )
+    
+    # Acceder al valor real del campo y su expiración
+    codigo_actual = getattr(user, "codigo_recuperacion", None)
+    codigo_expiry = getattr(user, "codigo_recuperacion_expiry", None)
+    
+    # Validar código
+    if not codigo_actual or codigo_actual != reset_data.codigo:
+        # Incrementar contador de intentos fallidos
+        reset_attempts = getattr(user, "reset_attempts", 0) or 0
+        reset_attempts += 1
+        setattr(user, "reset_attempts", reset_attempts)
+        
+        # Bloquear después de 5 intentos fallidos por 15 minutos
+        if reset_attempts >= 5:
+            locked_until = datetime.utcnow() + timedelta(minutes=15)
+            setattr(user, "reset_locked_until", locked_until)
+        
+        db.commit()
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid recovery code")
+    
+    # Validar expiración del código
+    if not codigo_expiry or datetime.utcnow() > codigo_expiry:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Recovery code expired")
+    
+    # Éxito: actualizar contraseña y limpiar
+    setattr(user, "password_hash", get_password_hash(reset_data.new_password))
+    setattr(user, "codigo_recuperacion", None)
+    setattr(user, "codigo_recuperacion_expiry", None)
+    setattr(user, "reset_attempts", 0)
+    setattr(user, "reset_locked_until", None)
+    db.commit()
+    
+    # Log de auditoría
+    try:
+        from app.core import audit_logging
+        audit_logging.audit_logger.log_audit_event(
+            event="password_reset_confirmed",
+            user_id=user.id_usuario if user.id_usuario is not None else 0,  # type: ignore[arg-type]
+            ip_address="unknown",
+            details={"email": reset_data.email},
+        )
+    except Exception:
+        pass
+    
+    return {"message": "Password reset successfully"}

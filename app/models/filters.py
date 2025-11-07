@@ -4,7 +4,7 @@ Modelos y utilidades para filtros avanzados
 
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ProductoFilters(BaseModel):
@@ -33,8 +33,8 @@ class ProductoFilters(BaseModel):
     estado: str | None = Field(default="Activo", description="Estado del producto")
     forma_farmaceutica: str | None = Field(default=None, description="Forma farmacéutica")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "nombre": "paracetamol",
                 "id_laboratorio": 1,
@@ -44,6 +44,7 @@ class ProductoFilters(BaseModel):
                 "estado": "Activo",
             }
         }
+    )
 
 
 class LaboratorioFilters(BaseModel):
@@ -53,10 +54,11 @@ class LaboratorioFilters(BaseModel):
     pais_origen: str | None = Field(default=None, description="Filtrar por país")
     estado: str | None = Field(default="Activo", description="Estado del laboratorio")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {"nombre": "Bayer", "pais_origen": "Alemania", "estado": "Activo"}
         }
+    )
 
 
 class SeccionFilters(BaseModel):
@@ -66,14 +68,15 @@ class SeccionFilters(BaseModel):
     ubicacion_fisica: str | None = Field(default=None, description="Filtrar por ubicación")
     estado: str | None = Field(default="Activo", description="Estado de la sección")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "nombre": "Analgésicos",
                 "ubicacion_fisica": "Pasillo A",
                 "estado": "Activo",
             }
         }
+    )
 
 
 class AlertaFilters(BaseModel):
@@ -87,10 +90,11 @@ class AlertaFilters(BaseModel):
     fecha_desde: datetime | None = Field(default=None, description="Fecha de creación desde")
     fecha_hasta: datetime | None = Field(default=None, description="Fecha de creación hasta")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {"tipo_alerta": "stock_bajo", "prioridad": "Alta", "estado": "Activo"}
         }
+    )
 
 
 class VentaFilters(BaseModel):
@@ -105,8 +109,8 @@ class VentaFilters(BaseModel):
     metodo_pago: str | None = Field(default=None, description="Método de pago")
     estado: str | None = Field(default="Activo", description="Estado de la venta")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "fecha_desde": "2024-01-01T00:00:00",
                 "fecha_hasta": "2024-12-31T23:59:59",
@@ -114,6 +118,7 @@ class VentaFilters(BaseModel):
                 "metodo_pago": "Efectivo",
             }
         }
+    )
 
 
 def apply_text_filter(query, model_field, filter_value: str | None):

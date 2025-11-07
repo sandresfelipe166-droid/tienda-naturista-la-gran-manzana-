@@ -328,7 +328,19 @@ class ClienteUpdate(BaseModel):
 
 
 # ==========================
-# Usuarios y Auth
+# Roles
+# ==========================
+class RolResponse(BaseModel):
+    id_rol: int
+    nombre_rol: str
+    descripcion: str | None = None
+    permisos: str | None = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+# ==========================
+# Users & Auth
 # ==========================
 class UserBase(BaseModel):
     username: str
@@ -350,6 +362,7 @@ class UserResponse(BaseModel):
     fecha_creacion: datetime | None = None
     ultima_acceso: datetime | None = None
     id_rol: int
+    rol: RolResponse | None = None  # Incluir datos del rol
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -360,6 +373,7 @@ class UserUpdate(BaseModel):
     nombre_completo: str | None = None
     estado: EstadoEnum | None = None
     password: str | None = None
+    id_rol: int | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -395,7 +409,8 @@ class PasswordResetRequest(BaseModel):
 
 
 class PasswordResetConfirm(BaseModel):
-    token: str
+    email: EmailStr
+    codigo: str
     new_password: str
 
 

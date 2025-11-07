@@ -156,6 +156,9 @@ class Settings(BaseSettings):
     scheduler_interval_hours: int = int(os.getenv("SCHEDULER_INTERVAL_HOURS", "24"))
     scheduler_timezone: str = os.getenv("SCHEDULER_TIMEZONE", "UTC")
 
+    # Password reset
+    password_reset_expire_minutes: int = int(os.getenv("PASSWORD_RESET_EXPIRE_MINUTES", "15"))
+
     # Health/Monitoring toggles
     health_check_enabled: bool = os.getenv("HEALTH_CHECK_ENABLED", "true").lower() == "true"
     db_health_check_enabled: bool = os.getenv("DB_HEALTH_CHECK_ENABLED", "true").lower() == "true"

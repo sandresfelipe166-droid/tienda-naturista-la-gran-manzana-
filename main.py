@@ -10,7 +10,10 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 
 from app.api.v1.router import api_router
+from app.core.cache import cache_manager
+from app.core.compression import CompressionMiddleware
 from app.core.config import settings
+from app.core.config_validator import validate_config_on_startup
 from app.core.error_responses import register_error_handlers
 from app.core.exception_handlers import (
     database_exception_handler,
@@ -35,6 +38,9 @@ from app.core.security_middleware import (
 from app.models.database import Base, SessionLocal, engine
 from app.models.models import Rol
 from app.routers.health import router as health_router
+from app.routers.health_advanced import router as health_advanced_router
+from app.routers.resilience import router as resilience_router
+from app.routers.websocket import router as websocket_router
 
 # Configure logging
 logging.basicConfig(
@@ -46,6 +52,9 @@ logger = logging.getLogger(__name__)
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
+        # Validate configuration on startup
+        validate_config_on_startup(settings, strict=False)
+        
         # Create schema only if explicitly enabled and not during tests (prefer Alembic)
         if settings.create_schema_on_startup and os.getenv("TESTING") != "true":
             Base.metadata.create_all(bind=engine)
@@ -85,6 +94,9 @@ app = FastAPI(
 
 # Add request ID middleware (early so downstream can use request.state.request_id)
 app.add_middleware(RequestIdMiddleware)
+
+# Add compression middleware (debe ir temprano para comprimir todas las respuestas)
+app.add_middleware(CompressionMiddleware, minimum_size=500)
 
 # Add CORS middleware with advanced configuration
 app.add_middleware(
@@ -130,6 +142,9 @@ register_error_handlers(app)
 # Include routers
 app.include_router(api_router)
 app.include_router(health_router, prefix="/api/v1", tags=["health"])
+app.include_router(health_advanced_router, prefix="/api/v1", tags=["health"])
+app.include_router(resilience_router, prefix="/api/v1/resilience", tags=["resilience"])
+app.include_router(websocket_router, prefix="/api/v1/ws", tags=["websocket"])
 
 # Expose Prometheus metrics endpoint if enabled
 if settings.prometheus_enabled:
@@ -173,6 +188,8 @@ async def root():
         "health": "/api/v1/health",
         "health_detailed": "/api/v1/health/detailed",
         "metrics": "/api/v1/health/metrics",
+        "websocket": "/api/v1/ws/notifications",
+        "resilience": "/api/v1/resilience/circuit-breakers",
     }
 
 

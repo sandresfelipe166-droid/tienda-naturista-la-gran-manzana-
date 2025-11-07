@@ -1,5 +1,6 @@
 import time
 from datetime import datetime
+from uuid import uuid4
 
 import redis.asyncio as aioredis
 
@@ -30,17 +31,12 @@ class RedisRateLimiter:
         now = time.time()
         window_start = now - window  # noqa: F841 used for zremrangebyscore
         rkey = f"ratelimit:{key}"
-        async with client.pipeline() as pipe:
-            # Remove old entries
-            await pipe.zremrangebyscore(rkey, 0, window_start)
-            # Add current
-            await pipe.zadd(rkey, {str(now): now})
-            # Set TTL slightly larger than window
-            await pipe.expire(rkey, window + 5)
-            # Get count
-            await pipe.zcard(rkey)
-            res = await pipe.execute()
-        count = int(res[-1]) if res and res[-1] is not None else 0
+        # Use sequential commands for reliability across redis-py versions
+        await client.zremrangebyscore(rkey, 0, window_start)
+        member = f"{now}-{uuid4().hex}"
+        await client.zadd(rkey, {member: now})
+        await client.expire(rkey, window + 5)
+        count = int(await client.zcard(rkey))
         return count <= limit
 
     async def get_remaining(self, key: str, limit: int, window: int) -> int:

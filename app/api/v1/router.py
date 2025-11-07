@@ -9,9 +9,11 @@ from app.routers import (
     inventory,
     laboratorios,
     productos,
+    roles,
     secciones,
     ventas,
 )
+from app.routers.business_metrics import router as business_metrics_router
 from app.routers.dashboard import router as dashboard_router
 from app.routers.notificaciones import router as notificaciones_router
 from app.routers.productos_advanced import router as productos_advanced_router
@@ -31,6 +33,7 @@ api_router.include_router(inventory.router)
 api_router.include_router(productos.router, prefix="/productos")
 api_router.include_router(auth.router, prefix="/auth")
 api_router.include_router(users_router)
+api_router.include_router(roles.router)  # Roles router
 # Nuevos routers: ventas, gastos y cotizaciones
 api_router.include_router(ventas.router)
 api_router.include_router(gastos.router)
@@ -42,6 +45,8 @@ api_router.include_router(dashboard_router)
 api_router.include_router(notificaciones_router)
 api_router.include_router(scheduler_router)
 api_router.include_router(entradas.router)
+# Business metrics
+api_router.include_router(business_metrics_router)
 
 
 # API info endpoint
@@ -65,6 +70,7 @@ async def api_info():
             "entradas": "/api/v1/entradas",
             "reportes": "/api/v1/reportes",
             "dashboard": "/api/v1/dashboard",
+            "business_metrics": "/api/v1/metrics/business",
             "notificaciones": "/api/v1/notificaciones",
             "scheduler": "/api/v1/scheduler",
         },

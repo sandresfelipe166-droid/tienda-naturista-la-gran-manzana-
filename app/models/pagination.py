@@ -5,7 +5,7 @@ Modelos y utilidades para paginación mejorada
 from math import ceil
 from typing import Generic, TypeVar
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 T = TypeVar('T')
 
@@ -54,8 +54,8 @@ class PaginatedResponse(BaseModel, Generic[T]):
     data: list[T] = Field(description="Lista de elementos")
     pagination: PaginationMeta = Field(description="Información de paginación")
 
-    class Config:
-        json_schema_extra = {
+    model_config = ConfigDict(
+        json_schema_extra={
             "example": {
                 "success": True,
                 "message": "Datos obtenidos exitosamente",
@@ -70,6 +70,7 @@ class PaginatedResponse(BaseModel, Generic[T]):
                 },
             }
         }
+    )
 
 
 class SortParams(BaseModel):
