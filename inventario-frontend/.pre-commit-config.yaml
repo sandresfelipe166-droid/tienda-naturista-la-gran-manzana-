@@ -1,0 +1,64 @@
+repos:
+  # Ruff - Linter y formatter ultrarrápido (reemplaza black, isort, flake8)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.3
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # Validaciones básicas de archivos
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^\.github/
+      - id: end-of-file-fixer
+        exclude: ^\.github/
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-toml
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # Validación de tipos con mypy
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.7.1
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - types-requests
+          - types-redis
+        args: [--ignore-missing-imports, --no-strict-optional]
+        exclude: ^(tests/|alembic/)
+
+  # Seguridad - detección de secretos
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: package.lock.json
+
+  # Tests automáticos antes de commit (solo tests rápidos)
+  - repo: local
+    hooks:
+      - id: pytest-fast
+        name: pytest-fast
+        entry: python -m pytest tests/ -q --tb=short -x
+        language: system
+        types: [python]
+        pass_filenames: false
+        stages: [commit]
+
+default_language_version:
+  python: python3
+
+ci:
+  autofix_commit_msg: "chore(pre-commit): auto fixes from pre-commit hooks"
+  autoupdate_commit_msg: "chore(pre-commit): autoupdate hooks"

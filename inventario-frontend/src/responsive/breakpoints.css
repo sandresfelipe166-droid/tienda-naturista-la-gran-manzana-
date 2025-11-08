@@ -1,0 +1,38 @@
+:root {
+  --bp-xs: 360px; /* teléfonos pequeños */
+  --bp-sm: 480px; /* teléfonos estándar */
+  --bp-md: 768px; /* tablets vertical */
+  --bp-lg: 1024px; /* tablets horizontal / desktop pequeño */
+  --bp-xl: 1280px; /* desktop */
+}
+
+/* Utilidades ejemplo */
+.hide-mobile { display: none; }
+@media (min-width: var(--bp-md)) {
+  .hide-mobile { display: initial; }
+}
+
+.stack { display: flex; flex-direction: column; gap: .75rem; }
+.row { display: flex; flex-direction: row; gap: .75rem; flex-wrap: wrap; }
+
+@media (max-width: var(--bp-sm)) {
+  .grid-responsive {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+@media (min-width: var(--bp-sm)) and (max-width: var(--bp-md)) {
+  .grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+@media (min-width: var(--bp-md)) {
+  .grid-responsive {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}

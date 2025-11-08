@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: inventario-backend
+    runtime: docker
+    rootDir: inventario-backend
+    dockerfilePath: inventario-backend/Dockerfile
+    autoDeploy: true
+    plan: starter
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: SSL_ENABLED
+        value: "true"
+      - key: CORS_ORIGINS
+        # Reemplaza con la URL del frontend en Render cuando la tengas
+        value: https://inventario-frontend.onrender.com
+      - key: TRUSTED_HOSTS
+        value: "*"
+      # Config DB (usa Render PostgreSQL o tu propio DBaaS)
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+
+  - type: web
+    name: inventario-frontend
+    runtime: static
+    rootDir: inventario-frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeploy: true
+    pullRequestPreviewsEnabled: false
+    envVars:
+      - key: VITE_API_URL
+        # Reemplaza con la URL pública del backend en Render (p.ej. https://inventario-backend.onrender.com)
+        value: https://inventario-backend.onrender.com
+      - key: VITE_API_V1
+        value: /api/v1
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /(.*)
+        destination: /index.html

@@ -1,0 +1,339 @@
+/* ========================================
+   RESPONSIVE MOBILE - NAVEGACIÓN INFERIOR
+   ======================================== */
+
+/* ==========================================================
+   OVERRIDE SOLICITADO: Sidebar fijo a la IZQUIERDA en móvil
+   (Se reemplaza navegación inferior anterior) 
+   ========================================================== */
+/* Breakpoints y utilidades integradas (antes en responsive/breakpoints.css) */
+:root {
+  --bp-xs: 360px;
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+}
+.stack { display:flex; flex-direction:column; gap:.75rem; }
+.row { display:flex; flex-direction:row; gap:.75rem; flex-wrap:wrap; }
+@media (max-width: var(--bp-sm)) { .grid-responsive { display:grid; grid-template-columns:1fr; gap:1rem; } }
+@media (min-width: var(--bp-sm)) and (max-width: var(--bp-md)) { .grid-responsive { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; } }
+@media (min-width: var(--bp-md)) { .grid-responsive { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; } }
+@media (max-width: 768px) {
+  /* Mantener layout horizontal */
+  .dashboard-layout {
+    flex-direction: row !important;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Sidebar vertical estrecho */
+  .sidebar {
+    position: fixed !important;
+    top: 0; left: 0; bottom: 0;
+    width: 72px !important;
+    min-width: 72px !important;
+    max-width: 72px !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    z-index: 1000;
+    padding: 0.75rem 0.4rem !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    background: #ffffff;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.12) !important;
+    border-right: 1px solid #e2e8f0;
+    border-radius: 0 !important;
+  }
+
+  .sidebar-logo {
+    display: block !important;
+    width: 42px !important;
+    height: 42px !important;
+    margin: 0 0 0.6rem 0 !important;
+  }
+
+  .sidebar-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0.4rem !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: none;
+  }
+  .sidebar-menu::-webkit-scrollbar { display: none; }
+
+  .sidebar-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column !important;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 0.35rem !important;
+    border-radius: 10px !important;
+    gap: 0.25rem !important;
+    min-width: auto !important;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .sidebar-item:hover { background: rgba(46,139,87,0.08); }
+  .sidebar-item.active {
+    background: linear-gradient(135deg,#2E8B57 0%,#3CB371 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 3px 10px rgba(46,139,87,0.25);
+  }
+
+  /* Tooltip flotante al pasar (solo cuando no expandida) */
+  .sidebar:not(.expanded) .sidebar-item:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #1e293b;
+    color: #fff;
+    padding: .4rem .6rem;
+    font-size: .65rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,.25);
+    z-index: 1100;
+  }
+  .sidebar:not(.expanded) .sidebar-item { position: relative; }
+
+  .sidebar-item svg,
+  .sidebar-item-icon {
+    width: 22px;
+    height: 22px;
+    margin: 0 !important;
+  }
+  .sidebar-label {
+    font-size: 0.58rem !important;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.05;
+    max-width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Estado expandido (mobile) */
+  .sidebar.expanded {
+    width: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    align-items: stretch !important;
+    padding: 0.75rem 0.6rem !important;
+  }
+  .sidebar.expanded .sidebar-item {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem !important;
+    padding: 0.6rem 0.5rem !important;
+  }
+  .sidebar.expanded .sidebar-label {
+    max-width: none;
+    font-size: 0.8rem !important;
+  }
+
+  /* Área principal desplazada a la derecha */
+  .dashboard-main-area {
+    margin-left: 72px !important;
+    width: calc(100% - 72px) !important;
+    max-width: calc(100% - 72px) !important;
+    height: 100vh !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 0 !important;
+  }
+
+  /* Cuando la sidebar está expandida, aumentar margen */
+  .dashboard-main-area.expanded {
+    margin-left: 180px !important;
+    width: calc(100% - 180px) !important;
+    max-width: calc(100% - 180px) !important;
+  }
+
+  /* Header superior fijo */
+  .dashboard-header {
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    padding: 0.6rem 1rem !important;
+    margin: 0 !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    z-index: 900;
+  }
+  .header-title { font-size: 1.05rem !important; margin: 0; }
+  .user-info { flex-direction: row !important; gap: 0.45rem !important; }
+  .logout-button, .notification-bell-btn, .admin-button { font-size: 0.68rem !important; }
+
+  /* Métricas en 2 columnas */
+  .metrics-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.65rem !important;
+    margin-bottom: 0.8rem !important;
+    padding: 0 0.5rem;
+  }
+  .metric-card.modern { padding: 0.9rem !important; min-height: 104px !important; }
+  .metric-icon-circle { width: 46px !important; height: 46px !important; }
+  .metric-label { font-size: 0.68rem !important; }
+  .metric-value { font-size: 1.45rem !important; }
+
+  /* Productos / listas en una columna */
+  .products-grid,
+  .ventas-list,
+  .gastos-list,
+  .entradas-list {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem !important;
+    padding: 0 0.6rem 0.9rem 0.6rem;
+  }
+
+  /* Botones táctiles */
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    padding: 0.65rem 1.1rem !important;
+    font-size: 0.85rem !important;
+    min-height: 42px;
+  }
+
+  /* Formularios */
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px !important;
+    padding: 0.65rem !important;
+    min-height: 42px;
+  }
+
+  /* Modales */
+  .modal-content {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    margin: 5vh auto !important;
+    border-radius: 16px !important;
+  }
+  .hide-mobile { display: none !important; }
+  .notification-panel { width: 100vw !important; right: 0 !important; border-radius: 16px 16px 0 0 !important; }
+}
+
+/* Extra small devices */
+@media (max-width: 480px) {
+  .sidebar-label {
+    font-size: 0.6rem !important;
+  }
+
+  .sidebar-item svg,
+  .sidebar-item-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .sidebar-item {
+    padding: 0.4rem 0.15rem !important;
+  }
+
+  .metrics-row {
+    gap: 0.5rem !important;
+  }
+
+  .metric-card.modern {
+    padding: 0.75rem !important;
+    min-height: 100px !important;
+  }
+
+  .header-title {
+    font-size: 1.25rem !important;
+  }
+}
+
+/* Landscape móvil */
+@media (max-width: 768px) and (orientation: landscape) {
+  .sidebar {
+    height: 60px !important;
+    min-height: 60px !important;
+  }
+
+  .sidebar-item {
+    flex-direction: row !important;
+    gap: 0.5rem !important;
+  }
+
+  .sidebar-label {
+    font-size: 0.7rem !important;
+  }
+
+  .dashboard-main-area {
+    height: calc(100vh - 60px) !important;
+  }
+}
+
+/* Tablets (portrait) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .sidebar {
+    width: 200px !important;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ========================================
+   MEJORAS VISUALES MÓVILES
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Smooth scroll */
+  .dashboard-main-area {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Safe area para notch/dynamic island */
+  .dashboard-header {
+    padding-top: env(safe-area-inset-top, 1rem) !important;
+  }
+
+  .sidebar {
+    padding-bottom: env(safe-area-inset-bottom, 0) !important;
+    height: calc(70px + env(safe-area-inset-bottom, 0)) !important;
+  }
+
+  /* Touch targets mínimo 44x44px */
+  button,
+  a,
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Reducir animaciones para performance */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+
+  /* Optimizar fonts para legibilidad móvil */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}

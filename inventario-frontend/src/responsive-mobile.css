@@ -1,0 +1,1173 @@
+/* ============================================
+   MOBILE-FIRST RESPONSIVE IMPROVEMENTS
+   ============================================ */
+
+/* Prevent zoom on double tap in iOS */
+input,
+button,
+a {
+  -webkit-touch-callout: none;
+}
+
+/* Better text rendering on mobile */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  background-color: #f5f5f5;
+}
+
+/* Viewport fit for notched devices (iPhone X+) */
+body {
+  padding: max(0px, env(safe-area-inset-top)) max(0px, env(safe-area-inset-right)) max(0px, env(safe-area-inset-bottom)) max(0px, env(safe-area-inset-left));
+}
+
+/* ============================================
+   MOBILE FIRST - Base estilos
+   ============================================ */
+
+/* DESKTOP FIRST - Mantener diseño normal en pantallas grandes */
+@media (min-width: 769px) {
+  .dashboard-layout {
+    flex-direction: row !important;
+  }
+
+  .sidebar {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    position: sticky !important;
+    top: 0 !important;
+    flex-direction: column !important;
+    padding: 1.5rem 0.5rem 1rem 0.5rem !important;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+    border-bottom: none !important;
+  }
+
+  .sidebar-logo {
+    margin-bottom: 2rem !important;
+    margin-right: 0 !important;
+    width: 100px !important;
+    height: 100px !important;
+  }
+
+  .sidebar-menu {
+    flex-direction: column !important;
+    gap: 0.3rem !important;
+    margin-top: 0.5rem !important;
+    flex-wrap: nowrap !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+  }
+
+  .sidebar-item {
+    padding: 0.9rem 1.1rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    min-height: auto !important;
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+  }
+
+  .sidebar-icon {
+    font-size: 1rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  .sidebar-label {
+    font-size: 0.7rem !important;
+    text-align: left !important;
+  }
+
+  .dashboard-main-area {
+    max-width: calc(100% - 220px) !important;
+  }
+
+  .dashboard-header {
+    padding: 0.8rem 1.5rem !important;
+  }
+
+  .header-content h1 {
+    font-size: 1.3rem !important;
+    display: block !important;
+  }
+
+  .user-info {
+    flex-direction: row !important;
+    gap: 0.8rem !important;
+  }
+
+  .user-name {
+    font-size: 0.95rem !important;
+    max-width: none !important;
+  }
+}
+
+/* Muy pequeño: 320px - 480px */
+@media (max-width: 480px) {
+  .dashboard-layout {
+    flex-direction: column !important;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    position: relative !important;
+    flex-direction: row !important;
+    padding: 0.75rem 0.5rem !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    border-bottom: 2px solid #2E8B57 !important;
+  }
+
+  .sidebar-logo {
+    width: 50px !important;
+    height: 50px !important;
+    margin-bottom: 0 !important;
+    margin-right: 0.5rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .sidebar-menu {
+    flex-direction: row !important;
+    gap: 0.2rem !important;
+    margin-top: 0 !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .sidebar-item {
+    padding: 0.5rem 0.6rem !important;
+    font-size: 0.6rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    flex-direction: column !important;
+  }
+
+  .sidebar-icon {
+    font-size: 1rem !important;
+    margin-bottom: 0.2rem !important;
+  }
+
+  .sidebar-label {
+    font-size: 0.55rem !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    line-height: 1.1 !important;
+  }
+
+  .dashboard-main-area {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .dashboard-main {
+    padding: 0.75rem !important;
+    gap: 1rem !important;
+  }
+
+  .dashboard-header {
+    padding: 0.5rem !important;
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 100 !important;
+    background: #fff !important;
+  }
+
+  .header-content {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .header-content h1 {
+    font-size: 0.9rem !important;
+    display: none !important; /* Ocultar título en móvil para ahorrar espacio */
+  }
+
+  .user-info {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.4rem !important;
+    width: 100% !important;
+    justify-content: flex-end !important;
+  }
+
+  .user-name {
+    font-size: 0.7rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100px !important;
+  }
+
+  .notification-bell-wrapper {
+    margin-right: 0 !important;
+  }
+
+  .notification-bell-btn {
+    font-size: 1.2rem !important;
+    padding: 0.3rem !important;
+  }
+
+  .admin-button {
+    padding: 0.3rem 0.6rem !important;
+    font-size: 0.7rem !important;
+    margin-right: 0 !important;
+  }
+
+  .logout-button {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.7rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Mostrar el icono de administración en móvil solo si el usuario es admin */
+  .admin-button {
+    display: inline-block !important;
+    visibility: visible !important;
+  }
+
+  /* Asegurar que los botones de notificación y cerrar sesión sean visibles */
+  .notification-bell-wrapper,
+  .notification-bell-btn,
+  .logout-button {
+    display: inline-block !important;
+    visibility: visible !important;
+  }
+
+  /* Métricas en grid de 2 columnas */
+  .metrics-row {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .metric-card.modern {
+    padding: 1rem 0.8rem;
+    min-height: 120px;
+    gap: 0.5rem;
+  }
+
+  .metric-icon-circle {
+    width: 50px;
+    height: 50px;
+  }
+
+  .metric-card.modern .metric-value {
+    font-size: 1.5rem;
+  }
+
+  .metric-card.modern .metric-label {
+    font-size: 0.75rem;
+  }
+
+  /* Grid de productos */
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+
+  .product-card.modern {
+    padding: 0.8rem;
+  }
+
+  /* Tabla responsiva */
+  .products-table {
+    border-radius: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .products-table table {
+    min-width: 100%;
+    font-size: 0.7rem;
+  }
+
+  .products-table th,
+  .products-table td {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.7rem;
+  }
+
+  .products-table th {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    z-index: 10;
+  }
+
+  /* Ocultar columnas menos importantes en móvil */
+  .products-table th:nth-child(4), /* Total */
+  .products-table td:nth-child(4) {
+    display: none;
+  }
+
+  /* Hacer acciones más accesibles */
+  .actions {
+    gap: 0.3rem;
+  }
+
+  .btn-edit,
+  .btn-delete {
+    font-size: 1.1rem;
+    padding: 0.4rem 0.5rem;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  /* Badge más pequeño */
+  .badge {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.6rem;
+  }
+
+  /* Modal */
+  .modal-content {
+    width: 95vw;
+    max-height: 90vh;
+    border-radius: 12px;
+  }
+
+  .modal-header h3 {
+    font-size: 1rem;
+  }
+
+  /* Botones accesibles para dedo */
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Inputs del formulario */
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    font-size: 16px; /* Previene zoom en iOS */
+    padding: 12px;
+    min-height: 44px;
+  }
+
+  /* Section header */
+  .section-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-header h2 {
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .add-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .view-all-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+  }
+
+  /* Toolbar */
+  .section-toolbar {
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+  }
+
+  .section-toolbar .search-bar {
+    width: 100%;
+  }
+
+  .section-toolbar .search-bar input[type="search"] {
+    min-width: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .section-toolbar .filters {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .section-toolbar .filters select {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .toggle-stock-bajo {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+    justify-content: center;
+  }
+
+  /* Activity card */
+  .activity-card {
+    margin-bottom: 1rem;
+  }
+
+  .activity-item {
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+  }
+
+  .activity-icon {
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+  }
+
+  .activity-title {
+    font-size: 0.9rem;
+  }
+
+  .activity-time {
+    font-size: 0.75rem;
+  }
+
+  /* Welcome card */
+  .welcome-card {
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .welcome-content {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .welcome-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .welcome-text h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .welcome-text p {
+    font-size: 0.9rem;
+  }
+
+  /* Grid de 2 columnas */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Pequeño: 480px - 768px */
+@media (min-width: 481px) and (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column !important;
+  }
+
+  .sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    position: relative !important;
+    flex-direction: row !important;
+    padding: 1rem 0.5rem !important;
+    overflow-x: auto !important;
+  }
+
+  .sidebar-menu {
+    flex-direction: row !important;
+    gap: 0.3rem !important;
+    margin-top: 0 !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+  }
+
+  .sidebar-item {
+    padding: 0.6rem 0.8rem !important;
+    font-size: 0.7rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dashboard-main {
+    padding: 1rem !important;
+    gap: 1rem !important;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  .header-content {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
+
+  .user-info {
+    width: auto !important;
+    flex-direction: row !important;
+  }
+
+  .dashboard-main-area {
+    max-width: 100% !important;
+  }
+}
+
+/* Mediano: 768px - 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard-layout {
+    flex-direction: row !important;
+  }
+
+  .sidebar {
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+  }
+
+  .sidebar-menu {
+    flex-direction: column !important;
+  }
+
+  .sidebar-item {
+    flex-direction: row !important;
+  }
+
+  .dashboard-main-area {
+    max-width: calc(100% - 200px) !important;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+
+  .dashboard-main {
+    padding: 1.5rem !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
+
+/* Grande: 1024px+ */
+@media (min-width: 1025px) {
+  .dashboard-layout {
+    flex-direction: row !important;
+  }
+
+  .sidebar {
+    width: 220px !important;
+    min-width: 220px !important;
+    max-width: 220px !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+  }
+
+  .sidebar-menu {
+    flex-direction: column !important;
+  }
+
+  .sidebar-item {
+    flex-direction: row !important;
+  }
+
+  .dashboard-main-area {
+    max-width: calc(100% - 220px) !important;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.5rem !important;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)) !important;
+    gap: 1.5rem !important;
+  }
+
+  .dashboard-main {
+    padding: 2rem !important;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2rem !important;
+  }
+}
+
+/* ============================================
+   ORIENTACIÓN Y TABLET ESPECÍFICO
+   ============================================ */
+
+/* iPad en vertical */
+@media (min-width: 768px) and (max-height: 1024px) and (orientation: portrait) {
+  .dashboard-main {
+    padding: 1.5rem;
+  }
+
+  .metrics-row {
+    gap: 1rem;
+  }
+}
+
+/* iPad en horizontal */
+@media (min-width: 1024px) and (max-height: 768px) and (orientation: landscape) {
+  .dashboard-main {
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .metrics-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* ============================================
+   TOUCH DEVICES - Mejoras
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Buttons con más tamaño en touch */
+  button,
+  a,
+  .sidebar-item {
+    min-height: 48px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Remover hover inútil en touch */
+  .sidebar-item:hover {
+    background: rgba(56, 189, 248, 0.1);
+  }
+
+  .product-card.modern:hover {
+    transform: scale(1);
+  }
+
+  .metric-card.modern:hover {
+    transform: scale(1);
+  }
+
+  /* Agregar active state en lugar de hover */
+  .sidebar-item:active {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+
+  button:active {
+    transform: scale(0.98);
+  }
+
+  /* Input focus mejorado */
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-width: 3px;
+    box-shadow: 0 0 0 6px rgba(46, 139, 87, 0.2);
+  }
+}
+
+/* ============================================
+   SAFE AREA PADDING (Notched devices)
+   ============================================ */
+
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+
+  .sidebar {
+    padding-top: max(0.5rem, env(safe-area-inset-top));
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+
+  .modal-overlay {
+    padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+}
+
+/* ============================================
+   ORIENTACIÓN DINÁMICA
+   ============================================ */
+
+@media (orientation: portrait) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .dashboard-layout {
+    flex-direction: column;
+  }
+}
+
+@media (orientation: landscape) {
+  .dashboard-layout {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    height: 100vh;
+    width: auto;
+  }
+
+  .sidebar-menu {
+    flex-direction: column;
+  }
+}
+
+/* ============================================
+   TIPOGRAFÍA RESPONSIVE
+   ============================================ */
+
+/* Escalar fuentes dinámicamente */
+@media (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1025px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* ============================================
+   LAYOUT IMPROVEMENTS
+   ============================================ */
+
+/* Prevenir horizontal scroll */
+* {
+  max-width: 100%;
+}
+
+/* Better form inputs */
+input,
+textarea,
+select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Flexbox ajustado */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Imagen responsiva */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   SCROLLING Y ANIMATIONS
+   ============================================ */
+
+/* Smooth scrolling solo en desktop */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Reducir animaciones en dispositivos con preferencias */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================
+   KEYBOARD NAVIGATION
+   ============================================ */
+
+/* Visible focus indicators */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid #2E8B57;
+  outline-offset: 2px;
+}
+
+/* ============================================
+   IMPRENTA
+   ============================================ */
+
+@media print {
+  .sidebar,
+  .dashboard-header,
+  .logout-button,
+  button {
+    display: none;
+  }
+
+  .dashboard-main {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+/* ============================================
+   MEJORAS ESPECÍFICAS PARA VISTA DE PRODUCTOS EN MÓVIL
+   ============================================ */
+
+@media (max-width: 480px) {
+  /* Hacer la tabla más compacta */
+  .productos-view .section-header {
+    position: sticky;
+    top: 60px; /* Debajo del header */
+    background: #f1f5f9;
+    z-index: 9;
+    padding: 0.5rem 0;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Búsqueda y filtros más compactos */
+  .section-toolbar {
+    position: sticky;
+    top: 105px; /* Debajo del section header */
+    background: #f1f5f9;
+    z-index: 8;
+    padding: 0.5rem 0;
+  }
+
+  /* Tabla con scroll horizontal suave */
+  .products-table {
+    margin-top: 0.5rem;
+  }
+
+  /* Mostrar solo las columnas más importantes en móvil */
+  .products-table th:nth-child(3), /* Precio */
+  .products-table td:nth-child(3),
+  .products-table th:nth-child(4), /* Total */
+  .products-table td:nth-child(4) {
+    display: none;
+  }
+
+  /* Hacer la columna de nombre más ancha */
+  .products-table th:nth-child(1),
+  .products-table td:nth-child(1) {
+    min-width: 120px;
+    max-width: 150px;
+  }
+
+  /* Columna de stock más visible */
+  .products-table th:nth-child(2),
+  .products-table td:nth-child(2) {
+    min-width: 50px;
+    text-align: center;
+  }
+
+  /* Estado más compacto */
+  .products-table th:nth-child(5),
+  .products-table td:nth-child(5) {
+    min-width: 80px;
+  }
+
+  /* Acciones más accesibles */
+  .products-table th:nth-child(6),
+  .products-table td:nth-child(6) {
+    min-width: 80px;
+    text-align: center;
+  }
+
+  /* Nombre de producto con ellipsis */
+  .products-table td:nth-child(1) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Dashboard grid en una sola columna */
+  .dashboard-column {
+    width: 100%;
+  }
+
+  /* Métricas más grandes y legibles */
+  .metric-card.modern {
+    padding: 1.2rem 1rem;
+    min-height: 110px;
+  }
+
+  .metric-icon-circle {
+    width: 48px;
+    height: 48px;
+  }
+
+  .metric-card.modern .metric-value {
+    font-size: 1.8rem;
+  }
+
+  .metric-card.modern .metric-label {
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  /* Formularios más accesibles */
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .form-field label {
+    font-size: 0.85rem;
+  }
+
+  .form-field input,
+  .form-field textarea,
+  .form-field select {
+    font-size: 16px !important; /* Previene zoom en iOS */
+    padding: 0.7rem;
+  }
+
+  /* Modal más grande */
+  .modal-content {
+    width: 95vw;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .modal-body {
+    max-height: calc(85vh - 100px);
+    overflow-y: auto;
+  }
+
+  /* Botones del formulario */
+  .form-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-actions button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* Empty state */
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .empty-state p {
+    font-size: 0.95rem;
+  }
+
+  /* Stats mini cards */
+  .stats-mini {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .stat-mini-card {
+    padding: 1rem;
+  }
+
+  .stat-mini-label {
+    font-size: 0.75rem;
+  }
+
+  .stat-mini-value {
+    font-size: 1.5rem;
+  }
+
+  /* Activity items más compactos */
+  .activity-item {
+    padding: 0.5rem 0;
+  }
+
+  .activity-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+  }
+
+  /* Welcome card */
+  .welcome-card {
+    padding: 0.75rem;
+  }
+
+  .welcome-content {
+    gap: 0.5rem;
+  }
+
+  .welcome-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .welcome-text h3 {
+    font-size: 1rem;
+  }
+
+  .welcome-text p {
+    font-size: 0.85rem;
+  }
+
+  /* Product cards en lista */
+  .products-list {
+    gap: 0.5rem;
+  }
+
+  .product-card.compact {
+    padding: 0.7rem 0.9rem;
+  }
+
+  .product-card.compact .product-card-header h3 {
+    font-size: 0.95rem;
+  }
+
+  .product-card.compact .product-info {
+    font-size: 0.85rem;
+  }
+
+  /* Info card */
+  .info-card {
+    padding: 0.8rem 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .info-card p {
+    font-size: 0.85rem;
+  }
+
+  /* Toast notifications */
+  .toast {
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    text-align: center;
+    font-size: 0.85rem;
+    padding: 0.75rem;
+  }
+
+  /* Notification panel */
+  .notification-bell-wrapper {
+    position: relative;
+  }
+
+  .notification-badge {
+    width: 16px !important;
+    height: 16px !important;
+    font-size: 0.65rem !important;
+    top: -3px !important;
+    right: -3px !important;
+  }
+}
+
+/* ============================================
+   MEJORAS PARA TABLETS (481px - 768px)
+   ============================================ */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .products-table th:nth-child(4), /* Total */
+  .products-table td:nth-child(4) {
+    display: table-cell; /* Mostrar columna Total en tablet */
+  }
+
+  .section-header {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .section-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .add-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+  }
+
+  .metric-card.modern .metric-value {
+    font-size: 1.6rem;
+  }
+
+  .metric-card.modern .metric-label {
+    font-size: 0.8rem;
+  }
+}
+

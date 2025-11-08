@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "resolveJsonModule": true,
+    "allowJs": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "jsx": "react-jsx"
+  },
+  "types": ["node", "@playwright/test"],
+  "include": ["src", "tests"],
+  "exclude": [
+    "**/*BACKUP.tsx",
+    "**/*BROKEN.*",
+    "**/*OLD_BACKUP.*",
+    "**/*NEW.*",
+    "**/*.js", /* Excluimos duplicados JS si existe equivalente TS/TSX */
+    "dist",
+    "node_modules"
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
