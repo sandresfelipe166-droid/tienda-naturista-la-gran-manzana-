@@ -98,6 +98,8 @@ class Settings(BaseSettings):
         "X-Request-Id",
     ]
     cors_max_age: int = 600
+    # Allow regex origins (useful for custom schemes like capacitor://localhost)
+    cors_allow_origin_regex: str | None = os.getenv("CORS_ALLOW_ORIGIN_REGEX")
 
     # CORS & Hosts - Environment Specific
     cors_origins_development: list[str] = [
@@ -105,6 +107,9 @@ class Settings(BaseSettings):
         "http://localhost:8000",
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8000",
+        # Vite (React) default dev server
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
     ]
     cors_origins_production: list[str] = [
         "https://yourdomain.com",
@@ -226,6 +231,35 @@ class Settings(BaseSettings):
             self._cors_origins = self.cors_origins_production
         else:
             self._cors_origins = self.cors_origins_development
+
+        # Optionally add LAN origin for mobile testing
+        # Example: set LOCAL_DEV_IP=192.168.1.50 and (optional) DEV_CLIENT_PORT=5173
+        local_ip = os.getenv("LOCAL_DEV_IP")
+        dev_client_port = os.getenv("DEV_CLIENT_PORT", "5173")
+        if local_ip:
+            lan_origin = f"http://{local_ip}:{dev_client_port}"
+            if lan_origin not in self._cors_origins:
+                self._cors_origins.append(lan_origin)
+
+        # Trusted hosts (Host header) for local/mobile testing
+        if self.environment.lower() != "production":
+            # Allow all hosts in development unless explicitly overridden
+            if os.getenv("ALLOW_ALL_HOSTS_DEV", "true").lower() == "true":
+                self.trusted_hosts = ["*"]
+            else:
+                # Optionally add a specific LAN IP or hostname
+                backend_host = os.getenv("LOCAL_BACKEND_HOST")
+                if backend_host and backend_host not in self.trusted_hosts:
+                    self.trusted_hosts.append(backend_host)
+
+        # In development, optionally allow mobile app schemes via regex
+        if self.environment.lower() != "production":
+            if os.getenv("ALLOW_MOBILE_SCHEMES_DEV", "true").lower() == "true":
+                # Accept http/https plus capacitor/ionic local origins
+                default_regex = r"^(https?://.*|capacitor://localhost|ionic://localhost)$"
+                # Only set if not explicitly provided by env
+                if not self.cors_allow_origin_regex:
+                    self.cors_allow_origin_regex = default_regex
 
         # Validate critical security settings
         if self.environment.lower() == "production" and len(self.secret_key) < 32:

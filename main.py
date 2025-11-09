@@ -196,25 +196,7 @@ async def root():
 
 
 
-def run_alembic_migration():
-    """Ejecuta alembic upgrade head si no se ha ejecutado."""
-    try:
-        # Solo ejecuta si estamos en Render o producción
-        if os.getenv("ENVIRONMENT", "development").lower() == "production":
-            print("Ejecutando migraciones Alembic (auto)...")
-            result = subprocess.run([
-                "alembic", "upgrade", "head"
-            ], capture_output=True, text=True)
-            print(result.stdout)
-            if result.returncode != 0:
-                print("[ERROR] Alembic migration failed:", result.stderr)
-            else:
-                print("Migraciones Alembic aplicadas correctamente.")
-    except Exception as e:
-        print(f"[ERROR] No se pudo ejecutar alembic upgrade head: {e}")
-
 if __name__ == "__main__":
-    run_alembic_migration()
     # Configurar logging de uvicorn
     log_level = "debug" if settings.debug else "info"
 
