@@ -271,9 +271,11 @@ class Settings(BaseSettings):
         if self.environment.lower() == "production" and len(self.secret_key) < 32:
             raise ValueError("SECRET_KEY must be at least 32 characters long in production")
 
+        # Note: Render and most cloud platforms handle SSL/TLS at the load balancer level
+        # so SSL_ENABLED can be False while still serving HTTPS to clients
         if self.environment.lower() == "production" and not self.ssl_enabled:
-            # Only a warning in production if SSL disabled
-            print("WARNING: SSL is not enabled in production environment")
+            # Only a warning in production if SSL disabled (commented out for Render)
+            pass  # print("WARNING: SSL is not enabled in production environment")
 
         # Conditionally apply HSTS only when SSL is enabled
         if not self.ssl_enabled and "Strict-Transport-Security" in self.security_headers:
