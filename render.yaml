@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: inventario-backend
+    runtime: docker
+    repo: https://github.com/sandresfelipe166-droid/tienda-naturista-la-gran-manzana-.git
+    branch: main
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
