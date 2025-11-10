@@ -1,0 +1,39 @@
+# Reduce el contexto de build del backend Docker
+# Evita copiar archivos del frontend y dependencias innecesarias
+
+# Git y entornos locales
+.git
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+logs/
+
+# Archivos y carpetas del frontend que no deben entrar al contenedor
+node_modules/
+package.json
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+src/
+public/
+test-results/
+playwright.config.ts
+vite.config.ts
+tsconfig.json
+tsconfig.node.json
+
+# Archivos de desarrollo/OS innecesarios
+*.swp
+*.swo
+*.tmp
+*.log
+
+# Backups
+*.bak
+*.old
+*.orig
