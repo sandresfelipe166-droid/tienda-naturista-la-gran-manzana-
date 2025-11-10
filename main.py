@@ -143,7 +143,8 @@ register_error_handlers(app)
 
 # Include routers
 app.include_router(api_router)
-app.include_router(health_router, prefix="/api/v1", tags=["health"])
+# Mount health router at root level for external health checks (Render, K8s, etc.)
+app.include_router(health_router, tags=["health"])
 app.include_router(health_advanced_router, prefix="/api/v1", tags=["health"])
 app.include_router(resilience_router, prefix="/api/v1/resilience", tags=["resilience"])
 app.include_router(websocket_router, prefix="/api/v1/ws", tags=["websocket"])
