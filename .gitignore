@@ -228,3 +228,6 @@ rdyjkj
 # Producción / secretos
 .env
 redis-windows.zip
+
+temp.db
+alembic_backup/
