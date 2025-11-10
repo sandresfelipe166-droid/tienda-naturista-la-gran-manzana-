@@ -115,6 +115,8 @@ class Settings(BaseSettings):
         "https://yourdomain.com",
         "https://www.yourdomain.com",
         "https://api.yourdomain.com",
+        # Render deployments
+        "https://*.onrender.com",
     ]
     trusted_hosts: list[str] = ["localhost", "127.0.0.1"]
 
@@ -251,6 +253,10 @@ class Settings(BaseSettings):
                 backend_host = os.getenv("LOCAL_BACKEND_HOST")
                 if backend_host and backend_host not in self.trusted_hosts:
                     self.trusted_hosts.append(backend_host)
+        else:
+            # In production, allow .onrender.com domains if TRUSTED_HOSTS not explicitly set
+            if not hosts_env:  # Only if TRUSTED_HOSTS env var is not set
+                self.trusted_hosts = ["*.onrender.com", "localhost", "127.0.0.1"]
 
         # In development, optionally allow mobile app schemes via regex
         if self.environment.lower() != "production":
