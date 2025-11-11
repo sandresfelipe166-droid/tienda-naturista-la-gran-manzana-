@@ -1,23 +1,32 @@
 FROM python:3.11-slim
+
+# 1) Sistema base y herramientas de compilación mínimas
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends \
+	   build-essential \
+	   libpq-dev \
+	&& rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copiar archivos de dependencias
-COPY pyproject.toml requirements.txt ./
+# 2) Mejorar pip para compatibilidades de wheels
+RUN pip install --upgrade pip
 
-# Instalar dependencias
+# 3) Instalar dependencias Python usando sólo los archivos de requisitos
+COPY pyproject.toml requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar el resto de la aplicación
+# 4) Copiar el resto de la app (excluida por .dockerignore lo innecesario)
 COPY . .
 
-# Hacer ejecutable el script de inicio
+# 5) Script de arranque (migra y levanta uvicorn)
 RUN chmod +x start.sh
 
-# Variables de entorno
+# 6) Variables de entorno
 ENV PYTHONUNBUFFERED=1
 
-# Exponer puerto
+# 7) Exponer puerto
 EXPOSE 8000
 
-# Usar el script de inicio que ejecuta migraciones primero
+# 8) Comando final
 CMD ["./start.sh"]
