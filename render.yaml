@@ -1,0 +1,25 @@
+services:
+  # Frontend Static Site
+  - type: web
+    name: inventario-frontend
+    runtime: static
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: npm ci --legacy-peer-deps && npm run build
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: NODE_VERSION
+        value: "18.17.0"
+      - key: VITE_API_URL
+        value: https://inventario-backend.onrender.com
+      - key: VITE_API_V1
+        value: /api/v1
+      - key: VITE_WS_URL
+        value: wss://inventario-backend.onrender.com
+      - key: VITE_ENV
+        value: production
+      - key: VITE_ENABLE_NOTIFICATIONS
+        value: "true"
+      - key: VITE_ENABLE_ANALYTICS
+        value: "false"
