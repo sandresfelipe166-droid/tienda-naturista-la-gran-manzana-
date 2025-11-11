@@ -1,14 +1,95 @@
 services:
+  # Backend API Service
   - type: web
     name: inventario-backend
-    runtime: docker
-    repo: https://github.com/sandresfelipe166-droid/tienda-naturista-la-gran-manzana-.git
+    runtime: python
+    region: oregon
+    plan: free
     branch: main
-    dockerfilePath: ./Dockerfile
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: ./start.sh
+    healthCheckPath: /api/v1/health
     envVars:
-      - key: DATABASE_URL
-        sync: false
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: "10000"
       - key: SECRET_KEY
-        sync: false
+        generateValue: true
+      - key: JWT_ALG
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: inventario-db
+          property: connectionString
+      - key: DB_POOL_SIZE
+        value: "10"
+      - key: DB_MAX_OVERFLOW
+        value: "20"
+      - key: DB_POOL_TIMEOUT
+        value: "30"
+      - key: DB_POOL_RECYCLE
+        value: "3600"
+      - key: CREATE_SCHEMA_ON_STARTUP
+        value: "false"
       - key: CORS_ORIGINS
-        sync: false
+        value: https://inventario-frontend.onrender.com,http://localhost:3000,http://localhost:5173
+      - key: TRUSTED_HOSTS
+        value: "*.onrender.com,localhost,127.0.0.1"
+      - key: ALLOW_ALL_HOSTS_DEV
+        value: "false"
+      - key: RATE_LIMIT_REQUESTS
+        value: "100"
+      - key: RATE_LIMIT_WINDOW
+        value: "60"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: LOG_JSON_FORMAT
+        value: "true"
+      - key: SCHEDULER_ENABLED
+        value: "false"
+      - key: HEALTH_CHECK_ENABLED
+        value: "true"
+      - key: DB_HEALTH_CHECK_ENABLED
+        value: "true"
+      - key: METRICS_ENABLED
+        value: "false"
+      - key: PROMETHEUS_ENABLED
+        value: "false"
+      - key: SSL_ENABLED
+        value: "false"
+      - key: SESSION_COOKIE_SECURE
+        value: "true"
+      - key: SESSION_COOKIE_HTTPONLY
+        value: "true"
+      - key: SESSION_COOKIE_SAMESITE
+        value: lax
+      - key: CSRF_SECRET
+        generateValue: true
+      - key: MIN_PASSWORD_LENGTH
+        value: "8"
+      - key: REQUIRE_SPECIAL_CHARS
+        value: "true"
+      - key: REQUIRE_UPPERCASE
+        value: "true"
+      - key: REQUIRE_NUMBERS
+        value: "true"
+      - key: PASSWORD_RESET_EXPIRE_MINUTES
+        value: "15"
+
+databases:
+  - name: inventario-db
+    databaseName: inventario
+    user: inventario_user
+    plan: free
+    region: oregon

@@ -15,7 +15,13 @@ fi
 
 echo "✓ Variables de entorno verificadas"
 
-# 2. Ejecutar migraciones de Alembic
+# 2. Verificar que Alembic esté instalado
+if ! command -v alembic &> /dev/null; then
+    echo "❌ ERROR: Alembic no está instalado"
+    exit 1
+fi
+
+# 3. Ejecutar migraciones de Alembic
 echo ""
 echo "📦 Ejecutando migraciones de base de datos..."
 alembic upgrade head
@@ -27,8 +33,10 @@ else
     exit 1
 fi
 
-# 3. Iniciar el servidor
+# 4. Iniciar el servidor
 echo ""
 echo "🌐 Iniciando servidor Uvicorn..."
+echo "   Host: 0.0.0.0"
+echo "   Port: ${PORT:-8000}"
 echo "=========================================="
-exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
+exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1
