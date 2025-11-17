@@ -1,0 +1,12 @@
+# Example only: workflows under inventario-frontend are not executed by GitHub Actions.
+# Keep for reference if this directory is split into its own repo.
+name: Frontend CI (example)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Frontend workflow example"

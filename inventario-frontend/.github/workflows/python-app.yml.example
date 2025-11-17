@@ -1,0 +1,11 @@
+# Example only: manual Python workflow kept for reference.
+name: Python application (example)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Example"

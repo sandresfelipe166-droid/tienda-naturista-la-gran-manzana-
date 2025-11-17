@@ -1,16 +1,11 @@
-name: CI Minimal
+name: Legacy CI (manual)
 
 on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main, develop]
   workflow_dispatch:
 
 jobs:
   sanity:
-    name: Sanity Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "CI workflow cargado correctamente"
+      - run: echo "Legacy workflow (manual)"
