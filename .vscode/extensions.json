@@ -1,0 +1,18 @@
+{
+    "recommendations": [
+        // Python
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        // JavaScript/TypeScript
+        "dbaeumer.vscode-eslint",
+        // Git
+        "eamodio.gitlens",
+        // YAML
+        "redhat.vscode-yaml",
+        // GitHub Actions
+        "github.vscode-github-actions",
+        // Docker
+        "ms-azuretools.vscode-docker"
+    ],
+    "unwantedRecommendations": []
+}

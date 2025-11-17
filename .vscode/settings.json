@@ -1,0 +1,77 @@
+{
+  // ============================================
+  // Configuración del Proyecto Inventario
+  // ============================================
+  // Python
+  "python.defaultInterpreterPath": "${workspaceFolder}/inventario-backend/.venv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/inventario-backend"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "inventario-backend/tests",
+    "-v"
+  ],
+  // JavaScript/TypeScript
+  "typescript.tsdk": "inventario-frontend/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  // Editor
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  // Archivos
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.pytest_cache": true,
+    "**/node_modules": true,
+    "**/.venv": true,
+    "**/dist": true,
+    "**/build": true
+  },
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/**": true,
+    "**/.venv/**": true,
+    "**/inventario-backend/.venv/**": true,
+    "**/inventario-frontend/node_modules/**": true,
+    "**/inventario-frontend/android/.gradle/**": true,
+    "**/inventario-frontend/android/app/build/**": true,
+    "**/inventario-frontend/ios/App/Pods/**": true
+  },
+  // Gradle/Android (para evitar warnings)
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.import.gradle.enabled": false,
+  "gradle.nestedProjects": false,
+  // Git
+  "git.ignoreLimitWarning": true,
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.profiles.windows": {
+    "PowerShell": {
+      "source": "PowerShell",
+      "icon": "terminal-powershell",
+      "args": [
+        "-NoExit",
+        "-Command",
+        "Write-Host 'Inventario App - Terminal' -ForegroundColor Green"
+      ]
+    }
+  },
+  // PowerShell Script Analyzer (desactivar avisos innecesarios)
+  "powershell.scriptAnalysis.enable": true,
+  "powershell.scriptAnalysis.settingsPath": "",
+  // YAML/GitHub Actions
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": ".github/workflows/*.yml"
+  },
+  "yaml.customTags": [
+    "!Ref",
+    "!GetAtt",
+    "!Sub"
+  ]
+}
