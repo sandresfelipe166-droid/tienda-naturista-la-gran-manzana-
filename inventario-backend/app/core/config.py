@@ -1,5 +1,6 @@
 import os
 from typing import Any
+import json
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -116,7 +117,8 @@ class Settings(BaseSettings):
         "https://www.yourdomain.com",
         "https://api.yourdomain.com",
     ]
-    trusted_hosts: list[str] = ["localhost", "127.0.0.1"]
+    # Make trusted_hosts tolerant to different env formats (JSON array or CSV)
+    trusted_hosts: Any = ["localhost", "127.0.0.1"]
 
     # Rate limiting
     rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
@@ -215,7 +217,15 @@ class Settings(BaseSettings):
             if parsed:
                 self.cors_origins = parsed
         if hosts_env:
-            parsed = [h.strip() for h in hosts_env.split(",") if h.strip()]
+            # Accept either JSON array or comma-separated list
+            parsed: list[str] = []
+            try:
+                maybe = json.loads(hosts_env)
+                if isinstance(maybe, list):
+                    parsed = [str(h).strip() for h in maybe if str(h).strip()]
+            except Exception:
+                parsed = [h.strip() for h in hosts_env.split(",") if h.strip()]
+
             if parsed:
                 self.trusted_hosts = parsed
 
