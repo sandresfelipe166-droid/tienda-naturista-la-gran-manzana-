@@ -3,7 +3,7 @@ services:
     name: inventario-backend
     runtime: docker
     rootDir: inventario-backend
-    dockerfilePath: inventario-backend/Dockerfile
+    dockerfilePath: ./Dockerfile
     autoDeploy: true
     plan: starter
     healthCheckPath: /api/v1/health
