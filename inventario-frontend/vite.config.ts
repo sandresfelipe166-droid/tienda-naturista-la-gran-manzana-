@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -11,7 +13,12 @@ const __dirname = dirname(__filename)
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
+    react({
+      // React Fast Refresh optimizations
+      fastRefresh: true,
+      // Automatic JSX runtime
+      jsxRuntime: 'automatic',
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
@@ -57,7 +64,24 @@ export default defineConfig({
       // Conservamos manifest.json en /public
       manifest: undefined,
     }),
-  ],
+    // Bundle size analyzer (solo en build con flag ANALYZE=true)
+    process.env.ANALYZE === 'true' && visualizer({
+      filename: './dist/stats.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
+    // Sentry source maps upload (solo en producción)
+    process.env.SENTRY_AUTH_TOKEN && sentryVitePlugin({
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+      authToken: process.env.SENTRY_AUTH_TOKEN,
+      sourcemaps: {
+        assets: './dist/assets/**',
+      },
+      telemetry: false,
+    }),
+  ].filter(Boolean),
   resolve: {
     alias: {
       '@': new URL('./src', import.meta.url).pathname,
@@ -73,6 +97,11 @@ export default defineConfig({
       compress: {
         drop_console: true,
         drop_debugger: true,
+        pure_funcs: ['console.log', 'console.info', 'console.debug'],
+        passes: 2,
+      },
+      format: {
+        comments: false,
       },
     },
     rollupOptions: {
@@ -82,9 +111,34 @@ export default defineConfig({
           'vendor-state': ['zustand', '@tanstack/react-query'],
           'vendor-http': ['axios'],
         },
+        // Optimizar nombres de chunks
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+      },
+      // Mejorar tree-shaking
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
       },
     },
     chunkSizeWarningLimit: 800,
+    // Optimizaciones adicionales
+    cssCodeSplit: true,
+    reportCompressedSize: false, // Más rápido en CI
+  },
+  
+  // Optimizaciones de dependencies
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'zustand',
+      '@tanstack/react-query',
+      'axios',
+    ],
+    exclude: ['@vite/client', '@vite/env'],
   },
   server: {
     port: 5173,

@@ -230,22 +230,12 @@ export default function DashboardPage() {
                                     }) })) : (_jsx("p", { children: "No hay productos disponibles" }))] }) })] }) }));
     };
     return (_jsxs("div", { className: `dashboard-layout${sidebarExpanded ? ' sidebar-expanded' : ''}`, children: [_jsxs("aside", { className: `sidebar${sidebarExpanded ? ' expanded' : ''}`, children: [_jsx("div", { className: "sidebar-logo", children: _jsx("img", { src: "/images/logo.png", alt: "Logo" }) }), _jsx("nav", { className: "sidebar-menu", role: "navigation", "aria-label": "Men\u00FA principal", children: sidebarMenu.map((item) => {
-                            // DEBUG: Ver qué está pasando con el menú admin
-                            if (item.id === 'admin') {
-                                console.log('🔍 Item admin encontrado:', {
-                                    item,
-                                    isAdmin: isAdmin(),
-                                    user,
-                                    requireAdmin: item.requireAdmin
-                                });
-                            }
                             // Verificar permisos: si tiene permission y no tiene el permiso, no mostrar
                             if (item.permission && !can(item.permission, 'read')) {
                                 return null;
                             }
                             // Si requiere ser admin y no lo es, no mostrar
                             if (item.requireAdmin && !isAdmin()) {
-                                console.log('❌ Usuario NO es admin, ocultando botón');
                                 return null;
                             }
                             // Tooltip preview for Productos

@@ -5,17 +5,18 @@ import { useLaboratorios } from '../hooks/useLaboratorios';
 import { useSecciones } from '../hooks/useSecciones';
 import { useUsuarios } from '../hooks/useUsuarios';
 import { Navigate } from 'react-router-dom';
+import logger from '@/utils/logger';
 import './AdminPanelPage.css';
 export const AdminPanelPage = () => {
     const { isAdmin } = usePermissions();
     const [activeTab, setActiveTab] = useState('laboratorios');
-    console.log('🔍 AdminPanelPage montado', { isAdmin: isAdmin() });
+    logger.debug('AdminPanelPage montado', { isAdmin: isAdmin() });
     // Si no es admin, redirigir
     if (!isAdmin()) {
-        console.log('❌ No es admin, redirigiendo...');
+        logger.info('Usuario sin permisos admin redirigido a dashboard');
         return _jsx(Navigate, { to: "/dashboard", replace: true });
     }
-    console.log('✅ Es admin, mostrando panel');
+    logger.debug('Panel de admin renderizado correctamente');
     return (_jsxs("div", { className: "admin-panel", children: [_jsxs("div", { className: "admin-header", children: [_jsx("h1", { children: "\uD83C\uDF3F Panel de Administraci\u00F3n" }), _jsx("p", { children: "Gestiona laboratorios, secciones y usuarios" })] }), _jsxs("div", { className: "admin-tabs", children: [_jsx("button", { className: `tab-btn ${activeTab === 'laboratorios' ? 'active' : ''}`, onClick: () => setActiveTab('laboratorios'), children: "\uD83C\uDFE2 Laboratorios" }), _jsx("button", { className: `tab-btn ${activeTab === 'secciones' ? 'active' : ''}`, onClick: () => setActiveTab('secciones'), children: "\uD83D\uDCC2 Secciones" }), _jsx("button", { className: `tab-btn ${activeTab === 'usuarios' ? 'active' : ''}`, onClick: () => setActiveTab('usuarios'), children: "\uD83D\uDC65 Usuarios" })] }), _jsxs("div", { className: "admin-content", children: [activeTab === 'laboratorios' && _jsx(LaboratoriosManager, {}), activeTab === 'secciones' && _jsx(SeccionesManager, {}), activeTab === 'usuarios' && _jsx(UsuariosManager, {})] })] }));
 };
 // Componente para gestionar laboratorios

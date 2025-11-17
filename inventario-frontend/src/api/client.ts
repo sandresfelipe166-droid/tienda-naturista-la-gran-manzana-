@@ -1,6 +1,7 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
 import { useAuthStore } from '@/store/authStore'
 import { enqueue } from '@/offline/outbox'
+import logger from '@/utils/logger'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const API_V1 = import.meta.env.VITE_API_V1 || '/api/v1'
@@ -50,9 +51,9 @@ apiClient.interceptors.response.use(
       if (['POST','PUT','PATCH','DELETE'].includes(method) && original?.url) {
         try {
           enqueue(method as any, `${original.baseURL || ''}${original.url}`.replace(/\/+/,'/'), original.data ? JSON.parse(original.data) : undefined)
-          console.info('🕓 Operación encolada para sincronizar cuando vuelva la conexión')
+          logger.info('Operación encolada para sincronización offline', { method, url: original.url })
         } catch (e) {
-          console.warn('No se pudo encolar mutación offline', e)
+          logger.warn('No se pudo encolar mutación offline', e as Error)
         }
       }
     }

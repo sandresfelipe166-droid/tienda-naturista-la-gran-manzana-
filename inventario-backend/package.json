@@ -1,0 +1,6 @@
+{
+  "optionalDependencies": {
+    "@sentry/react": "^10.25.0",
+    "@sentry/tracing": "^7.120.4"
+  }
+}

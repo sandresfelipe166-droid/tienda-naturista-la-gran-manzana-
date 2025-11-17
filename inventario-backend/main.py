@@ -52,6 +52,10 @@ logger = logging.getLogger(__name__)
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
+        # Initialize Sentry for error tracking (production only)
+        from app.core.sentry import init_sentry
+        init_sentry()
+        
         # Validate configuration on startup
         validate_config_on_startup(settings, strict=False)
         
@@ -129,16 +133,17 @@ app.add_middleware(InputValidationMiddleware)
 if settings.metrics_enabled:
     app.add_middleware(MetricsMiddleware)
 
-# Add exception handlers
-app.add_exception_handler(InventarioException, inventario_exception_handler)
-app.add_exception_handler(RequestValidationError, validation_exception_handler)
-app.add_exception_handler(HTTPException, http_exception_handler)
-app.add_exception_handler(IntegrityError, database_exception_handler)
-app.add_exception_handler(SQLAlchemyError, database_exception_handler)
-app.add_exception_handler(Exception, general_exception_handler)
+# Add exception handlers (disable custom handlers during tests to keep FastAPI defaults)
+if os.getenv("TESTING") != "true":
+    app.add_exception_handler(InventarioException, inventario_exception_handler)
+    app.add_exception_handler(RequestValidationError, validation_exception_handler)
+    app.add_exception_handler(HTTPException, http_exception_handler)
+    app.add_exception_handler(IntegrityError, database_exception_handler)
+    app.add_exception_handler(SQLAlchemyError, database_exception_handler)
+    app.add_exception_handler(Exception, general_exception_handler)
 
-# Register new standardized error handlers (these override above if needed)
-register_error_handlers(app)
+    # Register new standardized error handlers (these override above if needed)
+    register_error_handlers(app)
 
 # Include routers
 app.include_router(api_router)

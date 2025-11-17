@@ -44,5 +44,8 @@ Thumbs.db
 *.sqlite
 *.sqlite3
 
+# Redis Windows binaries (don't track in repository)
+redis-windows/
+
 # Alembic
 alembic/versions/*.pyc

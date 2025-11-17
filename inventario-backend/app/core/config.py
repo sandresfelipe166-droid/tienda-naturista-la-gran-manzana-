@@ -267,7 +267,8 @@ class Settings(BaseSettings):
 
         if self.environment.lower() == "production" and not self.ssl_enabled:
             # Only a warning in production if SSL disabled
-            print("WARNING: SSL is not enabled in production environment")
+            import warnings
+            warnings.warn("SSL is not enabled in production environment")
 
         # Conditionally apply HSTS only when SSL is enabled
         if not self.ssl_enabled and "Strict-Transport-Security" in self.security_headers:

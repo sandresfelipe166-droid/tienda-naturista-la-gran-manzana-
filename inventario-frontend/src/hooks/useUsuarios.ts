@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import apiClient from '@/api/client'
+import logger from '@/utils/logger'
 
 export interface Rol {
   id_rol: number
@@ -47,7 +48,7 @@ export const useUsuarios = () => {
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Error al cargar usuarios')
-      console.error('Error fetching usuarios:', err)
+      logger.error('Error al obtener lista de usuarios', err)
     } finally {
       setLoading(false)
     }
@@ -61,7 +62,7 @@ export const useUsuarios = () => {
       return response.data
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Error al obtener usuario')
-      console.error('Error fetching usuario:', err)
+      logger.error('Error al obtener usuario por ID', err)
       return null
     } finally {
       setLoading(false)
@@ -81,7 +82,7 @@ export const useUsuarios = () => {
     } catch (err: any) {
       const errorMsg = err.response?.data?.detail || 'Error al actualizar usuario'
       setError(errorMsg)
-      console.error('Error updating usuario:', err)
+      logger.error('Error al actualizar usuario', err)
       
       // Re-lanzar el error para que el componente pueda manejarlo
       throw new Error(errorMsg)
@@ -103,7 +104,7 @@ export const useUsuarios = () => {
     } catch (err: any) {
       const errorMsg = err.response?.data?.detail || 'Error al eliminar usuario'
       setError(errorMsg)
-      console.error('Error deleting usuario:', err)
+      logger.error('Error al eliminar usuario', err)
       
       // Re-lanzar el error para que el componente pueda manejarlo
       throw new Error(errorMsg)
@@ -119,7 +120,7 @@ export const useUsuarios = () => {
       const response = await apiClient.get('/roles')
       return Array.isArray(response.data) ? response.data : []
     } catch (err: any) {
-      console.error('Error fetching roles:', err)
+      logger.error('Error al obtener roles', err)
       return []
     }
   }

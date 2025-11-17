@@ -314,7 +314,8 @@ async def confirm_password_reset(reset_data: PasswordResetConfirm, db: Session =
     
     # Éxito: actualizar contraseña y limpiar
     setattr(user, "password_hash", get_password_hash(reset_data.new_password))
-    setattr(user, "codigo_recuperacion", None)
+    # Dejar el campo como cadena vacía según expectativas de tests
+    setattr(user, "codigo_recuperacion", "")
     setattr(user, "codigo_recuperacion_expiry", None)
     setattr(user, "reset_attempts", 0)
     setattr(user, "reset_locked_until", None)

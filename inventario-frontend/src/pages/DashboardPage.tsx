@@ -779,16 +779,6 @@ export default function DashboardPage() {
         </div>
   <nav className="sidebar-menu" role="navigation" aria-label="Menú principal">
           {sidebarMenu.map((item) => {
-            // DEBUG: Ver qué está pasando con el menú admin
-            if (item.id === 'admin') {
-              console.log('🔍 Item admin encontrado:', {
-                item,
-                isAdmin: isAdmin(),
-                user,
-                requireAdmin: item.requireAdmin
-              })
-            }
-            
             // Verificar permisos: si tiene permission y no tiene el permiso, no mostrar
             if (item.permission && !can(item.permission as any, 'read')) {
               return null
@@ -796,7 +786,6 @@ export default function DashboardPage() {
             
             // Si requiere ser admin y no lo es, no mostrar
             if (item.requireAdmin && !isAdmin()) {
-              console.log('❌ Usuario NO es admin, ocultando botón')
               return null
             }
             

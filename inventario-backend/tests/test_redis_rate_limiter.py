@@ -16,7 +16,8 @@ async def redis_limiter():
 
     # Try to connect; if Redis is not available, skip tests
     try:
-        r = await redis.from_url(redis_url)
+        # Agregar socket_timeout para evitar que se quede cargando
+        r = await redis.from_url(redis_url, socket_timeout=2.0, socket_connect_timeout=2.0)
         await r.ping()
         # Limpiar la base de datos del Redis de pruebas para evitar interferencias entre ejecuciones
         try:
@@ -40,6 +41,7 @@ async def redis_limiter():
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_redis_rate_limiter_allow_requests(redis_limiter):
     """Test that Redis limiter allows requests within limit."""
     client_id = "test-client-1"
@@ -52,6 +54,7 @@ async def test_redis_rate_limiter_allow_requests(redis_limiter):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_redis_rate_limiter_blocks_excess(redis_limiter):
     """Test that Redis limiter blocks requests over limit."""
     client_id = "test-client-2"
@@ -69,6 +72,7 @@ async def test_redis_rate_limiter_blocks_excess(redis_limiter):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_redis_rate_limiter_multiple_clients(redis_limiter):
     """Test that Redis limiter tracks separate clients."""
     client_1 = "test-client-a"
@@ -91,6 +95,7 @@ async def test_redis_rate_limiter_multiple_clients(redis_limiter):
 
 
 @pytest.mark.asyncio
+@pytest.mark.integration
 async def test_redis_rate_limiter_respects_custom_limits(redis_limiter):
     """Test that custom rate limit params work."""
     client_id = "test-custom-limit"

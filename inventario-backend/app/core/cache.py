@@ -27,6 +27,13 @@ class CacheManager:
 
     def _initialize_redis(self):
         """Inicializar conexión a Redis"""
+        import os
+        
+        # Deshabilitar Redis automáticamente en tests a menos que se configure explícitamente
+        if os.getenv("TESTING") == "true" and not os.getenv("REDIS_ENABLED_IN_TESTS"):
+            logger.log_info("Redis disabled in test mode")
+            return
+            
         if not settings.redis_host:
             logger.log_warning("Redis host not configured, cache disabled")
             return
@@ -40,9 +47,10 @@ class CacheManager:
                 socket_timeout=settings.redis_socket_timeout,
                 socket_connect_timeout=settings.redis_socket_timeout,
                 decode_responses=True,
-                retry_on_timeout=True,
+                retry_on_timeout=False,  # No reintentar para fallar rápido
+                retry_on_error=[],
             )
-            # Test connection
+            # Test connection with explicit timeout
             self.redis_client.ping()
             self.enabled = True
             logger.log_info("Redis cache initialized successfully")

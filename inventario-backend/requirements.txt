@@ -13,6 +13,7 @@ alembic==1.13.1
 redis==5.0.1
 pytest==7.4.3
 pytest-asyncio==0.21.1
+pytest-cov==4.1.0
 httpx==0.25.2
 APScheduler==3.10.4
 prometheus-client==0.20.0
@@ -23,3 +24,5 @@ detect-secrets==1.4.0
 mypy==1.7.1
 types-redis==4.6.0.11
 types-requests==2.31.0.10
+rich==13.7.0
+sentry-sdk[fastapi]==1.40.0

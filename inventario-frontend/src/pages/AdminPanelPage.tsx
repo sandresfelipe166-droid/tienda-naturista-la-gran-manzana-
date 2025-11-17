@@ -4,6 +4,7 @@ import { useLaboratorios, Laboratorio, LaboratorioCreate } from '../hooks/useLab
 import { useSecciones, Seccion, SeccionCreate } from '../hooks/useSecciones'
 import { useUsuarios, Usuario, UsuarioUpdate } from '../hooks/useUsuarios'
 import { Navigate } from 'react-router-dom'
+import logger from '@/utils/logger'
 import './AdminPanelPage.css'
 
 type TabType = 'laboratorios' | 'secciones' | 'usuarios'
@@ -12,15 +13,15 @@ export const AdminPanelPage = () => {
   const { isAdmin } = usePermissions()
   const [activeTab, setActiveTab] = useState<TabType>('laboratorios')
 
-  console.log('🔍 AdminPanelPage montado', { isAdmin: isAdmin() })
+  logger.debug('AdminPanelPage montado', { isAdmin: isAdmin() })
 
   // Si no es admin, redirigir
   if (!isAdmin()) {
-    console.log('❌ No es admin, redirigiendo...')
+    logger.info('Usuario sin permisos admin redirigido a dashboard')
     return <Navigate to="/dashboard" replace />
   }
 
-  console.log('✅ Es admin, mostrando panel')
+  logger.debug('Panel de admin renderizado correctamente')
 
   return (
     <div className="admin-panel">

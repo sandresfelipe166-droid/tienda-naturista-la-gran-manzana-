@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  lint-and-format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -25,27 +25,40 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install linting dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install ruff black
+          pip install ruff black isort
 
       - name: Run ruff (lint)
         run: |
           ruff check .
 
+      - name: Run isort check
+        run: |
+          isort --check-only .
+
       - name: Run black check
         run: |
           black --check .
 
-      - name: Run tests
-        run: |
-          python -m pytest -v
-
-  test-with-redis:
+  test:
     runs-on: ubuntu-latest
     services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: inventario_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
       redis:
         image: redis:7-alpine
         options: >-
@@ -77,8 +90,60 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run Redis rate limiter tests
+      - name: Run tests with SQLite (default)
+        env:
+          TESTING: "true"
+          DATABASE_URL: "sqlite:///./test_db.sqlite"
+        run: |
+          python -m pytest -v --maxfail=3
+
+      - name: Run Redis-specific tests
         env:
           REDIS_URL: redis://localhost:6379
         run: |
           python -m pytest tests/test_redis_rate_limiter.py -v
+
+  test-with-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: inventario_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_pass
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests with PostgreSQL
+        env:
+          TESTING: "true"
+          DATABASE_URL: "postgresql+psycopg2://test_user:test_pass@localhost:5432/inventario_test"
+        run: |
+          python -m pytest -v --maxfail=3

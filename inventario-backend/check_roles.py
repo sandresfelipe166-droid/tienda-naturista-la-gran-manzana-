@@ -1,9 +1,9 @@
-from app.models.database import SessionLocal
-from app.models.models import Rol
-
-db = SessionLocal()
-roles = db.query(Rol).all()
-print(f'Roles encontrados: {len(roles)}')
-for r in roles:
-    print(f'  - {r.id_rol}: {r.nombre_rol}')
-db.close()
+import sys
+from pathlib import Path
+root = Path(__file__).resolve().parents[1]
+# prepend root scripts/shared to sys.path
+shared = root / 'scripts' / 'shared'
+sys.path.insert(0, str(shared))
+from check_roles import main
+if __name__ == '__main__':
+    main()

@@ -11,6 +11,7 @@
  */
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuthStore } from '@/store/authStore';
+import logger from '@/utils/logger';
 export var WebSocketStatus;
 (function (WebSocketStatus) {
     WebSocketStatus["CONNECTING"] = "connecting";
@@ -56,7 +57,7 @@ export function useWebSocket(options) {
             const ws = new WebSocket(url);
             wsRef.current = ws;
             ws.onopen = () => {
-                console.log('[WebSocket] Connected');
+                logger.info('WebSocket conectado exitosamente');
                 setStatus(WebSocketStatus.CONNECTED);
                 setReconnectAttempts(0);
                 // Enviar autenticación si hay token
@@ -84,16 +85,16 @@ export function useWebSocket(options) {
                     onMessage?.(message);
                 }
                 catch (error) {
-                    console.error('[WebSocket] Error parsing message:', error);
+                    logger.error('Error parseando mensaje WebSocket', error);
                 }
             };
             ws.onerror = (error) => {
-                console.error('[WebSocket] Error:', error);
+                logger.error('Error en conexión WebSocket', error);
                 setStatus(WebSocketStatus.ERROR);
                 onError?.(error);
             };
             ws.onclose = () => {
-                console.log('[WebSocket] Disconnected');
+                logger.info('WebSocket desconectado');
                 setStatus(WebSocketStatus.DISCONNECTED);
                 clearTimers();
                 onDisconnect?.();
@@ -102,14 +103,17 @@ export function useWebSocket(options) {
                     setStatus(WebSocketStatus.RECONNECTING);
                     setReconnectAttempts(prev => prev + 1);
                     reconnectTimeoutRef.current = setTimeout(() => {
-                        console.log(`[WebSocket] Reconnecting... (attempt ${reconnectAttempts + 1}/${maxReconnectAttempts})`);
+                        logger.info('Reintentando conexión WebSocket', {
+                            attempt: reconnectAttempts + 1,
+                            maxAttempts: maxReconnectAttempts
+                        });
                         connect();
                     }, reconnectInterval);
                 }
             };
         }
         catch (error) {
-            console.error('[WebSocket] Connection error:', error);
+            logger.error('Error al establecer conexión WebSocket', error);
             setStatus(WebSocketStatus.ERROR);
         }
     }, [
@@ -140,7 +144,7 @@ export function useWebSocket(options) {
             wsRef.current.send(JSON.stringify(data));
         }
         else {
-            console.warn('[WebSocket] Cannot send message, not connected');
+            logger.warn('No se puede enviar mensaje WebSocket: desconectado');
         }
     }, []);
     // Auto-connect on mount
