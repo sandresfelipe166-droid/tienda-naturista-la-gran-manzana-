@@ -3,9 +3,9 @@
 Aplicación completa de gestión de inventario para tienda naturista con backend FastAPI y frontend React + TypeScript.
 
 ## 🚀 Enlaces Rápidos
-- **[DEVELOPMENT_ENV_SETUP.md](DEVELOPMENT_ENV_SETUP.md)** — Configurar entorno local (Windows/Linux)
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** — Guía completa para contribuir al proyecto
-- **[REDIS_WINDOWS_SETUP.md](REDIS_WINDOWS_SETUP.md)** — Configurar Redis en Windows
+- **[docs/DEVELOPMENT_ENV_SETUP.md](docs/DEVELOPMENT_ENV_SETUP.md)** — Configurar entorno local (Windows/Linux)
+- **[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)** — Guía completa para contribuir al proyecto
+- **[docs/REDIS_WINDOWS_SETUP.md](docs/REDIS_WINDOWS_SETUP.md)** — Configurar Redis en Windows
 - **[scripts/README.md](scripts/README.md)** — Documentación de scripts de utilidad
 
 ## 📋 Características principales
@@ -110,11 +110,15 @@ inventario-app/
 │   ├── setup_dev.ps1            # Setup automatizado (Windows)
 │   └── find_duplicates.py       # Detector de duplicados
 │
+├── docs/                        # Documentación del proyecto
+│   ├── DEVELOPMENT_ENV_SETUP.md # Guía setup entorno
+│   ├── CONTRIBUTING.md          # Guía contribución
+│   ├── REDIS_WINDOWS_SETUP.md   # Configurar Redis (Windows)
+│   ├── AUDIT_SUMMARY.md         # Informe auditoría y limpieza
+│   └── MEJORAS_*.md             # Reportes de mejoras
+│
 ├── .github/workflows/           # CI/CD (GitHub Actions)
-├── DEVELOPMENT_ENV_SETUP.md     # Guía setup entorno
-├── CONTRIBUTING.md              # Guía contribución
-├── REDIS_WINDOWS_SETUP.md       # Configurar Redis (Windows)
-└── AUDIT_SUMMARY.md             # Informe auditoría y limpieza
+└── render.yaml                  # Configuración despliegue Render
 ```
 
 ## 🔐 Configuración de Seguridad
@@ -228,11 +232,12 @@ docker-compose up -d redis
 - [`inventario-backend/DEVELOPMENT.md`](inventario-backend/DEVELOPMENT.md) — Arquitectura de seguridad, testing, CI/CD
 - [`inventario-backend/README.md`](inventario-backend/README.md) — README específico del backend
 - [`inventario-frontend/README.md`](inventario-frontend/README.md) — README específico del frontend
-- [`AUDIT_SUMMARY.md`](AUDIT_SUMMARY.md) — Informe de auditoría y limpieza del proyecto
+- [`docs/AUDIT_SUMMARY.md`](docs/AUDIT_SUMMARY.md) — Informe de auditoría y limpieza del proyecto
+- [`docs/MEJORAS_IMPLEMENTADAS.md`](docs/MEJORAS_IMPLEMENTADAS.md) — Resumen de mejoras implementadas
 
 ## 🤝 Contribuir
 
-1. Lee la [Guía de Contribución](CONTRIBUTING.md)
+1. Lee la [Guía de Contribución](docs/CONTRIBUTING.md)
 2. Haz fork del proyecto
 3. Crea una rama (`git checkout -b feature/mi-feature`)
 4. Formatea el código (`ruff format . && isort . && black .`)
