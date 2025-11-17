@@ -19,7 +19,8 @@ services:
         # Reemplaza con la URL del frontend en Render cuando la tengas
         value: "https://inventario-frontend.onrender.com"
       - key: TRUSTED_HOSTS
-        value: "localhost,127.0.0.1,inventario-backend.onrender.com"
+        # Provide as JSON array so pydantic BaseSettings can parse it as list[str]
+        value: '["localhost","127.0.0.1","inventario-backend.onrender.com"]'
       # Config DB (usa Render PostgreSQL o tu propio DBaaS)
       - key: DATABASE_URL
         sync: false
