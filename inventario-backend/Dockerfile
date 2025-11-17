@@ -66,9 +66,10 @@ COPY --chown=appuser:appuser main.py ./
 COPY --chown=appuser:appuser app/ ./app/
 COPY --chown=appuser:appuser alembic/ ./alembic/
 COPY --chown=appuser:appuser alembic.ini ./
+COPY --chown=appuser:appuser entrypoint.sh /entrypoint.sh
 
 # Crear directorio de logs con permisos
-RUN mkdir -p /app/logs && chown -R appuser:appuser /app/logs
+RUN mkdir -p /app/logs && chown -R appuser:appuser /app/logs && chmod +x /entrypoint.sh
 
 # Cambiar a usuario no-root
 USER appuser
@@ -86,7 +87,6 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:8000/api/v1/health || exit 1
 
-# Comando por defecto - Multi-worker para producción
-# Para desarrollo, override con: --workers 1 --reload
-CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2 --log-level info"]
+# Usar entrypoint que aplica migraciones y luego arranca la app
+CMD ["/entrypoint.sh"]
 
