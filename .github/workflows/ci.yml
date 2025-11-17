@@ -67,7 +67,7 @@ jobs:
                   TESTING: "true"
                   REDIS_URL: "redis://localhost:6379"
               run: |
-                  pytest tests/test_redis_rate_limiter.py -v -s
+                  pytest tests/test_redis_rate_limiter.py -v -s --override-ini="addopts=-v"
 
     frontend-build:
         name: Frontend build
