@@ -20,6 +20,13 @@ while [ "$i" -lt "$RETRIES" ]; do
   # Use 'heads' to apply all heads when multiple branches exist
   if alembic -c alembic.ini upgrade heads; then
     echo "Migrations applied successfully"
+    # Seed default roles to ensure application has expected roles
+    echo "Seeding default roles (idempotent)..."
+    if python -m app.scripts.seed_roles; then
+      echo "Seed script completed"
+    else
+      echo "Seed script failed (continuing startup)" >&2
+    fi
     break
   else
     echo "Migration attempt $((i+1)) failed, retrying in $SLEEP seconds..."
