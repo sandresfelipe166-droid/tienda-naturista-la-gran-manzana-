@@ -6,7 +6,8 @@ RETRIES=10
 SLEEP=3
 i=0
 while [ "$i" -lt "$RETRIES" ]; do
-  if alembic -c alembic.ini upgrade head; then
+  # Use 'heads' to apply all heads when multiple branches exist
+  if alembic -c alembic.ini upgrade heads; then
     echo "Migrations applied successfully"
     break
   else
