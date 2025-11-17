@@ -2,8 +2,9 @@ services:
   - type: web
     name: inventario-backend
     runtime: docker
+    # Para servicios docker, usa rootDir para establecer contexto y dockerfilePath relativo a rootDir
     rootDir: inventario-backend
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: Dockerfile
     autoDeploy: true
     plan: starter
     healthCheckPath: /api/v1/health
