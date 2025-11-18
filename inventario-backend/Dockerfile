@@ -26,7 +26,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     libpq-dev \
     postgresql-client \
+    curl \
+    ca-certificates \
+    build-essential \
+    libssl-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Instalar Rust toolchain (necesario para compilar pydantic-core, etc.)
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Copiar solo archivos de dependencias para aprovechar cache
 COPY requirements.txt pyproject.toml ./
@@ -34,7 +42,8 @@ COPY requirements.txt pyproject.toml ./
 # Crear virtualenv y instalar dependencias
 RUN python -m venv /opt/venv && \
     /opt/venv/bin/pip install --no-cache-dir --upgrade pip setuptools wheel && \
-    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+    # Asegurar que cargo/rust están en PATH durante la instalación de wheels
+    PATH="/root/.cargo/bin:$PATH" /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # --------------------------------------------
 # Stage 2: Runtime (Production)

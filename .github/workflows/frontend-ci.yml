@@ -1,0 +1,66 @@
+name: Frontend CI
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        name: Build and validate frontend
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "18"
+                  cache: "npm"
+
+            - name: Install dependencies
+              run: npm ci
+              working-directory: inventario-frontend
+
+            - name: Lint
+              run: npm run lint
+              working-directory: inventario-frontend
+
+            - name: Typecheck
+              run: npm run typecheck
+              working-directory: inventario-frontend
+
+            - name: Build (mobile / production)
+              run: npm run build:mobile
+              working-directory: inventario-frontend
+
+            - name: Validate dist artifacts
+              run: |
+                  echo "Listing dist files:"
+                  ls -la inventario-frontend/dist || true
+                  echo "Checking expected PWA files..."
+                  if [ -f inventario-frontend/dist/index.html ]; then echo "index.html OK"; else echo "index.html MISSING"; exit 1; fi
+                  if [ -f inventario-frontend/dist/manifest.json ]; then echo "manifest.json OK"; else echo "manifest.json MISSING (warning)"; fi
+                  if [ -f inventario-frontend/dist/sw.js ]; then echo "sw.js OK"; else echo "sw.js MISSING (warning)"; fi
+
+            - name: Upload dist artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: frontend-dist
+                  path: inventario-frontend/dist
+
+            - name: (Optional) Trigger Render deploy
+              if: ${{ secrets.RENDER_API_KEY != '' && secrets.RENDER_FRONTEND_SERVICE_ID != '' }}
+              env:
+                  RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+                  RENDER_FRONTEND_SERVICE_ID: ${{ secrets.RENDER_FRONTEND_SERVICE_ID }}
+              run: |
+                  echo "Triggering Render deploy for frontend service"
+                  # Install jq to pretty-print response (Ubuntu runner)
+                  sudo apt-get update && sudo apt-get install -y jq
+                  curl -s -X POST -H "Authorization: Bearer $RENDER_API_KEY" \
+                    -H "Accept: application/json" \
+                    "https://api.render.com/v1/services/$RENDER_FRONTEND_SERVICE_ID/deploys" \
+                    | jq -r '.message // .id // .'

@@ -33,7 +33,8 @@ services:
     name: inventario-frontend
     runtime: static
     rootDir: inventario-frontend
-    buildCommand: npm ci && npm run build
+    # Use explicit mobile production build (build:mobile) which sets production mode
+    buildCommand: npm ci && npm run build:mobile
     staticPublishPath: dist
     autoDeploy: true
     pullRequestPreviewsEnabled: false
@@ -47,7 +48,20 @@ services:
       - path: /assets/*
         name: Cache-Control
         value: public, max-age=31536000, immutable
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: no-referrer-when-downgrade
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-XSS-Protection
+        value: 1; mode=block
     routes:
+      # SPA fallback: rewrite everything to index.html so client-side routing works
       - type: rewrite
         source: /(.*)
         destination: /index.html
