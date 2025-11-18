@@ -1,8 +1,13 @@
-FROM python:3.11-slim
+# Multi-stage Dockerfile: build frontend with Node, serve with nginx
+FROM node:18-alpine AS build
 WORKDIR /app
-COPY pyproject.toml requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy all frontend files (this Dockerfile will be used with build context = inventario-frontend)
 COPY . .
-ENV PYTHONUNBUFFERED=1
-EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN npm ci --silent
+RUN npm run build:mobile
+
+FROM nginx:stable-alpine AS release
+COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+

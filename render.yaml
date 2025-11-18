@@ -19,11 +19,8 @@ services:
         # Reemplaza con la URL del frontend en Render cuando la tengas
         value: "https://inventario-frontend.onrender.com"
       - key: TRUSTED_HOSTS
-        # Provide as JSON array so pydantic BaseSettings can parse it as list[str]
         value: '["localhost","127.0.0.1","inventario-backend.onrender.com"]'
-      # Config DB (usa Render PostgreSQL o tu propio DBaaS)
       - key: DATABASE_URL
-        # Set to your Render Postgres connection (provided by user)
         value: "postgresql://inventario_db_rmlg_user:rwA7c0H7jyJegp8FYOy89YHn9FBmT1Dh@dpg-d4dla6fpm1nc73ddcbrg-a/inventario_db_rmlg"
         sync: false
       - key: SECRET_KEY
@@ -31,37 +28,13 @@ services:
 
   - type: web
     name: inventario-frontend
-    runtime: static
+    runtime: docker
     rootDir: inventario-frontend
-    # Use explicit mobile production build (build:mobile) which sets production mode
-    buildCommand: npm ci && npm run build:mobile
-    staticPublishPath: dist
+    dockerfilePath: Dockerfile
     autoDeploy: true
-    pullRequestPreviewsEnabled: false
+    plan: starter
     envVars:
       - key: VITE_API_URL
-        # Reemplaza con la URL pública del backend en Render (p.ej. https://inventario-backend.onrender.com)
         value: https://inventario-backend.onrender.com
       - key: VITE_API_V1
         value: /api/v1
-    headers:
-      - path: /assets/*
-        name: Cache-Control
-        value: public, max-age=31536000, immutable
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-      - path: /*
-        name: Referrer-Policy
-        value: no-referrer-when-downgrade
-      - path: /*
-        name: X-Frame-Options
-        value: DENY
-      - path: /*
-        name: X-XSS-Protection
-        value: 1; mode=block
-    routes:
-      # SPA fallback: rewrite everything to index.html so client-side routing works
-      - type: rewrite
-        source: /(.*)
-        destination: /index.html
