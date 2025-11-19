@@ -19,22 +19,39 @@ depends_on = None
 
 def upgrade() -> None:
     """Añade columnas faltantes a la tabla alerta de forma segura (batch_alter_table)."""
+    bind = op.get_bind()
+    inspector = sa.inspect(bind)
+    existing_columns = {col["name"] for col in inspector.get_columns("alerta")}
+
+    columns_to_add = [
+        sa.Column("fecha_creacion", sa.DateTime(), nullable=True),
+        sa.Column("fecha_resolucion", sa.DateTime(), nullable=True),
+        sa.Column(
+            "estado",
+            sa.String(length=20),
+            nullable=True,
+            server_default=sa.text("'Activo'"),
+        ),
+    ]
+
     with op.batch_alter_table("alerta", schema=None) as batch_op:
-        batch_op.add_column(sa.Column("fecha_creacion", sa.DateTime(), nullable=True))
-        batch_op.add_column(sa.Column("fecha_resolucion", sa.DateTime(), nullable=True))
-        # Para añadir un valor por defecto en PostgreSQL usar server_default
-        batch_op.add_column(
-            sa.Column(
-                "estado",
-                sa.String(length=20),
-                nullable=True,
-                server_default=sa.text("'Activo'")
-            )
-        )
+        for column in columns_to_add:
+            if column.name not in existing_columns:
+                batch_op.add_column(column)
 
 
 def downgrade() -> None:
+    bind = op.get_bind()
+    inspector = sa.inspect(bind)
+    existing_columns = {col["name"] for col in inspector.get_columns("alerta")}
+
+    columns_to_drop = [
+        "estado",
+        "fecha_resolucion",
+        "fecha_creacion",
+    ]
+
     with op.batch_alter_table("alerta", schema=None) as batch_op:
-        batch_op.drop_column("estado")
-        batch_op.drop_column("fecha_resolucion")
-        batch_op.drop_column("fecha_creacion")
+        for column_name in columns_to_drop:
+            if column_name in existing_columns:
+                batch_op.drop_column(column_name)
