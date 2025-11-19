@@ -17,19 +17,38 @@ depends_on = None
 
 
 def upgrade():
-    # Add missing columns to alerta table if they don't exist
+    bind = op.get_bind()
+    inspector = sa.inspect(bind)
+    existing_columns = {col['name'] for col in inspector.get_columns('alerta')}
+
+    columns_to_add = [
+        sa.Column('prioridad', sa.String(length=20), nullable=True),
+        sa.Column('id_seccion', sa.Integer(), nullable=True),
+        sa.Column('dias_para_vencer', sa.Integer(), nullable=True),
+        sa.Column('stock_actual', sa.Integer(), nullable=True),
+        sa.Column('stock_minimo', sa.Integer(), nullable=True),
+    ]
+
     with op.batch_alter_table('alerta') as batch_op:
-        batch_op.add_column(sa.Column('prioridad', sa.String(length=20), nullable=True))
-        batch_op.add_column(sa.Column('id_seccion', sa.Integer(), nullable=True))
-        batch_op.add_column(sa.Column('dias_para_vencer', sa.Integer(), nullable=True))
-        batch_op.add_column(sa.Column('stock_actual', sa.Integer(), nullable=True))
-        batch_op.add_column(sa.Column('stock_minimo', sa.Integer(), nullable=True))
+        for column in columns_to_add:
+            if column.name not in existing_columns:
+                batch_op.add_column(column)
 
 
 def downgrade():
+    bind = op.get_bind()
+    inspector = sa.inspect(bind)
+    existing_columns = {col['name'] for col in inspector.get_columns('alerta')}
+
+    columns_to_drop = [
+        'prioridad',
+        'id_seccion',
+        'dias_para_vencer',
+        'stock_actual',
+        'stock_minimo',
+    ]
+
     with op.batch_alter_table('alerta') as batch_op:
-        batch_op.drop_column('prioridad')
-        batch_op.drop_column('id_seccion')
-        batch_op.drop_column('dias_para_vencer')
-        batch_op.drop_column('stock_actual')
-        batch_op.drop_column('stock_minimo')
+        for column_name in columns_to_drop:
+            if column_name in existing_columns:
+                batch_op.drop_column(column_name)
