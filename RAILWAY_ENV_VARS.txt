@@ -1,0 +1,86 @@
+# ============================================
+# RAILWAY DEPLOYMENT - VARIABLES DE ENTORNO
+# ============================================
+
+# BACKEND - Variables de Entorno para Railway
+# ==============================================
+# Copia estas en Railway Dashboard > Backend Service > Variables
+
+ENVIRONMENT=production
+DEBUG=false
+HOST=0.0.0.0
+PORT=${{PORT}}
+
+# Security - JWT (IMPORTANTE: Genera uno nuevo con: openssl rand -hex 32)
+SECRET_KEY=TU_SECRET_KEY_SUPER_SEGURO_MINIMO_32_CARACTERES_AQUI
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+
+# Security - CSRF (IMPORTANTE: Genera uno nuevo)
+CSRF_SECRET=TU_CSRF_SECRET_SUPER_SEGURO_AQUI
+CSRF_TOKEN_EXPIRE_MINUTES=60
+
+# Database (Railway lo provee automáticamente)
+DATABASE_URL=${{DATABASE_URL}}
+
+# CORS - Railway URLs (Railway te dará estas URLs después del deploy)
+CORS_ORIGINS=https://tu-frontend.up.railway.app,https://tu-backend.up.railway.app
+TRUSTED_HOSTS=tu-backend.up.railway.app,tu-frontend.up.railway.app
+
+# Rate Limiting
+RATE_LIMIT_REQUESTS=100
+RATE_LIMIT_WINDOW=60
+RATE_LIMIT_USE_REDIS=false
+
+# Logging
+LOG_LEVEL=INFO
+LOG_JSON_FORMAT=true
+
+# Health Checks
+HEALTH_CHECK_ENABLED=true
+DB_HEALTH_CHECK_ENABLED=true
+REDIS_HEALTH_CHECK_ENABLED=false
+
+# Scheduler (desactivar en producción por ahora)
+SCHEDULER_ENABLED=false
+
+# Metrics (desactivar por ahora)
+PROMETHEUS_ENABLED=false
+METRICS_ENABLED=false
+
+# Sentry (opcional - para monitoreo de errores)
+SENTRY_DSN=
+SENTRY_TRACES_SAMPLE_RATE=0.1
+
+# ============================================
+# FRONTEND - Variables de Entorno para Railway
+# ============================================
+# Copia estas en Railway Dashboard > Frontend Service > Variables
+
+# API Configuration (Railway te dará esta URL)
+VITE_API_URL=https://tu-backend.up.railway.app
+VITE_API_V1=/api/v1
+
+# NO usar proxy en producción
+VITE_USE_PROXY=false
+
+# WebSocket (Railway te dará esta URL)
+VITE_WS_URL=wss://tu-backend.up.railway.app
+VITE_WS_RECONNECT_INTERVAL=3000
+VITE_WS_MAX_RECONNECT_ATTEMPTS=10
+
+# Environment
+VITE_ENV=production
+
+# Features
+VITE_ENABLE_PWA=true
+VITE_ENABLE_OFFLINE_MODE=true
+VITE_ENABLE_NOTIFICATIONS=true
+VITE_ENABLE_ANALYTICS=false
+
+# Sentry (opcional)
+VITE_SENTRY_DSN=
+VITE_SENTRY_RELEASE=1.0.0
+VITE_SENTRY_ENVIRONMENT=production
+VITE_SENTRY_TRACES_SAMPLE_RATE=0.1

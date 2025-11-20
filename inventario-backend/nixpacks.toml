@@ -1,0 +1,14 @@
+[phases.setup]
+nixPkgs = ["python311", "postgresql", "gcc", "rustc", "cargo"]
+
+[phases.install]
+cmds = [
+  "pip install --upgrade pip setuptools wheel",
+  "pip install -r requirements.txt"
+]
+
+[phases.build]
+cmds = ["echo 'Backend build complete'"]
+
+[start]
+cmd = "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port $PORT --workers 2 --log-level info"
