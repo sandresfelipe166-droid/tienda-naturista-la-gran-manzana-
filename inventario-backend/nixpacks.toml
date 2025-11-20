@@ -11,4 +11,4 @@ cmds = [
 cmds = ["echo 'Backend build complete'"]
 
 [start]
-cmd = "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port $PORT --workers 2 --log-level info"
+cmd = "uvicorn main:app --host 0.0.0.0 --port $PORT --workers 2 --log-level info"
