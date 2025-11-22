@@ -41,7 +41,10 @@ if [ "$i" -ge "$RETRIES" ]; then
 fi
 
 echo "Starting application"
-exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2 --log-level info
+# Use PORT from environment or default to 8000
+APP_PORT="${PORT:-8000}"
+echo "Starting on port: $APP_PORT"
+exec uvicorn main:app --host 0.0.0.0 --port "$APP_PORT" --workers 2 --log-level info
 
 # After startup we'll also print current alembic revision (best-effort)
 # Note: this will only run if the container stays alive and python/alembic are available
