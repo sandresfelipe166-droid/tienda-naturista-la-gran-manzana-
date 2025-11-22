@@ -14,31 +14,33 @@ else
   echo "DATABASE_URL not set"
 fi
 
-echo "Alembic current before upgrade:"
-alembic -c alembic.ini current || true
-while [ "$i" -lt "$RETRIES" ]; do
-  # Use 'heads' to apply all heads when multiple branches exist
-  if alembic -c alembic.ini upgrade heads; then
-    echo "Migrations applied successfully"
-    # Seed default roles to ensure application has expected roles
-    echo "Seeding default roles (idempotent)..."
-    if python -m app.scripts.seed_roles; then
-      echo "Seed script completed"
-    else
-      echo "Seed script failed (continuing startup)" >&2
-    fi
-    break
-  else
-    echo "Migration attempt $((i+1)) failed, retrying in $SLEEP seconds..."
-    i=$((i+1))
-    sleep $SLEEP
-  fi
-done
-
-if [ "$i" -ge "$RETRIES" ]; then
-  echo "Migrations failed after $RETRIES attempts" >&2
-  exit 1
-fi
+# Migraciones temporalmente deshabilitadas para deployment inicial
+echo "Skipping migrations for initial deployment"
+# echo "Alembic current before upgrade:"
+# alembic -c alembic.ini current || true
+# while [ "$i" -lt "$RETRIES" ]; do
+#   # Use 'heads' to apply all heads when multiple branches exist
+#   if alembic -c alembic.ini upgrade heads; then
+#     echo "Migrations applied successfully"
+#     # Seed default roles to ensure application has expected roles
+#     echo "Seeding default roles (idempotent)..."
+#     if python -m app.scripts.seed_roles; then
+#       echo "Seed script completed"
+#     else
+#       echo "Seed script failed (continuing startup)" >&2
+#     fi
+#     break
+#   else
+#     echo "Migration attempt $((i+1)) failed, retrying in $SLEEP seconds..."
+#     i=$((i+1))
+#     sleep $SLEEP
+#   fi
+# done
+# 
+# if [ "$i" -ge "$RETRIES" ]; then
+#   echo "Migrations failed after $RETRIES attempts" >&2
+#   exit 1
+# fi
 
 echo "Starting application"
 exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 2 --log-level info
