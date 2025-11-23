@@ -62,11 +62,17 @@ async def lifespan(app: FastAPI):
         # Create schema only if explicitly enabled and not during tests (prefer Alembic)
         if settings.create_schema_on_startup and os.getenv("TESTING") != "true":
             Base.metadata.create_all(bind=engine)
-        db = SessionLocal()
+        
+        # Try to seed roles but don't fail startup if it doesn't work
         try:
-            _seed_default_roles(db)
-        finally:
-            db.close()
+            db = SessionLocal()
+            try:
+                _seed_default_roles(db)
+                logger.info("✓ Default roles seeded successfully")
+            finally:
+                db.close()
+        except Exception as e:
+            logger.warning(f"Could not seed roles (will continue anyway): {e}")
         # Start scheduler if enabled
         try:
             if settings.scheduler_enabled:
