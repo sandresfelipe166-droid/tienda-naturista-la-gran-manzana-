@@ -89,8 +89,8 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app
 
-# Exponer puerto (Railway usa PORT dinámico, default 8000)
-EXPOSE 8000
+# Exponer puerto (Railway usa PORT dinámico, default 8080)
+EXPOSE 8080
 
 # Healthcheck deshabilitado - Railway maneja esto externamente
 # HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
