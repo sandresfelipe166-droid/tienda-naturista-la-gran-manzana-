@@ -89,12 +89,12 @@ ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=/app
 
-# Exponer puerto
+# Exponer puerto (Railway usa PORT dinámico, default 8000)
 EXPOSE 8000
 
-# Healthcheck para Docker y orquestadores (K8s, Docker Swarm)
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+# Healthcheck deshabilitado - Railway maneja esto externamente
+# HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+#     CMD curl -f http://localhost:${PORT:-8000}/api/v1/health || exit 1
 
 # Usar entrypoint que aplica migraciones y luego arranca la app
 CMD ["/entrypoint.sh"]
