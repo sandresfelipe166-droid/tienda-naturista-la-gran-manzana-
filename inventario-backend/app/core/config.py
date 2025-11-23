@@ -118,7 +118,7 @@ class Settings(BaseSettings):
         "https://api.yourdomain.com",
     ]
     # Trusted hosts - usar wildcard por defecto para evitar bloqueos
-    trusted_hosts: list[str] = ["*"]
+    trusted_hosts: Any = ["*"]  # Any para evitar auto-parsing JSON de pydantic_settings
 
     # Rate limiting
     rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
