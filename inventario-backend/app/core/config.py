@@ -117,7 +117,8 @@ class Settings(BaseSettings):
         "https://www.yourdomain.com",
         "https://api.yourdomain.com",
     ]
-    # Trusted hosts - usar wildcard por defecto para evitar bloqueos`n    trusted_hosts: list[str] = ["*"]
+    # Trusted hosts - usar wildcard por defecto para evitar bloqueos
+    trusted_hosts: list[str] = ["*"]
 
     # Rate limiting
     rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
