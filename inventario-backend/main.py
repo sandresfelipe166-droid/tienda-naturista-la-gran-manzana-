@@ -120,8 +120,8 @@ app.add_middleware(
     max_age=settings.cors_max_age,
 )
 
-# Add trusted host middleware
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.trusted_hosts)
+# Add trusted host middleware - TEMPORARILY DISABLED FOR RAILWAY HEALTHCHECK
+# app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.trusted_hosts)
 
 # Add security middleware
 app.add_middleware(SecurityHeadersMiddleware)
