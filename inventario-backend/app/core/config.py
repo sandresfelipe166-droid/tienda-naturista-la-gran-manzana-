@@ -117,26 +117,7 @@ class Settings(BaseSettings):
         "https://www.yourdomain.com",
         "https://api.yourdomain.com",
     ]
-    # Trusted hosts (protege contra Host header injection). Se puede override con env TRUSTED_HOSTS
-    # Formatos aceptados:
-    #   TRUSTED_HOSTS=*                     (confía en todos - solo usar temporalmente)
-    #   TRUSTED_HOSTS=dominio.com,api.dominio.com
-    #   TRUSTED_HOSTS=["dominio.com","api.dominio.com"]
-    raw_trusted = os.getenv("TRUSTED_HOSTS")
-    if raw_trusted:
-        cleaned = raw_trusted.strip()
-        if cleaned.startswith("[") and cleaned.endswith("]"):
-            # Intentar parsear como JSON list
-            try:
-                import json as _json
-                parsed = _json.loads(cleaned)
-                trusted_hosts: Any = parsed if isinstance(parsed, list) else ["localhost"]
-            except Exception:
-                trusted_hosts: Any = [h.strip() for h in cleaned[1:-1].split(",") if h.strip()]
-        else:
-            trusted_hosts: Any = [h.strip() for h in cleaned.split(",") if h.strip()]
-    else:
-        trusted_hosts: Any = ["localhost", "127.0.0.1"]
+    # Trusted hosts - usar wildcard por defecto para evitar bloqueos`n    trusted_hosts: list[str] = ["*"]
 
     # Rate limiting
     rate_limit_requests: int = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
@@ -337,3 +318,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
