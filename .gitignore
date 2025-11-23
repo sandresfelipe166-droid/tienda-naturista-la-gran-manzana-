@@ -76,6 +76,8 @@ desktop.ini
 .env.development
 *.pem
 *.key
+CLAVES_SEGURIDAD.txt
+*_SECRETS.txt
 
 # ============================================
 # Database

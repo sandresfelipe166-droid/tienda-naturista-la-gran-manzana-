@@ -1,0 +1,21 @@
+# ============================================
+# ACTUALIZAR ESTAS VARIABLES EN RAILWAY
+# ============================================
+
+# VE A: Railway Dashboard > Tu Proyecto > backend service > Variables
+
+# Busca y ACTUALIZA estas variables:
+
+CORS_ORIGINS=https://tienda-naturista-la-gran-manzana-production-625c.up.railway.app,http://localhost:5173,http://localhost:3000
+
+TRUSTED_HOSTS=tienda-naturista-la-gran-manzana-production-625c.up.railway.app,localhost
+
+# Esta variable es IMPORTANTE - permite que Railway cree las tablas al iniciar
+CREATE_SCHEMA_ON_STARTUP=true
+
+# ============================================
+# NOTAS:
+# ============================================
+# - Después de agregar CREATE_SCHEMA_ON_STARTUP=true, Railway redesplegará
+# - Las tablas se crearán automáticamente
+# - Una vez que funcione, puedes eliminar CREATE_SCHEMA_ON_STARTUP
