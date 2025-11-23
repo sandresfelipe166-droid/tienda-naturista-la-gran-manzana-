@@ -1,12 +1,13 @@
-import { ErrorBoundary } from '@/components/ErrorBoundary'
-import ForgotPasswordPage from '@/pages/ForgotPasswordPage'
-import LoginPage from '@/pages/LoginPage'
-import RegisterPage from '@/pages/RegisterPage'
-import ResetPasswordPage from '@/pages/ResetPasswordPage'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import './App.css'
+console.log("App render");
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import ForgotPasswordPage from '@/pages/ForgotPasswordPage';
+import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/RegisterPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import './App.css';
 
-import { OnlineStatus } from '@/components/OnlineStatus'
+import { OnlineStatus } from '@/components/OnlineStatus';
 function App() {
     return (
         <ErrorBoundary>
