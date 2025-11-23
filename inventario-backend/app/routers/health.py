@@ -30,6 +30,11 @@ async def health_check() -> dict[str, Any]:
         "environment": settings.environment,
     }
 
+# Alias en español para compatibilidad con healthcheck configurado en Railway (/api/v1/salud)
+@router.get("/salud", summary="Health Check Alias (Salud)")
+async def health_check_alias() -> dict[str, Any]:
+    return await health_check()
+
 
 @router.get("/health/detailed", summary="Health Check Detallado")
 async def detailed_health_check() -> dict[str, Any]:
